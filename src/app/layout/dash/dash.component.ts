@@ -49,6 +49,7 @@ export class DashComponent implements OnInit {
       );
   }
   _selected_drop(id: any, _data: any) {
+    debugger
     if (_data === '') id.selected_ob = [];
     else id.selected_ob = _.find(_data.drop.all, { index: id.selected });
 
@@ -103,7 +104,14 @@ export class DashComponent implements OnInit {
     );
   }
   search(dt: any, pg_dt: any) {
+
+    pg_dt.pg_data.data = this._search(dt,pg_dt);
+  }
+  _search(dt: any, pg_dt: any) {
+
     let ft = _.cloneDeep(dt);
+
+    if(ft.filter_arr.length == 0) return pg_dt.pg_data.data;
     let new_ftr: any = [];
     for (let i = 0; i < ft.filter_arr.length; i++) {
       let fn = (dx: any) => {
@@ -121,16 +129,31 @@ export class DashComponent implements OnInit {
       .flatMap()
       .filter({ name: ft.selected })
       .value();
-    pg_dt.pg_data.data = _.flow(new_ftr)(pg_dt.pg_data.data);
-    console.log('pg_dt.data=>', pg_dt.pg_data.data);
-    // this.dt = this.set_data_refresh_table(x);
-
-    //   console.log(_.flow(dt.filter_arr)(pg_dt[0].data));
+     return   _.flow(new_ftr)(pg_dt.pg_data.data);
   }
-  reset(data: any, pg_dt: any) {
-    data.filter_arr = [];
+  reset(id: any, _data: any) {
+    // debugger;
+    // data.filter_arr = [];
+    //
+    // this._selected_drop(data, '');
+    debugger;
+  let that = this;
+      if (_data === '') id.selected_ob = [];
+    else id.selected_ob = _.find(_data.drop.all, { index: id.selected });
 
-    this._selected_drop(data, '');
+    //this.data.pg_data =
+      this.hs.ajax(
+      'https://livedata.glitch.me/api/index/' + id.selected
+    ).pipe(
+      map((d:any) => {
+        _data.pg_data = d;
+        _data.pg_data.data = that._search(id,_data);
+        console.log("x==>",_data.pg_data);
+         return of(_data.pg_data);
+      })
+    ).subscribe(rr=>{
+        console.log("sadfsdfsfsdfsdf=>",rr);
+      })
   }
   temp_save_popup_data(d: any) {}
 
