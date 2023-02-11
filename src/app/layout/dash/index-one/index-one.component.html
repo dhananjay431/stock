@@ -1,0 +1,41 @@
+<table class="table table-sm table-striped table-hover mt-2">
+  <thead class="header-fixed bg">
+    <tr>
+      <th>index</th>
+      <th>last</th>
+      <th>Up</th>
+      <th>Down</th>
+      <th>pClose</th>
+      <th>d%</th>
+      <th>1W</th>
+      <th>1M</th>
+      <th>1Y</th>
+      <th>52WH</th>
+      <th>52WL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let i of data">
+      <td>{{ i.index }}</td>
+      <td>{{ i.last }}</td>
+      <td>{{ i.advances || "" }}</td>
+      <td>{{ i.declines || "" }}</td>
+      <td>{{ i.previousClose || "" }}</td>
+      <td>
+        <span
+          [class]="{
+            'text-success': i.percentChange > 0,
+            'text-danger': i.percentChange < 0
+          }"
+        >
+          {{ i.percentChange || "" }}
+        </span>
+      </td>
+      <td>{{ i.oneWeekAgo || "" }}</td>
+      <td>{{ i.oneMonthAgo || "" }}</td>
+      <td>{{ i.oneYearAgo || "" }}</td>
+      <td>{{ i.yearHigh || "" }}</td>
+      <td>{{ i.yearLow || "" }}</td>
+    </tr>
+  </tbody>
+</table>

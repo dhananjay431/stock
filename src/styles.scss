@@ -1,0 +1,24 @@
+/* You can add global styles to this file, and also import other style files */
+.table-sm>:not(caption)>*>* {
+    padding: 0rem 0rem;
+}
+
+.bg{
+  color:#FFFFFF;
+  background: rgb(131,58,180);
+  background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+}
+thead {
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+  color:#FFFFFF;
+}
+.loader {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: url('../assets/img/load.gif') 50% 50% no-repeat #00000070;
+}

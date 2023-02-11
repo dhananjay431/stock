@@ -1,0 +1,55 @@
+<table id="example" class="table table-sm table-striped table-hover mt-2">
+  <thead class="header-fixed bg">
+    <tr>
+      <th (click)="download('example')">#</th>
+      <th (click)="asc_desc('symbol', _data.pg_data)">symbol</th>
+      <th (click)="asc_desc('meta.industry', _data.pg_data)">industry</th>
+      <th (click)="asc_desc('ffmc', _data.pg_data)">ffmc</th>
+
+      <th (click)="asc_desc('previousClose', _data.pg_data)">pClose</th>
+      <th (click)="asc_desc('yearLow', _data.pg_data)">52WL%</th>
+      <th (click)="asc_desc('lastPrice', _data.pg_data)">Close</th>
+
+      <th (click)="asc_desc('yearHigh', _data.pg_data)">52WH%</th>
+
+      <th (click)="asc_desc('nearWKH', _data.pg_data)">NH</th>
+      <th (click)="asc_desc('nearWKL', _data.pg_data)">NW</th>
+      <th (click)="asc_desc('pChange', _data.pg_data)">D%</th>
+      <th (click)="asc_desc('perChange30d', _data.pg_data)">30D%</th>
+      <th (click)="asc_desc('perChange365d', _data.pg_data)">365D%</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let i of ob(_data).pg_data.data; let idx = index">
+      <td>{{ idx + 1 }}</td>
+      <td>
+        <a
+          target="_blank"
+          [href]="
+            'https://www.nseindia.com/get-quotes/equity?symbol=' + i.symbol
+          "
+        >
+          {{ i.symbol }}
+        </a>
+      </td>
+      <td class="text-nowrap">
+        {{ i?.meta?.industry || "" }}
+      </td>
+      <td class="text-nowrap">
+        {{ i.ffmc || "" }}
+      </td>
+
+      <td>{{ i.previousClose }}</td>
+
+      <td>{{ i.yearLow }}</td>
+      <td>{{ i.lastPrice }}</td>
+      <td>{{ i.yearHigh }}</td>
+      <td>{{ n(i.nearWKH) }}</td>
+      <td>{{ n(i.nearWKL) }}</td>
+
+      <td>{{ i.pChange }}</td>
+      <td>{{ i.perChange30d }}</td>
+      <td>{{ i.perChange365d }}</td>
+    </tr>
+  </tbody>
+</table>

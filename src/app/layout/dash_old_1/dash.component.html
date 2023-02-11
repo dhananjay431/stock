@@ -1,0 +1,201 @@
+<div class="row">
+  <div class="col-12">
+    <select
+      class="form-select"
+      aria-label="Default select example"
+      [(ngModel)]="data.selected"
+      (change)="_selected_drop(data.selected, data)"
+    >
+      <option selected>Open this select menu</option>
+      <ng-container *ngFor="let i of data.drop">
+        <option value="">--{{ i }}--</option>
+        <option [value]="j.name" *ngFor="let j of data.pg_data[i]">
+          {{ j.name }}
+        </option>
+      </ng-container>
+    </select>
+  </div>
+</div>
+<!--    -->
+<div *ngIf="dt | async as pg_dt" class="mt-3">
+  <div class="row">
+    <div class="col-lg-3 col-12">
+      <select
+        class="form-select"
+        aria-label="Default select example"
+        [(ngModel)]="data.filter.col"
+      >
+        <option selected>Open this select menu</option>
+        <option>symbol</option>
+        <option value="meta.industry">industry</option>
+        <option>lastPrice</option>
+        <option>previousClose</option>
+        <option>yearHigh</option>
+        <option>yearLow</option>
+        <option>nearWKH</option>
+        <option>nearWKL</option>
+        <option>pChange</option>
+        <option>perChange30d</option>
+        <option>perChange365d</option>
+      </select>
+    </div>
+    <div class="col-lg-3 col-12">
+      <select
+        class="form-select"
+        aria-label="Default select example"
+        [(ngModel)]="data.filter.cond"
+      >
+        <option selected>Open this select menu</option>
+        <option value="gt">></option>
+        <option value="gte">>=</option>
+        <option value="lt"><</option>
+        <option value="lte"><=</option>
+        <option value="eq">=</option>
+      </select>
+    </div>
+    <div class="col-lg-3 col-12">
+      <input type="text" class="form-control" [(ngModel)]="data.filter.val" />
+    </div>
+    <div class="col-lg-3 col-12">
+      <button
+        type="button"
+        class="btn btn-primary me-2"
+        (click)="add_fn(data, pg_dt)"
+      >
+        Add
+      </button>
+      <button
+        type="button"
+        class="btn btn-success me-2"
+        (click)="search(data, pg_dt)"
+      >
+        Search
+      </button>
+      <button
+        type="button"
+        class="btn btn-danger me-2"
+        (click)="reset(data, pg_dt)"
+      >
+        Reset
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-warning"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal"
+        (click)="temp_save_popup_data(data)"
+      >
+        filters
+      </button>
+    </div>
+  </div>
+  <div class="table-responsive123" *ngIf="pg_dt != null">
+    <table id="example" class="table table-sm table-striped table-hover">
+      <thead class="header-fixed">
+        <tr>
+          <th (click)="download('example')">#</th>
+          <th (click)="asc_desc('symbol', pg_dt)">symbol</th>
+          <th (click)="asc_desc('meta.industry', pg_dt)">industry</th>
+          <th (click)="asc_desc('lastPrice', pg_dt)">Close</th>
+          <th (click)="asc_desc('previousClose', pg_dt)">pClose</th>
+          <th (click)="asc_desc('yearHigh', pg_dt)">52H%</th>
+          <th (click)="asc_desc('yearLow', pg_dt)">yearLow</th>
+          <th (click)="asc_desc('nearWKH', pg_dt)">NH</th>
+          <th (click)="asc_desc('nearWKL', pg_dt)">NW</th>
+          <th (click)="asc_desc('pChange', pg_dt)">D%</th>
+          <th (click)="asc_desc('perChange30d', pg_dt)">30D%</th>
+          <th (click)="asc_desc('perChange365d', pg_dt)">365D%</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let i of oa(pg_dt)[0].data; let idx = index">
+          <td>{{ idx + 1 }}</td>
+          <td>
+            <a
+              target="_blank"
+              [href]="
+                'https://www.nseindia.com/get-quotes/equity?symbol=' + i.symbol
+              "
+            >
+              {{ i.symbol }}
+            </a>
+          </td>
+          <td class="text-nowrap">
+            {{ i?.meta?.industry || "" }}
+          </td>
+
+          <td>{{ i.lastPrice }}</td>
+          <td>{{ i.previousClose }}</td>
+
+          <td>{{ i.yearHigh }}</td>
+          <td>{{ i.yearLow }}</td>
+
+          <td>{{ n(i.nearWKH) }}</td>
+          <td>{{ n(i.nearWKL) }}</td>
+
+          <td>{{ i.pChange }}</td>
+          <td>{{ i.perChange30d }}</td>
+          <td>{{ i.perChange365d }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>Column</th>
+              <th>condition</th>
+              <th>Value</th>
+              <th>Action</th>
+            </tr>
+          </tbody>
+          <tbody>
+            <tr *ngFor="let i of data.filter_arr">
+              <td>{{ i.col }}</td>
+              <td>{{ i.cond }}</td>
+              <td>{{ i.val }}</td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-primary me-2"
+                  (click)="rem_from_filter(data, i)"
+                >
+                  Rm
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

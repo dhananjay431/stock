@@ -1,0 +1,184 @@
+<div
+  class="row"
+  *ngIf="{ drop: data.drop | async, pg_data: data.pg_data | async } as _data"
+>
+  <div class="col-6 mb-2 mt-2" *ngIf="_data.drop != null">
+    <select
+      class="form-select form-select-sm"
+      aria-label="Default select example"
+      [(ngModel)]="data.selected"
+      (change)="_selected_drop(data, _data)"
+    >
+      <option selected>Open this select menu</option>
+      <ng-container *ngFor="let i of ob(_data).drop.key">
+        <option value="">--{{ i }}--</option>
+        <option [value]="j.index" *ngFor="let j of ob(_data).drop.data[i]">
+          {{ j.index }}
+
+          <i class="fa-solid fa-sort-up"></i>
+        </option>
+      </ng-container>
+    </select>
+  </div>
+  <div class="col-6">
+    <button
+      type="button"
+      class="btn btn-sm btn-warning"
+      data-bs-toggle="modal"
+      data-bs-target="#allList"
+      (click)="temp_save_popup_data(data)"
+    >
+      <i class="fa-solid fa-list"></i>
+    </button>
+  </div>
+  <div class="col-12" *ngIf="data.selected_ob != null">
+    <app-index-one [data]="oa(data.selected_ob)"></app-index-one>
+  </div>
+  <div class="table-responsive123 mt-2" *ngIf="_data.pg_data != null">
+    <!--    start-->
+    <div class="row">
+      <div class="col-lg-3 col-12">
+        <select
+          class="form-select form-select-sm"
+          aria-label="Default select example"
+          [(ngModel)]="data.filter.col"
+        >
+          <option selected>Open this select menu</option>
+          <option>symbol</option>
+          <option value="meta.industry">industry</option>
+          <option>lastPrice</option>
+          <option>previousClose</option>
+          <option>yearHigh</option>
+          <option>yearLow</option>
+          <option>nearWKH</option>
+          <option>nearWKL</option>
+          <option>pChange</option>
+          <option>perChange30d</option>
+          <option>perChange365d</option>
+        </select>
+      </div>
+      <div class="col-lg-3 col-12">
+        <select
+          class="form-select form-select-sm"
+          aria-label="Default select example"
+          [(ngModel)]="data.filter.cond"
+        >
+          <option selected>Open this select menu</option>
+          <option value="gt">></option>
+          <option value="gte">>=</option>
+          <option value="lt"><</option>
+          <option value="lte"><=</option>
+          <option value="eq">=</option>
+        </select>
+      </div>
+      <div class="col-lg-3 col-12">
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          [(ngModel)]="data.filter.val"
+        />
+      </div>
+      <div class="col-lg-3 col-12">
+        <button
+          type="button"
+          class="btn btn-sm btn-primary me-2"
+          (click)="add_fn(data, _data)"
+        >
+          <i class="fa-solid fa-plus"></i>
+        </button>
+        <button
+          type="button"
+          class="btn btn-sm btn-success me-2"
+          (click)="search(data, _data)"
+        >
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+        <button
+          type="button"
+          class="btn btn-sm btn-danger me-2"
+          (click)="reset(data, _data)"
+        >
+          <i class="fa-solid fa-arrows-rotate"></i>
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-sm btn-warning"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+          (click)="temp_save_popup_data(data)"
+        >
+          <i class="fa-solid fa-filter"></i>
+        </button>
+      </div>
+    </div>
+    <!--    end-->
+    <app-index-dtl [_data]="_data"></app-index-dtl>
+  </div>
+  <!-- Modal -->
+
+  <div *ngIf="_data.drop != null">
+    <app-all-index [data]="_data"></app-all-index>
+  </div>
+
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <table class="table">
+            <tbody>
+              <tr>
+                <th>Column</th>
+                <th>condition</th>
+                <th>Value</th>
+                <th>Action</th>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr *ngFor="let i of data.filter_arr">
+                <td>{{ i.col }}</td>
+                <td>{{ i.cond }}</td>
+                <td>{{ i.val }}</td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-primary me-2"
+                    (click)="rem_from_filter(data, i)"
+                  >
+                    Rm
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
