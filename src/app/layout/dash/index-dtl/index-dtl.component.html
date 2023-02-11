@@ -39,17 +39,80 @@
         {{ i.ffmc || "" }}
       </td>
 
-      <td>{{ i.previousClose }}</td>
+      <td>
+        <span
+          [class]="{
+            'text-success': i.lastPrice > i.previousClose,
+            'text-danger': i.lastPrice < i.previousClose
+          }"
+        >
+          {{ n(i.previousClose) || "" }}
+        </span>
+      </td>
 
       <td>{{ i.yearLow }}</td>
-      <td>{{ i.lastPrice }}</td>
+      <td>
+        <span
+          [class]="{
+            'text-success': i.lastPrice > i.open,
+            'text-danger': i.lastPrice < i.open
+          }"
+        >
+          {{ n(i.lastPrice) || "" }}
+        </span>
+      </td>
       <td>{{ i.yearHigh }}</td>
-      <td>{{ n(i.nearWKH) }}</td>
-      <td>{{ n(i.nearWKL) }}</td>
+      <td>
+        <span
+          [class]="{
+            'text-success': i.nearWKH > 0,
+            'text-danger': i.nearWKH < 0
+          }"
+        >
+          {{ n(i.nearWKH) || "" }}
+        </span>
+      </td>
+      <td>
+        <span
+          [class]="{
+            'text-success': i.nearWKL > 0,
+            'text-danger': i.nearWKL < 0
+          }"
+        >
+          {{ n(i.nearWKL) || "" }}
+        </span>
+      </td>
 
-      <td>{{ i.pChange }}</td>
-      <td>{{ i.perChange30d }}</td>
-      <td>{{ i.perChange365d }}</td>
+      <td>
+        <span
+          [class]="{
+            'text-success': i.pChange > 0,
+            'text-danger': i.pChange < 0
+          }"
+        >
+          {{ i.pChange || "" }}
+        </span>
+      </td>
+      <td>
+        <span
+          [class]="{
+            'text-success': i.perChange30d > 0,
+            'text-danger': i.perChange30d < 0
+          }"
+        >
+          {{ i.perChange30d || "" }}
+        </span>
+      </td>
+      <td>
+        <span
+          [class]="{
+            'text-success': i.perChange365d > 0,
+            'text-danger': i.perChange365d < 0
+          }"
+        >
+          {{ i.perChange365d || "" }}
+        </span>
+      </td>
     </tr>
   </tbody>
 </table>

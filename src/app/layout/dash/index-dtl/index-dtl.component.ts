@@ -33,7 +33,6 @@ export class IndexDtlComponent implements OnInit {
     }
     if (pg_dt.col[key] === 'asc')
       pg_dt.data = pg_dt.data.sort((a: any, b: any) => {
-        console.log(_.get(a, key), _.get(b, key));
         return _.get(a, key) < _.get(b, key) ? 1 : -1;
       });
 
