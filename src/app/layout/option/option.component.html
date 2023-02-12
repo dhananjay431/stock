@@ -1,6 +1,27 @@
+<!--
+https://www.nseindia.com/api/master-quote
+
+
+-->
+
 <div *ngIf="{ data: data.$data | async } as _data">
-  <div class="row" *ngIf="_data.data != null">
-    <div class="col-12 text-end">
+  <div class="row mt-2" *ngIf="_data.data != null">
+    <div class="col-6">
+      <select
+        [(ngModel)]="data.contracts"
+        (change)="h_contracts(data.contracts)"
+        class="form-select form-select-sm"
+      >
+        <option>--Select--</option>
+        <option
+          *ngFor="let i of ['NIFTY', 'FINNIFTY', 'BANKNIFTY', 'MIDCPNIFTY']"
+          [value]="i"
+        >
+          {{ i }}
+        </option>
+      </select>
+    </div>
+    <div class="col-6">
       <button
         type="button"
         class="btn btn-sm btn-danger me-2"
@@ -11,26 +32,50 @@
     </div>
     <div class="col-6" *ngFor="let i of ob(_data.data)['expiryData_key']">
       <!--    {{ ob(_data.data)["expiryData"][i] | json }}-->
-      {{ i }}
+
+      <span class="fw-semibold">
+        {{ i }}
+      </span>
+      Underlying Index:
+      <span class="fw-semibold">
+        {{ data.contracts }}
+      </span>
+      <span class="fw-semibold">
+        {{ ob(_data.data).data.records.underlyingValue | number }}
+      </span>
+      As on
+
+      <span class="fw-semibold">
+        {{ ob(_data.data).data.records.timestamp }}
+      </span>
+
+      <span class="badge text-bg-primary"></span>
       <table id="example" class="table table-sm table-striped table-hover mt-2">
         <thead class="header-fixed bg">
           <tr>
             <th class="text-end">OI</th>
             <th class="text-end">COI</th>
-            <th class="text-center">Strike Price</th>
 
+            <th class="text-end">lastPrice</th>
+            <th class="text-center">Strike Price</th>
+            <th class="text-end">lastPrice</th>
             <th class="text-end">COI</th>
             <th class="text-end">OI</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let i of ob(_data.data).expiryData[i]">
+            <!--             'text-danger': ((i.CE.change || 0 ) < 0),
+                'text-success':   ((i.CE.change || 0 ) > 0),-->
             <td
               class="text-end"
               [class]="{
                 'bg-primary-subtle':
-                  i.strikePrice < (i?.CE?.underlyingValue || 0)
+                  i.strikePrice < (i?.CE?.underlyingValue || 0),
+                'text-danger': (i.CE.change || 0) < 0,
+                'text-success': (i.CE.change || 0) > 0
               }"
+              [title]="i.CE.change"
             >
               {{ i.CE.openInterest }}
             </td>
@@ -38,19 +83,48 @@
               class="text-end"
               [class]="{
                 'bg-primary-subtle':
-                  i.strikePrice < (i?.CE?.underlyingValue || 0)
+                  i.strikePrice < (i?.CE?.underlyingValue || 0),
+                'text-danger': (i.CE.change || 0) < 0,
+                'text-success': (i.CE.change || 0) > 0
               }"
+              [title]="i.CE.change"
             >
               {{ i.CE.changeinOpenInterest }}
             </td>
-            <td class="text-center">{{ i.strikePrice }}</td>
 
             <td
               class="text-end"
               [class]="{
                 'bg-primary-subtle':
-                  i.strikePrice > (i?.PE?.underlyingValue || 0)
+                  i.strikePrice < (i?.CE?.underlyingValue || 0),
+                'text-danger': (i.CE.change || 0) < 0,
+                'text-success': (i.CE.change || 0) > 0
               }"
+            >
+              {{ n(i.CE.lastPrice) }}
+            </td>
+            <td class="text-center">{{ i.strikePrice }}</td>
+            <td
+              class="text-end"
+              [class]="{
+                'bg-primary-subtle':
+                  i.strikePrice > (i?.PE?.underlyingValue || 0),
+                'text-danger': (i.PE.change || 0) < 0,
+                'text-success': (i.PE.change || 0) > 0
+              }"
+            >
+              {{ n(i.PE.lastPrice) }}
+            </td>
+
+            <td
+              class="text-end"
+              [class]="{
+                'bg-primary-subtle':
+                  i.strikePrice > (i?.PE?.underlyingValue || 0),
+                'text-danger': (i.PE.change || 0) < 0,
+                'text-success': (i.PE.change || 0) > 0
+              }"
+              [title]="i.PE.change"
             >
               {{ i.PE.changeinOpenInterest }}
             </td>
@@ -59,8 +133,11 @@
               class="text-end"
               [class]="{
                 'bg-primary-subtle':
-                  i.strikePrice > (i?.PE?.underlyingValue || 0)
+                  i.strikePrice > (i?.PE?.underlyingValue || 0),
+                'text-danger': (i.PE.change || 0) < 0,
+                'text-success': (i.PE.change || 0) > 0
               }"
+              [title]="i.PE.change"
             >
               {{ i.PE.openInterest }}
             </td>

@@ -12,6 +12,7 @@ export class OptionComponent implements OnInit {
   constructor(private hs: HeroService) {}
 
   data: any = {
+    contracts: 'NIFTY',
     $data: of([]),
     $$data: new Subject(),
     expiryData_key: [],
@@ -21,24 +22,24 @@ export class OptionComponent implements OnInit {
   oa = (a: any) => (Array.isArray(a) ? a : [a]);
   ngOnInit(): void {
     let that = this;
-    this.data.$data = this.data.$$data.pipe(mergeMap((d) => this.getNew()));
+    this.data.$data = this.data.$$data.pipe(mergeMap((d) => this.getNew(d)));
 
     setTimeout(() => {
-      this.data.$$data.next([]);
+      this.data.$$data.next(this.data.contracts);
     }, 100);
   }
-  getNew() {
+  h_contracts(id: any) {
+    this.data.$$data.next(id);
+  }
+  getNew(id: any) {
     let that = this;
-    return this.hs.ajax('https://livedata.glitch.me/api/option/NIFTY').pipe(
+    return this.hs.ajax('https://livedata.glitch.me/api/option/' + id).pipe(
       map((d: any) => {
-        console.log('ddd=>', d);
         let expiryData = that.getAllopData({ data: d });
         let expiryData_key = Object.keys(expiryData);
-
-        return { data: d, expiryData, expiryData_key };
-      }),
-      tap((d) => {
-        console.log('tap=>', d);
+        let dt = { data: d, expiryData, expiryData_key };
+        console.log('dt=>', dt);
+        return dt;
       })
     );
   }
@@ -50,8 +51,6 @@ export class OptionComponent implements OnInit {
     let temp_data: any = _.chain(_data.data.records.data)
       .filter({ expiryDate: expiryDate })
       .value();
-
-    console.log('temp_data=>', temp_data);
     let a = _.chain(temp_data)
       .filter((d: any) => {
         return (d?.PE?.strikePrice || 0) < (d?.PE?.underlyingValue || 0);
@@ -67,16 +66,6 @@ export class OptionComponent implements OnInit {
       .sortBy('CE.changeinOpenInterest')
       .takeRight(3)
       .value();
-
-    console.log(
-      'CE=>',
-      _.chain(temp_data)
-        .filter((d: any) => {
-          return (d?.CE?.strikePrice || 0) > (d?.CE?.underlyingValue || 0);
-        })
-        .sortBy('CE.changeinOpenInterest')
-        .value()
-    );
     return _.chain([...a, ...b])
       .sortBy('strikePrice')
       .value();
@@ -97,6 +86,9 @@ export class OptionComponent implements OnInit {
     return data;
   }
   reset(a: any, b: any) {
-    this.data.$$data.next([]);
+    this.data.$$data.next(this.data.contracts);
+  }
+  n(d: any) {
+    return Number(d).toFixed(2);
   }
 }
