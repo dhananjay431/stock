@@ -12,5 +12,8 @@ export class AllIndexComponent implements OnInit {
       all: [],
     },
   };
+  n(d: any) {
+    return Number(d).toFixed(2);
+  }
   ngOnInit(): void {}
 }

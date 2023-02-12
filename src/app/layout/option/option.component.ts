@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HeroService } from '../../hero.service';
-import { of } from 'rxjs';
+import { mergeMap, of, Subject } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 declare var _: any;
 @Component({
@@ -13,12 +13,20 @@ export class OptionComponent implements OnInit {
 
   data: any = {
     $data: of([]),
+    $$data: new Subject(),
     expiryData_key: [],
     expiryData: [],
   };
   ob = (a: any) => a;
   oa = (a: any) => (Array.isArray(a) ? a : [a]);
+  ngOnInit(): void {
+    let that = this;
+    this.data.$data = this.data.$$data.pipe(mergeMap((d) => this.getNew()));
 
+    setTimeout(() => {
+      this.data.$$data.next([]);
+    }, 100);
+  }
   getNew() {
     let that = this;
     return this.hs.ajax('https://livedata.glitch.me/api/option/NIFTY').pipe(
@@ -34,10 +42,7 @@ export class OptionComponent implements OnInit {
       })
     );
   }
-  ngOnInit(): void {
-    let that = this;
-    this.data.$data = this.getNew();
-  }
+
   h_expiryDates(data: any, _data: any) {
     data.expiryData = this.getAllopData(_data);
   }
@@ -46,28 +51,40 @@ export class OptionComponent implements OnInit {
       .filter({ expiryDate: expiryDate })
       .value();
 
+    console.log('temp_data=>', temp_data);
     let a = _.chain(temp_data)
       .filter((d: any) => {
-        return d.PE.strikePrice < d.PE.underlyingValue;
+        return (d?.PE?.strikePrice || 0) < (d?.PE?.underlyingValue || 0);
       })
       .sortBy('PE.changeinOpenInterest')
       .takeRight(3)
       .value();
+    debugger;
     let b = _.chain(temp_data)
       .filter((d: any) => {
-        return d.CE.strikePrice > d.CE.underlyingValue;
+        return (d?.CE?.strikePrice || 0) > (d?.CE?.underlyingValue || 0);
       })
       .sortBy('CE.changeinOpenInterest')
       .takeRight(3)
       .value();
 
+    console.log(
+      'CE=>',
+      _.chain(temp_data)
+        .filter((d: any) => {
+          return (d?.CE?.strikePrice || 0) > (d?.CE?.underlyingValue || 0);
+        })
+        .sortBy('CE.changeinOpenInterest')
+        .value()
+    );
     return _.chain([...a, ...b])
       .sortBy('strikePrice')
       .value();
   }
   getAllopData(_data: any) {
+    debugger;
     return _.chain(_data.data.records.expiryDates)
-      .take(3)
+      .take(4)
       .reduce((a: any, b: any) => {
         let t: any = {};
         a[b] = this.getexpiryData(b, _data);
@@ -80,6 +97,6 @@ export class OptionComponent implements OnInit {
     return data;
   }
   reset(a: any, b: any) {
-    this.data.$data = this.getNew();
+    this.data.$$data.next([]);
   }
 }

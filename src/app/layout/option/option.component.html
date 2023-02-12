@@ -9,49 +9,60 @@
         <i class="fa-solid fa-arrows-rotate"></i>
       </button>
     </div>
-    <div *ngFor="let i of ob(_data.data)['expiryData_key']">
+    <div class="col-6" *ngFor="let i of ob(_data.data)['expiryData_key']">
       <!--    {{ ob(_data.data)["expiryData"][i] | json }}-->
       {{ i }}
       <table id="example" class="table table-sm table-striped table-hover mt-2">
         <thead class="header-fixed bg">
           <tr>
-            <th>openInterest</th>
-            <th>changeinOpenInterest</th>
-            <th>strikePrice</th>
-            <th>openInterest</th>
-            <th>changeinOpenInterest</th>
+            <th class="text-end">OI</th>
+            <th class="text-end">COI</th>
+            <th class="text-center">Strike Price</th>
+
+            <th class="text-end">COI</th>
+            <th class="text-end">OI</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let i of ob(_data.data).expiryData[i]">
             <td
+              class="text-end"
               [class]="{
-                'bg-primary-subtle': i.strikePrice < i.CE.underlyingValue
+                'bg-primary-subtle':
+                  i.strikePrice < (i?.CE?.underlyingValue || 0)
               }"
             >
               {{ i.CE.openInterest }}
             </td>
             <td
+              class="text-end"
               [class]="{
-                'bg-primary-subtle': i.strikePrice < i.CE.underlyingValue
+                'bg-primary-subtle':
+                  i.strikePrice < (i?.CE?.underlyingValue || 0)
               }"
             >
               {{ i.CE.changeinOpenInterest }}
             </td>
-            <td>{{ i.strikePrice }}</td>
+            <td class="text-center">{{ i.strikePrice }}</td>
+
             <td
+              class="text-end"
               [class]="{
-                'bg-primary-subtle': i.strikePrice > i.PE.underlyingValue
-              }"
-            >
-              {{ i.PE.openInterest }}
-            </td>
-            <td
-              [class]="{
-                'bg-primary-subtle': i.strikePrice > i.PE.underlyingValue
+                'bg-primary-subtle':
+                  i.strikePrice > (i?.PE?.underlyingValue || 0)
               }"
             >
               {{ i.PE.changeinOpenInterest }}
+            </td>
+
+            <td
+              class="text-end"
+              [class]="{
+                'bg-primary-subtle':
+                  i.strikePrice > (i?.PE?.underlyingValue || 0)
+              }"
+            >
+              {{ i.PE.openInterest }}
             </td>
           </tr>
         </tbody>

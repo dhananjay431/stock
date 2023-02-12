@@ -16,26 +16,41 @@
   </thead>
   <tbody>
     <tr *ngFor="let i of data">
-      <td>{{ i.index }}</td>
-      <td>{{ i.last }}</td>
-      <td>{{ i.advances || "" }}</td>
-      <td>{{ i.declines || "" }}</td>
-      <td>{{ i.previousClose || "" }}</td>
-      <td>
+      <td
+        [class]="{
+          'text-success': i.percentChange > 0,
+          'text-danger': i.percentChange < 0
+        }"
+      >
+        {{ i.index }}
+      </td>
+      <td
+        class="text-end"
+        [class]="{
+          'text-success': i.percentChange > 0,
+          'text-danger': i.percentChange < 0
+        }"
+      >
+        {{ n(i.last) }}
+      </td>
+      <td class="text-end">{{ i.advances || "" }}</td>
+      <td class="text-end">{{ i.declines || "" }}</td>
+      <td class="text-end">{{ n(i.previousClose) || "" }}</td>
+      <td class="text-end">
         <span
           [class]="{
             'text-success': i.percentChange > 0,
             'text-danger': i.percentChange < 0
           }"
         >
-          {{ i.percentChange || "" }}
+          {{ n(i.percentChange) || "" }}
         </span>
       </td>
-      <td>{{ i.oneWeekAgo || "" }}</td>
-      <td>{{ i.oneMonthAgo || "" }}</td>
-      <td>{{ i.oneYearAgo || "" }}</td>
-      <td>{{ i.yearHigh || "" }}</td>
-      <td>{{ i.yearLow || "" }}</td>
+      <td class="text-end">{{ n(i.oneWeekAgo) || "" }}</td>
+      <td class="text-end">{{ n(i.oneMonthAgo) || "" }}</td>
+      <td class="text-end">{{ n(i.oneYearAgo) || "" }}</td>
+      <td class="text-end">{{ n(i.yearHigh) || "" }}</td>
+      <td class="text-end">{{ n(i.yearLow) || "" }}</td>
     </tr>
   </tbody>
 </table>

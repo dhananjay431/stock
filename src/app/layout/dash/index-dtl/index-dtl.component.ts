@@ -12,6 +12,7 @@ export class IndexDtlComponent implements OnInit {
   @Input() _data: any = {};
   oa: any = this.hs.oa;
   ob = (a: any) => a;
+
   ngOnInit(): void {}
   download(id: any) {
     let table_elt = document.getElementById(id);

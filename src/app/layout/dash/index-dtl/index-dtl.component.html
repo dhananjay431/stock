@@ -1,22 +1,52 @@
 <table id="example" class="table table-sm table-striped table-hover mt-2">
   <thead class="header-fixed bg">
     <tr>
-      <th (click)="download('example')">#</th>
-      <th (click)="asc_desc('symbol', _data.pg_data)">symbol</th>
-      <th (click)="asc_desc('meta.industry', _data.pg_data)">industry</th>
-      <th (click)="asc_desc('ffmc', _data.pg_data)">ffmc</th>
-
-      <th (click)="asc_desc('previousClose', _data.pg_data)">pClose</th>
-      <th (click)="asc_desc('yearLow', _data.pg_data)">52WL%</th>
-      <th (click)="asc_desc('lastPrice', _data.pg_data)">Close</th>
-
-      <th (click)="asc_desc('yearHigh', _data.pg_data)">52WH%</th>
-
-      <th (click)="asc_desc('nearWKH', _data.pg_data)">NH</th>
-      <th (click)="asc_desc('nearWKL', _data.pg_data)">NW</th>
-      <th (click)="asc_desc('pChange', _data.pg_data)">D%</th>
-      <th (click)="asc_desc('perChange30d', _data.pg_data)">30D%</th>
-      <th (click)="asc_desc('perChange365d', _data.pg_data)">365D%</th>
+      <th class="text-center" (click)="download('example')">#</th>
+      <th class="text-center" (click)="asc_desc('symbol', _data.pg_data)">
+        symbol
+      </th>
+      <th
+        class="text-center"
+        (click)="asc_desc('meta.industry', _data.pg_data)"
+      >
+        industry
+      </th>
+      <th class="text-center" (click)="asc_desc('ffmc', _data.pg_data)">
+        ffmc
+      </th>
+      <th
+        class="text-center"
+        (click)="asc_desc('previousClose', _data.pg_data)"
+      >
+        pClose
+      </th>
+      <th class="text-center" (click)="asc_desc('yearLow', _data.pg_data)">
+        52WL%
+      </th>
+      <th class="text-center" (click)="asc_desc('lastPrice', _data.pg_data)">
+        Close
+      </th>
+      <th class="text-center" (click)="asc_desc('yearHigh', _data.pg_data)">
+        52WH%
+      </th>
+      <th class="text-center" (click)="asc_desc('nearWKH', _data.pg_data)">
+        NH
+      </th>
+      <th class="text-center" (click)="asc_desc('nearWKL', _data.pg_data)">
+        NW
+      </th>
+      <th class="text-center" (click)="asc_desc('pChange', _data.pg_data)">
+        D%
+      </th>
+      <th class="text-center" (click)="asc_desc('perChange30d', _data.pg_data)">
+        30D%
+      </th>
+      <th
+        class="text-center"
+        (click)="asc_desc('perChange365d', _data.pg_data)"
+      >
+        365D%
+      </th>
     </tr>
   </thead>
   <tbody>
@@ -35,11 +65,11 @@
       <td class="text-nowrap">
         {{ i?.meta?.industry || "" }}
       </td>
-      <td class="text-nowrap">
-        {{ i.ffmc || "" }}
+      <td class="text-nowrap text-end">
+        {{ n(i.ffmc) || "" }}
       </td>
 
-      <td>
+      <td class="text-end">
         <span
           [class]="{
             'text-success': i.lastPrice > i.previousClose,
@@ -50,8 +80,8 @@
         </span>
       </td>
 
-      <td>{{ i.yearLow }}</td>
-      <td>
+      <td class="text-end">{{ n(i.yearLow) }}</td>
+      <td class="text-end">
         <span
           [class]="{
             'text-success': i.lastPrice > i.open,
@@ -61,8 +91,8 @@
           {{ n(i.lastPrice) || "" }}
         </span>
       </td>
-      <td>{{ i.yearHigh }}</td>
-      <td>
+      <td class="text-end">{{ n(i.yearHigh) }}</td>
+      <td class="text-end">
         <span
           [class]="{
             'text-success': i.nearWKH > 0,
@@ -72,7 +102,7 @@
           {{ n(i.nearWKH) || "" }}
         </span>
       </td>
-      <td>
+      <td class="text-end">
         <span
           [class]="{
             'text-success': i.nearWKL > 0,
@@ -83,34 +113,34 @@
         </span>
       </td>
 
-      <td>
+      <td class="text-end">
         <span
           [class]="{
             'text-success': i.pChange > 0,
             'text-danger': i.pChange < 0
           }"
         >
-          {{ i.pChange || "" }}
+          {{ n(i.pChange) || "" }}
         </span>
       </td>
-      <td>
+      <td class="text-end">
         <span
           [class]="{
             'text-success': i.perChange30d > 0,
             'text-danger': i.perChange30d < 0
           }"
         >
-          {{ i.perChange30d || "" }}
+          {{ n(i.perChange30d) || "" }}
         </span>
       </td>
-      <td>
+      <td class="text-end">
         <span
           [class]="{
             'text-success': i.perChange365d > 0,
             'text-danger': i.perChange365d < 0
           }"
         >
-          {{ i.perChange365d || "" }}
+          {{ n(i.perChange365d) || "" }}
         </span>
       </td>
     </tr>
