@@ -16,6 +16,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('./layout/dash/dash.module').then((m) => m.DashModule),
       },
+      {
+        path: 'option',
+        loadChildren: () =>
+          import('./layout/option/option.module').then((m) => m.OptionModule),
+      },
     ],
   },
 ];

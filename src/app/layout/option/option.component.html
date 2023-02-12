@@ -1,0 +1,69 @@
+<div *ngIf="{ data: data.$data | async } as _data">
+  <div class="row" *ngIf="_data.data != null">
+    <div class="col-12 text-end">
+      <button
+        type="button"
+        class="btn btn-sm btn-danger me-2"
+        (click)="reset(data, _data)"
+      >
+        <i class="fa-solid fa-arrows-rotate"></i>
+      </button>
+    </div>
+    <div *ngFor="let i of ob(_data.data)['expiryData_key']">
+      <!--    {{ ob(_data.data)["expiryData"][i] | json }}-->
+      {{ i }}
+      <table id="example" class="table table-sm table-striped table-hover mt-2">
+        <thead class="header-fixed bg">
+          <tr>
+            <th>openInterest</th>
+            <th>changeinOpenInterest</th>
+            <th>strikePrice</th>
+            <th>openInterest</th>
+            <th>changeinOpenInterest</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let i of ob(_data.data).expiryData[i]">
+            <td
+              [class]="{
+                'bg-primary-subtle': i.strikePrice < i.CE.underlyingValue
+              }"
+            >
+              {{ i.CE.openInterest }}
+            </td>
+            <td
+              [class]="{
+                'bg-primary-subtle': i.strikePrice < i.CE.underlyingValue
+              }"
+            >
+              {{ i.CE.changeinOpenInterest }}
+            </td>
+            <td>{{ i.strikePrice }}</td>
+            <td
+              [class]="{
+                'bg-primary-subtle': i.strikePrice > i.PE.underlyingValue
+              }"
+            >
+              {{ i.PE.openInterest }}
+            </td>
+            <td
+              [class]="{
+                'bg-primary-subtle': i.strikePrice > i.PE.underlyingValue
+              }"
+            >
+              {{ i.PE.changeinOpenInterest }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!--{{ data.expiryData_key | json }}
+  {{ data.expiryData[data.expiryData_key[0]] | json }}
+  <div *ngIf="data.expiryData_key !== undefined">
+    <div *ngFor="let i of check(data, 'data.expiryData_key')">
+      {{ i }}
+    </div>
+  </div>-->
+  </div>
+</div>
