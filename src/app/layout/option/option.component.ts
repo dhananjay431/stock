@@ -10,30 +10,36 @@ declare var _: any;
 })
 export class OptionComponent implements OnInit {
   constructor(private hs: HeroService) {}
-
+  //api/master-quote
   data: any = {
     contracts: 'NIFTY',
+    $masterQuote: of([]),
     $data: of([]),
     $$data: new Subject(),
     expiryData_key: [],
     expiryData: [],
+    temp_url: '/api/option/',
   };
   ob = (a: any) => a;
   oa = (a: any) => (Array.isArray(a) ? a : [a]);
   ngOnInit(): void {
     let that = this;
     this.data.$data = this.data.$$data.pipe(mergeMap((d) => this.getNew(d)));
-
+    this.data.$masterQuote = this.hs.ajax(
+      this.hs.getUrl() + '/api/master-quote'
+    );
     setTimeout(() => {
-      this.data.$$data.next(this.data.contracts);
+      this.data.$$data.next({ url: '/api/option/', id: this.data.contracts });
     }, 100);
   }
-  h_contracts(id: any) {
-    this.data.$$data.next(id);
+  h_contracts(url: any, id: any) {
+    debugger;
+    this.data.temp_url = url;
+    this.data.$$data.next({ url, id });
   }
   getNew(id: any) {
     let that = this;
-    return this.hs.ajax('https://livedata.glitch.me/api/option/' + id).pipe(
+    return this.hs.ajax(this.hs.getUrl() + id.url + id.id).pipe(
       map((d: any) => {
         let expiryData = that.getAllopData({ data: d });
         let expiryData_key = Object.keys(expiryData);
@@ -86,7 +92,7 @@ export class OptionComponent implements OnInit {
     return data;
   }
   reset(a: any, b: any) {
-    this.data.$$data.next(this.data.contracts);
+    this.data.$$data.next({ url: this.data.temp_url, id: this.data.contracts });
   }
   n(d: any) {
     return Number(d).toFixed(2);

@@ -29,4 +29,10 @@ export class HeroService {
       })
     );
   }
+  getUrl() {
+    debugger;
+    //let t: any = Object.fromEntries(new URLSearchParams(location.search));
+    //return t.url || '';
+    return 'http://localhost:3000';
+  }
 }

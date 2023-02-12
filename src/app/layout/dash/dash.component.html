@@ -38,23 +38,19 @@
     <!--    start-->
     <div class="row">
       <div class="col-lg-3 col-12">
+        <!--
+        ['priority', 'symbol', 'identifier', 'series', 'open', 'dayHigh', 'dayLow', 'lastPrice', 'previousClose', 'change', 'pChange', 'totalTradedVolume', 'totalTradedValue', 'lastUpdateTime', 'yearHigh', 'ffmc', 'yearLow', 'nearWKH', 'nearWKL', 'perChange365d', 'date365dAgo', 'chart365dPath', 'date30dAgo', 'perChange30d', 'chart30dPath', 'chartTodayPath', 'meta']
+        -->
+
         <select
           class="form-select form-select-sm"
           aria-label="Default select example"
           [(ngModel)]="data.filter.col"
         >
           <option selected>Open this select menu</option>
-          <option>symbol</option>
-          <option value="meta.industry">industry</option>
-          <option>lastPrice</option>
-          <option>previousClose</option>
-          <option>yearHigh</option>
-          <option>yearLow</option>
-          <option>nearWKH</option>
-          <option>nearWKL</option>
-          <option>pChange</option>
-          <option>perChange30d</option>
-          <option>perChange365d</option>
+          <option *ngFor="let i of data.dropdown_filter_data" [value]="i.key">
+            {{ i.value }}
+          </option>
         </select>
       </div>
       <div class="col-lg-3 col-12">

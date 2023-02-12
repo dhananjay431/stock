@@ -38,15 +38,11 @@ export class DashComponent implements OnInit {
   ngOnInit(): void {
     let that = this;
 
+    this.hs.ajax(this.hs.getUrl() + '/api/equityMaster').subscribe((resp) => {
+      console.log('resp=>', resp);
+    });
     this.hs
-      .ajax('https://livedata.glitch.me/api/equityMaster')
-      .subscribe((resp) => {
-        console.log('resp=>', resp);
-      });
-    this.hs
-      .ajax_no_head(
-        'https://raw.githack.com/dhananjay431/my_imp_data/master/20230210.json'
-      )
+      .ajax(this.hs.getUrl() + '/dhananjay431/my_imp_data/master/20230210.json')
       .subscribe((r) => {
         that.data.pg_data = r;
         that.data.drop = Object.keys(r);

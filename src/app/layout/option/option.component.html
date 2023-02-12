@@ -1,15 +1,21 @@
 <!--
 https://www.nseindia.com/api/master-quote
-
+https://www.nseindia.com/api/option-chain-equities?symbol=ABB
+https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
 
 -->
 
-<div *ngIf="{ data: data.$data | async } as _data">
+<div
+  *ngIf="{
+    data: data.$data | async,
+    masterQuote: data.$masterQuote | async
+  } as _data"
+>
   <div class="row mt-2" *ngIf="_data.data != null">
-    <div class="col-6">
+    <div class="col-3">
       <select
         [(ngModel)]="data.contracts"
-        (change)="h_contracts(data.contracts)"
+        (change)="h_contracts('/api/option/', data.contracts)"
         class="form-select form-select-sm"
       >
         <option>--Select--</option>
@@ -17,6 +23,18 @@ https://www.nseindia.com/api/master-quote
           *ngFor="let i of ['NIFTY', 'FINNIFTY', 'BANKNIFTY', 'MIDCPNIFTY']"
           [value]="i"
         >
+          {{ i }}
+        </option>
+      </select>
+    </div>
+    <div class="col-3">
+      <select
+        [(ngModel)]="data.contracts"
+        (change)="h_contracts('/api/option-equities/', data.contracts)"
+        class="form-select form-select-sm"
+      >
+        <option>--Select--</option>
+        <option *ngFor="let i of oa(_data.masterQuote)" [value]="i">
           {{ i }}
         </option>
       </select>
@@ -30,7 +48,10 @@ https://www.nseindia.com/api/master-quote
         <i class="fa-solid fa-arrows-rotate"></i>
       </button>
     </div>
-    <div class="col-6" *ngFor="let i of ob(_data.data)['expiryData_key']">
+    <div
+      class="col-md-6 col-lg-6 col-12"
+      *ngFor="let i of ob(_data.data)['expiryData_key']"
+    >
       <!--    {{ ob(_data.data)["expiryData"][i] | json }}-->
 
       <span class="fw-semibold">

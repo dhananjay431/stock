@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HeroService } from '../../hero.service';
 import { from, of } from 'rxjs';
 import { map, filter, tap } from 'rxjs/operators';
+import { dropdown_filter_data } from './data';
 declare var _: any, $: any, XLSX: any;
 const TM = 20;
 @Component({
@@ -23,6 +24,7 @@ export class DashComponent implements OnInit {
     drop: of([]),
     filter: {},
     filter_arr: [],
+    dropdown_filter_data: dropdown_filter_data,
   };
 
   _getKey = (d: any) => {
@@ -39,21 +41,19 @@ export class DashComponent implements OnInit {
     //     })
     //   );
 
-    that.data.drop = this.hs
-      .ajax('https://livedata.glitch.me/api/allIndices')
-      .pipe(
-        map((d) => {
-          let x = _.chain(d.data).groupBy('key').value();
-          return { key: Object.keys(x), data: x, all: d.data };
-        })
-      );
+    that.data.drop = this.hs.ajax(this.hs.getUrl() + '/api/allIndices').pipe(
+      map((d) => {
+        let x = _.chain(d.data).groupBy('key').value();
+        return { key: Object.keys(x), data: x, all: d.data };
+      })
+    );
   }
   _selected_drop$(id: any, _data: any) {
     debugger;
     if (_data === '') id.selected_ob = [];
     else id.selected_ob = _.find(_data.drop.all, { index: id.selected });
 
-    return this.hs.ajax('https://livedata.glitch.me/api/index/' + id.selected);
+    return this.hs.ajax(this.hs.getUrl() + '/api/index/' + id.selected);
   }
 
   _selected_drop(id: any, _data: any) {
