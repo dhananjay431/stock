@@ -5,7 +5,7 @@ import { map, filter, tap } from 'rxjs/operators';
 declare var _: any, $: any, XLSX: any;
 const TM = 20;
 @Component({
-  selector: 'app-dash',
+  selector: 'app-index',
   templateUrl: './dash.component.html',
   styleUrls: ['./dash.component.scss'],
 })

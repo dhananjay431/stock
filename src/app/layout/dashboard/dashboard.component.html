@@ -1,0 +1,46 @@
+<div
+  class="row"
+  *ngIf="{
+    dt: data.dt$ | async,
+    allIndices: data.allIndices$ | async
+  } as _data"
+>
+  <div class="col-md-6 col-lg-6" *ngIf="_data.allIndices != null">
+    <select
+      class="form-select form-select-sm"
+      aria-label=".form-select-sm example"
+      [(ngModel)]="data.selected"
+      (change)="h_selected_change(data)"
+    >
+      <option selected>--Selete--</option>
+      <option [value]="i.index" *ngFor="let i of ob(_data.allIndices).data">
+        {{ i.index }}
+      </option>
+    </select>
+  </div>
+
+  <div class="col-md-6 col-lg-6">
+    <button
+      type="button"
+      class="btn btn-sm btn-danger me-2"
+      (click)="h_selected_change(data)"
+    >
+      <i class="fa-solid fa-arrows-rotate"></i>
+    </button>
+  </div>
+  <div class="col-12">
+    <div id="container"></div>
+  </div>
+</div>
+
+<!--
+chart30dPath
+:
+"https://static.nseindia.com/sparklines/30d/NIFTY-50.jpg"
+chart365dPath
+:
+"https://static.nseindia.com/sparklines/365d/NIFTY-50.jpg"
+chartTodayPath
+:
+"https://static.nseindia.com/sparklines/today/NIFTY-50.jpg"
+-->

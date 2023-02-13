@@ -12,18 +12,29 @@ const routes: Routes = [
           import('./layout/table/table.module').then((m) => m.TableModule),
       },
       {
-        path: 'dash',
+        path: 'index',
         loadChildren: () =>
-          import('./layout/dash/dash.module').then((m) => m.DashModule),
+          import('./layout/index/dash.module').then((m) => m.DashModule),
       },
       {
         path: 'option',
         loadChildren: () =>
           import('./layout/option/option.module').then((m) => m.OptionModule),
       },
+      {
+        path: 'dashboard',
+        loadChildren: () =>
+          import('./layout/dashboard/dashboard.module').then(
+            (m) => m.DashboardModule
+          ),
+      },
     ],
   },
-  { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },
+  {
+    path: 'login',
+    loadChildren: () =>
+      import('./login/login.module').then((m) => m.LoginModule),
+  },
 ];
 
 @NgModule({

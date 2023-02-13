@@ -11,7 +11,7 @@ export class LoginComponent implements OnInit {
   login(d: any) {
     if (d.user === d.pass) {
       localStorage.setItem('url', d.user);
-      this.router.navigate(['/dash', {}]);
+      this.router.navigate(['/index', {}]);
     }
   }
   ngOnInit(): void {}
