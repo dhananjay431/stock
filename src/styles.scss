@@ -1,4 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
+.b10{
+  background: linear-gradient(45deg,#0000 calc(25%/3), #ffffff 0 calc(50%/3),
+      #0000 0 calc(250%/3), #ffffff 0 calc(275%/3),
+      #0000 0),linear-gradient( 45deg,#ffffff calc(25%/3), #0000 0 calc(50%/3),
+      #ffffff 0 25%, #0000 0 75%,
+      #ffffff 0 calc(250%/3), #0000 0 calc(275%/3),
+      #ffffff 0),
+      linear-gradient(-45deg,#0000 calc(25%/3), #ffffff 0 calc(50%/3),
+      #0000 0 calc(250%/3), #ffffff 0 calc(275%/3),
+      #0000 0),linear-gradient(-45deg,#ffffff calc(25%/3), #0000 0 calc(50%/3),
+      #ffffff 0 25%, #0000 0 75%,
+      #ffffff 0 calc(250%/3), #0000 0 calc(275%/3),
+      #ffffff 0)
+      #f8f8f8;
+background-size: 30px 30px;
+background-position: 0 0, 15px  15px;
+}
+.b11{
+  background:
+      repeating-linear-gradient( 45deg,#0000 calc(-650%/13) calc(50%/13),#ffffff 0 calc(100%/13),
+      #0000 0 calc(150%/13),#ffffff 0 calc(200%/13),
+      #0000 0 calc(250%/13),#ffffff 0 calc(300%/13)),repeating-linear-gradient( 45deg,#0000 calc(-650%/13) calc(50%/13),#ffffff 0 calc(100%/13),
+      #0000 0 calc(150%/13),#ffffff 0 calc(200%/13),
+      #0000 0 calc(250%/13),#ffffff 0 calc(300%/13)) 15px 15px,
+      repeating-linear-gradient(-45deg,#0000 calc(-650%/13) calc(50%/13),#ffffff 0 calc(100%/13),
+      #0000 0 calc(150%/13),#ffffff 0 calc(200%/13),
+      #0000 0 calc(250%/13),#ffffff 0 calc(300%/13)),repeating-linear-gradient(-45deg,#0000 calc(-650%/13) calc(50%/13),#ffffff 0 calc(100%/13),
+      #0000 0 calc(150%/13),#ffffff 0 calc(200%/13),
+      #0000 0 calc(250%/13),#ffffff 0 calc(300%/13)) 15px 15px #f7f7f7;
+background-size: 30px 30px;
+
+}
 .table-sm>:not(caption)>*>* {
     padding: 0rem 0rem;
 }
