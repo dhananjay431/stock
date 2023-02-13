@@ -2,7 +2,10 @@
 .table-sm>:not(caption)>*>* {
     padding: 0rem 0rem;
 }
-
+  table {
+        width: 100%;
+        border-collapse: collapse;
+      }
 .bg{
   color:#FFFFFF;
   background: rgb(131,58,180);

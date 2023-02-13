@@ -1,56 +1,58 @@
-<table class="table table-sm table-striped table-hover mt-2">
-  <thead class="header-fixed bg">
-    <tr>
-      <th>index</th>
-      <th>last</th>
-      <th>Up</th>
-      <th>Down</th>
-      <th>pClose</th>
-      <th>d%</th>
-      <th>1W</th>
-      <th>1M</th>
-      <th>1Y</th>
-      <th>52WH</th>
-      <th>52WL</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let i of data">
-      <td
-        [class]="{
-          'text-success': i.percentChange > 0,
-          'text-danger': i.percentChange < 0
-        }"
-      >
-        {{ i.index }}
-      </td>
-      <td
-        class="text-end"
-        [class]="{
-          'text-success': i.percentChange > 0,
-          'text-danger': i.percentChange < 0
-        }"
-      >
-        {{ n(i.last) }}
-      </td>
-      <td class="text-end">{{ i.advances || "" }}</td>
-      <td class="text-end">{{ i.declines || "" }}</td>
-      <td class="text-end">{{ n(i.previousClose) || "" }}</td>
-      <td class="text-end">
-        <span
+<div class="table-responsive">
+  <table class="table table-sm table-striped table-hover mt-2">
+    <thead class="header-fixed bg">
+      <tr>
+        <th>index</th>
+        <th>last</th>
+        <th>Up</th>
+        <th>Down</th>
+        <th>pClose</th>
+        <th>d%</th>
+        <th>1W</th>
+        <th>1M</th>
+        <th>1Y</th>
+        <th>52WH</th>
+        <th>52WL</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of data">
+        <td
           [class]="{
             'text-success': i.percentChange > 0,
             'text-danger': i.percentChange < 0
           }"
         >
-          {{ n(i.percentChange) || "" }}
-        </span>
-      </td>
-      <td class="text-end">{{ n(i.oneWeekAgo) || "" }}</td>
-      <td class="text-end">{{ n(i.oneMonthAgo) || "" }}</td>
-      <td class="text-end">{{ n(i.oneYearAgo) || "" }}</td>
-      <td class="text-end">{{ n(i.yearHigh) || "" }}</td>
-      <td class="text-end">{{ n(i.yearLow) || "" }}</td>
-    </tr>
-  </tbody>
-</table>
+          {{ i.index }}
+        </td>
+        <td
+          class="text-end"
+          [class]="{
+            'text-success': i.percentChange > 0,
+            'text-danger': i.percentChange < 0
+          }"
+        >
+          {{ n(i.last) }}
+        </td>
+        <td class="text-end">{{ i.advances || "" }}</td>
+        <td class="text-end">{{ i.declines || "" }}</td>
+        <td class="text-end">{{ n(i.previousClose) || "" }}</td>
+        <td class="text-end">
+          <span
+            [class]="{
+              'text-success': i.percentChange > 0,
+              'text-danger': i.percentChange < 0
+            }"
+          >
+            {{ n(i.percentChange) || "" }}
+          </span>
+        </td>
+        <td class="text-end">{{ n(i.oneWeekAgo) || "" }}</td>
+        <td class="text-end">{{ n(i.oneMonthAgo) || "" }}</td>
+        <td class="text-end">{{ n(i.oneYearAgo) || "" }}</td>
+        <td class="text-end">{{ n(i.yearHigh) || "" }}</td>
+        <td class="text-end">{{ n(i.yearLow) || "" }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

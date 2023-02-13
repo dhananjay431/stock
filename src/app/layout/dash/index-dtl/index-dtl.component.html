@@ -1,148 +1,187 @@
-<table id="example" class="table table-sm table-striped table-hover mt-2">
-  <thead class="header-fixed bg">
-    <tr>
-      <th class="text-center" (click)="download('example')">#</th>
-      <th class="text-center" (click)="asc_desc('symbol', _data.pg_data)">
-        symbol
-      </th>
-      <th
-        class="text-center"
-        (click)="asc_desc('meta.industry', _data.pg_data)"
-      >
-        industry
-      </th>
-      <th class="text-center" (click)="asc_desc('ffmc', _data.pg_data)">
-        ffmc
-      </th>
-      <th
-        class="text-center"
-        (click)="asc_desc('previousClose', _data.pg_data)"
-      >
-        pClose
-      </th>
-      <th class="text-center" (click)="asc_desc('yearLow', _data.pg_data)">
-        52WL%
-      </th>
-      <th class="text-center" (click)="asc_desc('lastPrice', _data.pg_data)">
-        Close
-      </th>
-      <th class="text-center" (click)="asc_desc('yearHigh', _data.pg_data)">
-        52WH%
-      </th>
-      <th class="text-center" (click)="asc_desc('nearWKH', _data.pg_data)">
-        NH
-      </th>
-      <th class="text-center" (click)="asc_desc('nearWKL', _data.pg_data)">
-        NW
-      </th>
-      <th class="text-center" (click)="asc_desc('pChange', _data.pg_data)">
-        D%
-      </th>
-      <th class="text-center" (click)="asc_desc('perChange30d', _data.pg_data)">
-        30D%
-      </th>
-      <th
-        class="text-center"
-        (click)="asc_desc('perChange365d', _data.pg_data)"
-      >
-        365D%
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let i of ob(_data).pg_data.data; let idx = index">
-      <td>{{ idx + 1 }}</td>
-      <td>
-        <a
-          target="_blank"
-          [href]="
-            'https://www.nseindia.com/get-quotes/equity?symbol=' + i.symbol
-          "
+<div class="table-responsive">
+  <table id="example" class="table table-sm table-striped table-hover mt-2">
+    <thead class="header-fixed bg">
+      <tr>
+        <th class="text-center" (click)="download('example')">#</th>
+        <th class="text-center" (click)="asc_desc('symbol', _data.pg_data)">
+          symbol
+        </th>
+        <th
+          class="text-center"
+          (click)="asc_desc('meta.industry', _data.pg_data)"
         >
-          {{ i.symbol }}
-        </a>
-      </td>
-      <td class="text-nowrap">
-        {{ i?.meta?.industry || "" }}
-      </td>
-      <td class="text-nowrap text-end">
-        {{ n(i.ffmc) || "" }}
-      </td>
+          industry
+        </th>
+        <!--        <th>test</th>-->
+        <th class="text-center" (click)="asc_desc('ffmc', _data.pg_data)">
+          ffmc
+        </th>
+        <th (click)="asc_desc('open', _data.pg_data)">open</th>
+        <th (click)="asc_desc('dayHigh', _data.pg_data)">dayHigh</th>
+        <th (click)="asc_desc('dayLow', _data.pg_data)">dayLow</th>
 
-      <td class="text-end">
-        <span
-          [class]="{
-            'text-success': i.lastPrice > i.previousClose,
-            'text-danger': i.lastPrice < i.previousClose
-          }"
+        <!--        <th (click)="asc_desc('DNL', _data.pg_data)">DNL</th>-->
+        <!--        <th (click)="asc_desc('DNH', _data.pg_data)">DNH</th>-->
+        <th
+          class="text-center"
+          (click)="asc_desc('previousClose', _data.pg_data)"
         >
-          {{ n(i.previousClose) || "" }}
-        </span>
-      </td>
+          pClose
+        </th>
+        <th class="text-center" (click)="asc_desc('yearLow', _data.pg_data)">
+          52WL%
+        </th>
+        <th class="text-center" (click)="asc_desc('lastPrice', _data.pg_data)">
+          Close
+        </th>
+        <th class="text-center" (click)="asc_desc('yearHigh', _data.pg_data)">
+          52WH%
+        </th>
+        <th class="text-center" (click)="asc_desc('nearWKH', _data.pg_data)">
+          NH
+        </th>
+        <th class="text-center" (click)="asc_desc('nearWKL', _data.pg_data)">
+          NW
+        </th>
+        <th class="text-center" (click)="asc_desc('pChange', _data.pg_data)">
+          D%
+        </th>
+        <th
+          class="text-center"
+          (click)="asc_desc('perChange30d', _data.pg_data)"
+        >
+          30D%
+        </th>
+        <th
+          class="text-center"
+          (click)="asc_desc('perChange365d', _data.pg_data)"
+        >
+          365D%
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of ob(_data).pg_data.data; let idx = index">
+        <td>{{ idx + 1 }}</td>
+        <td>
+          <a
+            target="_blank"
+            [href]="
+              'https://www.nseindia.com/get-quotes/equity?symbol=' + i.symbol
+            "
+          >
+            {{ i.symbol }}
+          </a>
+        </td>
+        <td class="text-nowrap">
+          {{ i?.meta?.industry || "" }}
+        </td>
+        <!--        <td>-->
+        <!--          <div style="position: relative">-->
+        <!--            <div [style]="cand(i)"></div>-->
+        <!--            <div-->
+        <!--              style="-->
+        <!--                margin-left: 2px;-->
+        <!--                border-left: 1px solid green;-->
+        <!--                height: 20px;-->
+        <!--              "-->
+        <!--            ></div>-->
+        <!--          </div>-->
+        <!--        </td>-->
+        <td class="text-nowrap text-end">
+          {{ n(i.ffmc / 1000000000) }}
+        </td>
+        <td class="text-nowrap text-end">
+          {{ n(i.open) || 0 }}
+        </td>
+        <td class="text-nowrap text-end">
+          {{ n(i.dayHigh) || 0 }}
+        </td>
+        <td class="text-nowrap text-end">
+          {{ n(i.dayLow) || 0 }}
+        </td>
+        <!--        <td class="text-nowrap text-end">-->
+        <!--          {{ n(i.DNL) || 0 }}-->
+        <!--        </td>-->
+        <!--        <td class="text-nowrap text-end">-->
+        <!--          {{ n(i.DNH) || 0 }}-->
+        <!--        </td>-->
 
-      <td class="text-end">{{ n(i.yearLow) }}</td>
-      <td class="text-end">
-        <span
-          [class]="{
-            'text-success': i.lastPrice > i.open,
-            'text-danger': i.lastPrice < i.open
-          }"
-        >
-          {{ n(i.lastPrice) || "" }}
-        </span>
-      </td>
-      <td class="text-end">{{ n(i.yearHigh) }}</td>
-      <td class="text-end">
-        <span
-          [class]="{
-            'text-success': i.nearWKH > 0,
-            'text-danger': i.nearWKH < 0
-          }"
-        >
-          {{ n(i.nearWKH) || "" }}
-        </span>
-      </td>
-      <td class="text-end">
-        <span
-          [class]="{
-            'text-success': i.nearWKL > 0,
-            'text-danger': i.nearWKL < 0
-          }"
-        >
-          {{ n(i.nearWKL) || "" }}
-        </span>
-      </td>
+        <td class="text-end">
+          <span
+            [class]="{
+              'text-success': i.lastPrice > i.previousClose,
+              'text-danger': i.lastPrice < i.previousClose
+            }"
+          >
+            {{ n(i.previousClose) || "" }}
+          </span>
+        </td>
 
-      <td class="text-end">
-        <span
-          [class]="{
-            'text-success': i.pChange > 0,
-            'text-danger': i.pChange < 0
-          }"
-        >
-          {{ n(i.pChange) || "" }}
-        </span>
-      </td>
-      <td class="text-end">
-        <span
-          [class]="{
-            'text-success': i.perChange30d > 0,
-            'text-danger': i.perChange30d < 0
-          }"
-        >
-          {{ n(i.perChange30d) || "" }}
-        </span>
-      </td>
-      <td class="text-end">
-        <span
-          [class]="{
-            'text-success': i.perChange365d > 0,
-            'text-danger': i.perChange365d < 0
-          }"
-        >
-          {{ n(i.perChange365d) || "" }}
-        </span>
-      </td>
-    </tr>
-  </tbody>
-</table>
+        <td class="text-end">{{ n(i.yearLow) }}</td>
+        <td class="text-end">
+          <span
+            [class]="{
+              'text-success': i.lastPrice > i.open,
+              'text-danger': i.lastPrice < i.open
+            }"
+          >
+            {{ n(i.lastPrice) || "" }}
+          </span>
+        </td>
+        <td class="text-end">{{ n(i.yearHigh) }}</td>
+        <td class="text-end">
+          <span
+            [class]="{
+              'text-success': i.nearWKH > 0,
+              'text-danger': i.nearWKH < 0
+            }"
+          >
+            {{ n(i.nearWKH) || "" }}
+          </span>
+        </td>
+        <td class="text-end">
+          <span
+            [class]="{
+              'text-success': i.nearWKL > 0,
+              'text-danger': i.nearWKL < 0
+            }"
+          >
+            {{ n(i.nearWKL) || "" }}
+          </span>
+        </td>
+
+        <td class="text-end">
+          <span
+            [class]="{
+              'text-success': i.pChange > 0,
+              'text-danger': i.pChange < 0
+            }"
+          >
+            {{ n(i.pChange) || "" }}
+          </span>
+        </td>
+        <td class="text-end">
+          <span
+            [class]="{
+              'text-success': i.perChange30d > 0,
+              'text-danger': i.perChange30d < 0
+            }"
+          >
+            {{ n(i.perChange30d) || "" }}
+          </span>
+        </td>
+        <td class="text-end">
+          <span
+            [class]="{
+              'text-success': i.perChange365d > 0,
+              'text-danger': i.perChange365d < 0
+            }"
+          >
+            {{ n(i.perChange365d) || "" }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -2,7 +2,8 @@
   class="row"
   *ngIf="{ drop: data.drop | async, pg_data: data.pg_data | async } as _data"
 >
-  <div class="col-6 mb-2 mt-2" *ngIf="_data.drop != null">
+  <button (click)="_sh(_data)">pg_data</button>
+  <div class="col-md-6 col-12 mt-2" *ngIf="_data.drop != null">
     <select
       class="form-select form-select-sm"
       aria-label="Default select example"
@@ -20,7 +21,7 @@
       </ng-container>
     </select>
   </div>
-  <div class="col-6">
+  <div class="col-md-6 col-12 mt-2">
     <button
       type="button"
       class="btn btn-sm btn-warning"
@@ -31,7 +32,7 @@
       <i class="fa-solid fa-list"></i>
     </button>
   </div>
-  <div class="col-12" *ngIf="data.selected_ob != null">
+  <div class="col-12 mt-2" *ngIf="data.selected_ob != null">
     <app-index-one [data]="oa(data.selected_ob)"></app-index-one>
   </div>
   <div class="table-responsive123 mt-2" *ngIf="_data.pg_data != null">

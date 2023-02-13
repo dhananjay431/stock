@@ -48,12 +48,56 @@ export class DashComponent implements OnInit {
       })
     );
   }
+  _sh(d: any) {
+    console.log(d);
+  }
   _selected_drop$(id: any, _data: any) {
     debugger;
     if (_data === '') id.selected_ob = [];
     else id.selected_ob = _.find(_data.drop.all, { index: id.selected });
-
+    /*
+{
+    "priority": 1,
+    "symbol": "NIFTY 50",
+    "identifier": "NIFTY 50",
+    "open": 17847.55,
+    "dayHigh": 17876.95,
+    "dayLow": 17801,
+    "lastPrice": 17856.5,
+    "previousClose": 17893.45,
+    "change": -36.95000000000073,
+    "pChange": -0.21,
+    "ffmc": 788165089.5,
+    "yearHigh": 18887.6,
+    "yearLow": 15183.4,
+    "totalTradedVolume": 231991834,
+    "totalTradedValue": 170638820357.98,
+    "lastUpdateTime": "10-Feb-2023 16:00:00",
+    "nearWKH": 5.459137211715616,
+    "nearWKL": -17.605411172728115,
+    "perChange365d": 2.77,
+    "date365dAgo": "11-Feb-2022",
+    "chart365dPath": "https://static.nseindia.com/sparklines/365d/NIFTY-50.jpg",
+    "date30dAgo": "13-Jan-2023",
+    "perChange30d": -0.56,
+    "chart30dPath": "https://static.nseindia.com/sparklines/30d/NIFTY-50.jpg",
+    "chartTodayPath": "https://static.nseindia.com/sparklines/today/NIFTY-50.jpg"
+}
+*/
     return this.hs.ajax(this.hs.getUrl() + '/api/index/' + id.selected);
+    /*      .pipe(
+            map((d) => {
+              d.data = d.data.map((x: any) => {
+                x.DNL = ((x.lastPrice - x.dayLow) / x.dayLow) * 100;
+                x.DNH = ((x.dayHigh - x.lastPrice) / x.dayHigh) * 100;
+                return x;
+              });
+              return d;
+            }),
+            tap((d: any) => {
+              console.log(d);
+            })
+          );*/
   }
 
   _selected_drop(id: any, _data: any) {
@@ -136,19 +180,17 @@ export class DashComponent implements OnInit {
     //id.filter_arr = [];
     //this.data.pg_data =
 
-    this._selected_drop$(id, _data)
-      .pipe(
-        map((d: any) => {
-          debugger;
-          _data.pg_data = _.cloneDeep(d);
-          _data.data = this._search(id, _.cloneDeep(_data));
-          return _data;
-        })
-      )
-      .subscribe((resp) => {
-        console.log('after fil => ', resp);
-        _data.pg_data = resp;
-      });
+    this.data.pg_data = this._selected_drop$(id, _data).pipe(
+      map((d: any) => {
+        debugger;
+        _data.pg_data = _.cloneDeep(d);
+        _data.pg_data.data = this._search(id, _.cloneDeep(_data));
+        return _data.pg_data;
+      })
+    );
+    // .subscribe((resp) => {
+    //   _data.pg_data = resp;
+    // });
 
     // pg_dt.pg_data.data = this._search(dt, pg_dt);
   }
