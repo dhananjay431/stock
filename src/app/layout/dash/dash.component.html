@@ -2,7 +2,7 @@
   class="row"
   *ngIf="{ drop: data.drop | async, pg_data: data.pg_data | async } as _data"
 >
-  <button (click)="_sh(_data)">pg_data</button>
+  <!--  <button (click)="_sh(_data)"></button>-->
   <div class="col-md-6 col-12 mt-2" *ngIf="_data.drop != null">
     <select
       class="form-select form-select-sm"
@@ -22,15 +22,24 @@
     </select>
   </div>
   <div class="col-md-6 col-12 mt-2">
-    <button
-      type="button"
-      class="btn btn-sm btn-warning"
-      data-bs-toggle="modal"
-      data-bs-target="#allList"
-      (click)="temp_save_popup_data(data)"
-    >
-      <i class="fa-solid fa-list"></i>
-    </button>
+    <table>
+      <tr>
+        <td>
+          <button
+            type="button"
+            class="btn btn-sm btn-warning"
+            data-bs-toggle="modal"
+            data-bs-target="#allList"
+            (click)="temp_save_popup_data(data)"
+          >
+            <i class="fa-solid fa-list"></i>
+          </button>
+        </td>
+        <td>
+          {{ ob(_data.pg_data)?.timestamp || "" }}
+        </td>
+      </tr>
+    </table>
   </div>
   <div class="col-12 mt-2" *ngIf="data.selected_ob != null">
     <app-index-one [data]="oa(data.selected_ob)"></app-index-one>
