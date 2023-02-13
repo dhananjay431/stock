@@ -31,7 +31,7 @@
   <div class="col-12">
     <div id="container"></div>
   </div>
-  <div class="col-12">
+  <div class="col-12" *ngIf="_data.allIndices != null">
     <table class="table table-sm table-striped table-hover mt-2">
       <thead class="header-fixed bg">
         <tr>
@@ -50,7 +50,14 @@
       </thead>
       <tbody>
         <tr *ngFor="let i of ob(_data.allIndices).data">
-          <td>{{ i.index }}</td>
+          <td
+            [class]="{
+              'text-danger': i.open > i.last,
+              'text-success': i.open < i.last
+            }"
+          >
+            {{ i.index }}
+          </td>
           <td>
             {{ i.advances || 0 }}
             / {{ i.declines || 0 }}
