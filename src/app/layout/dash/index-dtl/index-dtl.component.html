@@ -64,14 +64,17 @@
       <tr *ngFor="let i of ob(_data).pg_data.data; let idx = index">
         <td>{{ idx + 1 }}</td>
         <td>
-          <a
+          <!--<a
             target="_blank"
             [href]="
               'https://www.nseindia.com/get-quotes/equity?symbol=' + i.symbol
             "
           >
             {{ i.symbol }}
-          </a>
+          </a>-->
+          <span (click)="open_popup('#index-dtl-popup-id', i)">
+            {{ i.symbol }}
+          </span>
         </td>
         <td class="text-nowrap">
           {{ i?.meta?.industry || "" }}
@@ -184,4 +187,78 @@
       </tr>
     </tbody>
   </table>
+</div>
+<button
+  id="index-dtl-popup-id"
+  type="button"
+  class="btn btn-primary d-none"
+  data-bs-toggle="modal"
+  data-bs-target="#index-dtl-popup"
+>
+  Launch demo modal
+</button>
+<div
+  class="modal fade"
+  id="index-dtl-popup"
+  tabindex="-1"
+  aria-labelledby="index-dtl-popup-lbl"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="index-dtl-popup-lbl">Modal title</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12 col-md-4 col-lg-4" *ngFor="let i of selected_col">
+            <div class="row g-0">
+              <div class="col-6 fw-semibold text-end">{{ i.value }}:</div>
+              <div class="col-6">{{ getD(i.key, selected) }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <table>
+        <tr>
+          <td class="text-center">Today</td>
+          <td class="text-center">30D</td>
+          <td class="text-center">360D</td>
+        </tr>
+        <tr>
+          <td class="text-center">
+            <ul style="list-style-type: none">
+              <li>{{ selected.lastUpdateTime }}</li>
+              <li><img [src]="selected.chartTodayPath" alt="" /></li>
+            </ul>
+          </td>
+          <td class="text-center">
+            <ul style="list-style-type: none">
+              <li>{{ selected.date30dAgo }}</li>
+              <li><img [src]="selected.chart30dPath" alt="" /></li>
+            </ul>
+          </td>
+          <td class="text-center">
+            <ul style="list-style-type: none">
+              <li>{{ selected.date365dAgo }}</li>
+              <li><img [src]="selected.chart365dPath" alt="" /></li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
 </div>
