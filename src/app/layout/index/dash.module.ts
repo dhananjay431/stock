@@ -7,9 +7,10 @@ import { FormsModule } from '@angular/forms';
 import { AllIndexComponent } from './all-index/all-index.component';
 import { IndexOneComponent } from './index-one/index-one.component';
 import { IndexDtlComponent } from './index-dtl/index-dtl.component';
+import { SymbolDtlComponent } from './symbol-dtl/symbol-dtl.component';
 
 @NgModule({
-  declarations: [DashComponent, AllIndexComponent, IndexOneComponent, IndexDtlComponent],
+  declarations: [DashComponent, AllIndexComponent, IndexOneComponent, IndexDtlComponent, SymbolDtlComponent],
   imports: [CommonModule, DashRoutingModule, FormsModule],
 })
 export class DashModule {}

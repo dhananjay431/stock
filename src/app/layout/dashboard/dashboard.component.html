@@ -58,11 +58,7 @@
             }"
           >
             <!--            <a [routerLink]="['/index?symbol=', i.index]">-->
-            <a
-              target="_blank"
-              [routerLink]="['/index']"
-              [queryParams]="{ symbol: i.index }"
-            >
+            <a [routerLink]="['/index']" [queryParams]="{ symbol: i.index }">
               {{ i.index }}
             </a>
           </td>
