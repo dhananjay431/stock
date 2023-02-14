@@ -50,14 +50,21 @@
       </thead>
       <tbody>
         <tr *ngFor="let i of ob(_data.allIndices).data">
+          <!--          (click)="goto(i)"-->
           <td
             [class]="{
               'text-danger': i.open > i.last,
               'text-success': i.open < i.last
             }"
-            (click)="goto(i)"
           >
-            {{ i.index }}
+            <!--            <a [routerLink]="['/index?symbol=', i.index]">-->
+            <a
+              target="_blank"
+              [routerLink]="['/index']"
+              [queryParams]="{ symbol: i.index }"
+            >
+              {{ i.index }}
+            </a>
           </td>
           <td>
             {{ i.advances || 0 }}

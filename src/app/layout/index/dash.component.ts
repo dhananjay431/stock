@@ -49,10 +49,13 @@ export class DashComponent implements OnInit {
       })
     );
 
-    const params: any = new Proxy(new URLSearchParams(window.location.search), {
+    /*   const params: any = new Proxy(new URLSearchParams(window.location.search), {
       get: (searchParams: any, prop: any) => searchParams.get(prop),
-    });
-    if (params.symbol === null) {
+    });*/
+
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const params: any = Object.fromEntries(urlSearchParams.entries());
+    if (params.symbol === undefined) {
       this._selected_drop(this.data, '');
     } else {
       this.data.selected = params.symbol;
