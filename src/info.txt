@@ -1,0 +1,5 @@
+https://www.nseindia.com/api/quote-equity?symbol=NTPC   =>  /api/equity/:symbol
+https://www.nseindia.com/api/quote-equity?symbol=NTPC&section=trade_info    =>   /api/equity/tradeInfo/:symbol
+https://www.nseindia.com/api/chart-databyindex?index=NTPCEQN   => /api/equity/intraday/NTPCEQN
+https://www.nseindia.com/api/chart-databyindex?index=NTPCEQN&preopen=true   =>  /api/equity/intraday/NTPCEQN?preopen=true
+

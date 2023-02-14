@@ -55,6 +55,7 @@
               'text-danger': i.open > i.last,
               'text-success': i.open < i.last
             }"
+            (click)="goto(i)"
           >
             {{ i.index }}
           </td>

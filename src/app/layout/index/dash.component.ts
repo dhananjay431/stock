@@ -18,8 +18,9 @@ export class DashComponent implements OnInit {
     return Number(d).toFixed(2);
   }
   dt: any = of(null);
-
+  //NIFTY 50
   data: any = {
+    selected: 'NIFTY 50',
     pg_data: of(null),
     drop: of([]),
     filter: {},
@@ -47,43 +48,23 @@ export class DashComponent implements OnInit {
         return { key: Object.keys(x), data: x, all: d.data };
       })
     );
+
+    const params: any = new Proxy(new URLSearchParams(window.location.search), {
+      get: (searchParams: any, prop: any) => searchParams.get(prop),
+    });
+    if (params.symbol === null) {
+      this._selected_drop(this.data, '');
+    } else {
+      this.data.selected = params.symbol;
+      this._selected_drop(this.data, '');
+    }
   }
   _sh(d: any) {
     console.log(d);
   }
   _selected_drop$(id: any, _data: any) {
-    debugger;
     if (_data === '') id.selected_ob = [];
     else id.selected_ob = _.find(_data.drop.all, { index: id.selected });
-    /*
-{
-    "priority": 1,
-    "symbol": "NIFTY 50",
-    "identifier": "NIFTY 50",
-    "open": 17847.55,
-    "dayHigh": 17876.95,
-    "dayLow": 17801,
-    "lastPrice": 17856.5,
-    "previousClose": 17893.45,
-    "change": -36.95000000000073,
-    "pChange": -0.21,
-    "ffmc": 788165089.5,
-    "yearHigh": 18887.6,
-    "yearLow": 15183.4,
-    "totalTradedVolume": 231991834,
-    "totalTradedValue": 170638820357.98,
-    "lastUpdateTime": "10-Feb-2023 16:00:00",
-    "nearWKH": 5.459137211715616,
-    "nearWKL": -17.605411172728115,
-    "perChange365d": 2.77,
-    "date365dAgo": "11-Feb-2022",
-    "chart365dPath": "https://static.nseindia.com/sparklines/365d/NIFTY-50.jpg",
-    "date30dAgo": "13-Jan-2023",
-    "perChange30d": -0.56,
-    "chart30dPath": "https://static.nseindia.com/sparklines/30d/NIFTY-50.jpg",
-    "chartTodayPath": "https://static.nseindia.com/sparklines/today/NIFTY-50.jpg"
-}
-*/
     return this.hs.ajax(this.hs.getUrl() + '/api/index/' + id.selected);
     /*      .pipe(
             map((d) => {
