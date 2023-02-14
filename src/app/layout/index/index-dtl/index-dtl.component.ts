@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { HeroService } from '../../../hero.service';
+import { forkJoin } from 'rxjs';
 declare var XLSX: any, _: any, $: any;
 
 @Component({
@@ -68,9 +69,24 @@ export class IndexDtlComponent implements OnInit {
     return Number(d).toFixed(2);
   }
   open_popup(id: any, i: any) {
-    this.popup_flag = true;
-    console.log('popup_flag=>', this.popup_flag);
-    this.selected = i;
-    $(id).click();
+    let that = this;
+    let ob_data: any = {};
+    ob_data.equity = this.hs.ajax(this.hs.getUrl() + '/api/equity/' + i.symbol);
+    ob_data.tradeInfo = this.hs.ajax(
+      this.hs.getUrl() + '/api/equity/tradeInfo/' + i.symbol
+    );
+    ob_data.equity_intraday = this.hs.ajax(
+      this.hs.getUrl() + '/api/equity/intraday/' + i.identifier
+    );
+    // ob_data.equity_intraday_preopen = this.hs.ajax(
+    //   this.hs.getUrl() + `/api/equity/intraday/${i.identifier}?preopen=true`
+    // );
+    forkJoin(ob_data).subscribe((resp: any) => {
+      this.selected = { ...i, resp };
+      console.log('forkJoin=>', this.selected);
+      $(id).click();
+      that.hs.ch(resp.equity_intraday, 'container');
+    });
+    //this.selected = { ...i, ...ob_data };
   }
 }

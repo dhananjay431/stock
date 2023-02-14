@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { from, of } from 'rxjs';
 import { finalize, mergeMap, tap } from 'rxjs/operators';
-declare var $: any;
+declare var $: any, Highcharts: any;
 @Injectable({
   providedIn: 'root',
 })
@@ -34,5 +34,67 @@ export class HeroService {
     //return t.url || '';
     return localStorage.getItem('url');
     //return 'http://localhost:3000';
+  }
+  ch(data: any, id: any) {
+    Highcharts.chart(id, {
+      chart: {
+        zoomType: 'x',
+      },
+      title: {
+        text: data.name + ' ' + data.closePrice,
+        align: 'center',
+      },
+
+      xAxis: {
+        type: 'datetime',
+      },
+      yAxis: {
+        title: {
+          text: '',
+        },
+      },
+      legend: {
+        enabled: false,
+      },
+      plotOptions: {
+        area: {
+          fillColor: {
+            linearGradient: {
+              x1: 0,
+              y1: 0,
+              x2: 0,
+              y2: 1,
+            },
+            stops: [
+              [0, Highcharts.getOptions().colors[0]],
+              [
+                1,
+                Highcharts.color(Highcharts.getOptions().colors[0])
+                  .setOpacity(0)
+                  .get('rgba'),
+              ],
+            ],
+          },
+          marker: {
+            radius: 2,
+          },
+          lineWidth: 1,
+          states: {
+            hover: {
+              lineWidth: 1,
+            },
+          },
+          threshold: null,
+        },
+      },
+
+      series: [
+        {
+          type: 'area',
+          name: data.name,
+          data: data.grapthData,
+        },
+      ],
+    });
   }
 }

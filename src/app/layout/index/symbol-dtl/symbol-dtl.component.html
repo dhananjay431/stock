@@ -19,7 +19,19 @@
         ></button>
       </div>
       <div class="modal-body b10">
+        <div id="container"></div>
+
         <div class="row">
+          <div class="col-6" *ngIf="selected.resp != null">
+            <pre>
+            {{ selected.resp.equity | json }}
+            </pre>
+          </div>
+          <div class="col-6" *ngIf="selected.resp != null">
+            <pre>
+            {{ selected.resp.tradeInfo | json }}
+            </pre>
+          </div>
           <div class="col-12 col-md-4 col-lg-4" *ngFor="let i of selected_col">
             <div class="row g-0">
               <div class="col-6 fw-semibold text-end">{{ i.value }}:</div>

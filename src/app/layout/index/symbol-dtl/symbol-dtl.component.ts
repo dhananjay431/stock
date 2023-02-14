@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { of } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
 import { HeroService } from '../../../hero.service';
 declare var _: any;
 @Component({
@@ -19,6 +19,7 @@ export class SymbolDtlComponent implements OnInit {
   data: any = {
     equity$: of([]),
     tradeInfo: of([]),
+    set_all_data$: of([]),
     equity_intraday: of([]),
     equity_intraday_preopen: of([]),
   };
@@ -60,7 +61,25 @@ export class SymbolDtlComponent implements OnInit {
     return Number(d).toFixed(2);
   }
   constructor(private hs: HeroService) {}
-
+  set_all_data_function(selected: any) {
+    this.data.set_all_data$ = this.set_all_data(selected);
+  }
+  set_all_data(selected: any) {
+    let ob_data: any = {};
+    ob_data.equity = this.hs.ajax(
+      this.hs.getUrl() + '/api/equity/' + selected.symbol
+    );
+    ob_data.tradeInfo = this.hs.ajax(
+      this.hs.getUrl() + '/api/equity/tradeInfo/' + selected.symbol
+    );
+    ob_data.equity_intraday = this.hs.ajax(
+      this.hs.getUrl() + '/api/equity/intraday/' + selected.symbol
+    );
+    ob_data.equity_intraday_preopen = this.hs.ajax(
+      this.hs.getUrl() + `api/equity/intraday/${selected.symbol}?preopen=true`
+    );
+    return forkJoin(ob_data);
+  }
   ngOnInit(): void {
     console.log('symbol pop =>', this.selected);
     // this.data.equity$ = this.hs.ajax('/api/equity/' + this.selected.symbol);
