@@ -115,4 +115,7 @@ const params = Object.fromEntries(urlSearchParams.entries());
 
     console.log('id=>', id.index);
   }
+  ref_index() {
+    this.data.allIndices$ = this.hs.ajax(this.hs.getUrl() + '/api/allIndices');
+  }
 }

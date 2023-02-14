@@ -13,7 +13,7 @@ export class IndexDtlComponent implements OnInit {
   oa: any = this.hs.oa;
   ob = (a: any) => a;
   selected: any = {};
-
+  popup_flag: any = false;
   ngOnInit(): void {}
   download(id: any) {
     let table_elt = document.getElementById(id);
@@ -68,6 +68,8 @@ export class IndexDtlComponent implements OnInit {
     return Number(d).toFixed(2);
   }
   open_popup(id: any, i: any) {
+    this.popup_flag = true;
+    console.log('popup_flag=>', this.popup_flag);
     this.selected = i;
     $(id).click();
   }

@@ -1,12 +1,27 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { of } from 'rxjs';
+import { HeroService } from '../../../hero.service';
 declare var _: any;
 @Component({
   selector: 'app-symbol-dtl',
   templateUrl: './symbol-dtl.component.html',
   styleUrls: ['./symbol-dtl.component.scss'],
 })
+/*
+https://www.nseindia.com/api/quote-equity?symbol=NTPC   =>  /api/equity/:symbol
+https://www.nseindia.com/api/quote-equity?symbol=NTPC&section=trade_info    =>   /api/equity/tradeInfo/:symbol
+https://www.nseindia.com/api/chart-databyindex?index=NTPCEQN   => /api/equity/intraday/NTPCEQN
+https://www.nseindia.com/api/chart-databyindex?index=NTPCEQN&preopen=true   =>  /api/equity/intraday/NTPCEQN?preopen=true
+*/
 export class SymbolDtlComponent implements OnInit {
-  @Input() selected: any;
+  @Input() selected: any = {};
+
+  data: any = {
+    equity$: of([]),
+    tradeInfo: of([]),
+    equity_intraday: of([]),
+    equity_intraday_preopen: of([]),
+  };
   selected_col: any = [
     { key: 'symbol', value: 'Symbol' },
     { key: 'series', value: 'series' },
@@ -44,7 +59,19 @@ export class SymbolDtlComponent implements OnInit {
   n(d: any) {
     return Number(d).toFixed(2);
   }
-  constructor() {}
+  constructor(private hs: HeroService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log('symbol pop =>', this.selected);
+    // this.data.equity$ = this.hs.ajax('/api/equity/' + this.selected.symbol);
+    // this.data.tradeInfo = this.hs.ajax(
+    //   ' /api/equity/tradeInfo/' + this.selected.symbol
+    // );
+    // this.data.equity_intraday = this.hs.ajax(
+    //   '/api/equity/intraday/' + this.selected.symbol
+    // );
+    // this.data.equity_intraday_preopen = this.hs.ajax(
+    //   `api/equity/intraday/${this.selected.symbol}?preopen=true`
+    // );
+  }
 }
