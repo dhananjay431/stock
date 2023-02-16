@@ -62,8 +62,6 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
         class="col-md-6 col-lg-6 col-12"
         *ngFor="let i of ob(_data.data)['expiryData_key']"
       >
-        <!--    {{ ob(_data.data)["expiryData"][i] | json }}-->
-
         <span class="fw-semibold">
           {{ i }}
         </span>
@@ -85,7 +83,7 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
           id="example"
           class="table table-sm table-striped table-hover mt-2"
         >
-          <thead class="header-fixed bg">
+          <thead class="header-fixed bg" (click)="show(data, _data)">
             <tr>
               <th class="text-end">OI</th>
               <th class="text-end">COI</th>
@@ -104,8 +102,7 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
               <td
                 class="text-end"
                 [class]="{
-                  'bg-primary-subtle':
-                    i.strikePrice < (i?.CE?.underlyingValue || 0),
+                  'bg-primary-subtle': i.flag < 50,
                   'text-danger': (i.CE.change || 0) < 0,
                   'text-success': (i.CE.change || 0) > 0
                 }"
@@ -116,8 +113,7 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
               <td
                 class="text-end"
                 [class]="{
-                  'bg-primary-subtle':
-                    i.strikePrice < (i?.CE?.underlyingValue || 0),
+                  'bg-primary-subtle': i.flag < 50,
                   'text-danger': (i.CE.change || 0) < 0,
                   'text-success': (i.CE.change || 0) > 0
                 }"
@@ -129,8 +125,7 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
               <td
                 class="text-end"
                 [class]="{
-                  'bg-primary-subtle':
-                    i.strikePrice < (i?.CE?.underlyingValue || 0),
+                  'bg-primary-subtle': i.flag < 50,
                   'text-danger': (i.CE.change || 0) < 0,
                   'text-success': (i.CE.change || 0) > 0
                 }"
@@ -141,8 +136,7 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
               <td
                 class="text-end"
                 [class]="{
-                  'bg-primary-subtle':
-                    i.strikePrice > (i?.PE?.underlyingValue || 0),
+                  'bg-primary-subtle': i.flag > 50,
                   'text-danger': (i.PE.change || 0) < 0,
                   'text-success': (i.PE.change || 0) > 0
                 }"
@@ -153,8 +147,7 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
               <td
                 class="text-end"
                 [class]="{
-                  'bg-primary-subtle':
-                    i.strikePrice > (i?.PE?.underlyingValue || 0),
+                  'bg-primary-subtle': i.flag > 50,
                   'text-danger': (i.PE.change || 0) < 0,
                   'text-success': (i.PE.change || 0) > 0
                 }"
@@ -166,8 +159,7 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
               <td
                 class="text-end"
                 [class]="{
-                  'bg-primary-subtle':
-                    i.strikePrice > (i?.PE?.underlyingValue || 0),
+                  'bg-primary-subtle': i.flag > 50,
                   'text-danger': (i.PE.change || 0) < 0,
                   'text-success': (i.PE.change || 0) > 0
                 }"
@@ -175,6 +167,14 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
               >
                 {{ i.PE.openInterest | number }}
               </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
           </tbody>
         </table>

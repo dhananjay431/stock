@@ -42,6 +42,11 @@ export class OptionComponent implements OnInit {
     let that = this;
     return this.hs.ajax(this.hs.getUrl() + id.url + id.id).pipe(
       map((d: any) => {
+        d.records.data = d.records.data.map((d: any) => {
+          if (d.PE != undefined)
+            d.flag = d.PE.strikePrice - d.PE.underlyingValue;
+          return d;
+        });
         let expiryData = that.getAllopData({ data: d });
         let expiryData_key = Object.keys(expiryData);
         let dt = { data: d, expiryData, expiryData_key };
@@ -54,22 +59,23 @@ export class OptionComponent implements OnInit {
   h_expiryDates(data: any, _data: any) {
     data.expiryData = this.getAllopData(_data);
   }
+  show(d: any, _d: any) {
+    console.log(d, _d);
+  }
   getexpiryData(expiryDate: any, _data: any) {
     let temp_data: any = _.chain(_data.data.records.data)
       .filter({ expiryDate: expiryDate })
       .value();
+
+    debugger;
     let a = _.chain(temp_data)
-      .filter((d: any) => {
-        return (d?.PE?.strikePrice || 0) < (d?.PE?.underlyingValue || 0);
-      })
+      .filter((d: any) => d.flag <= 0)
       .sortBy('PE.changeinOpenInterest')
       .takeRight(3)
       .value();
     debugger;
     let b = _.chain(temp_data)
-      .filter((d: any) => {
-        return (d?.CE?.strikePrice || 0) > (d?.CE?.underlyingValue || 0);
-      })
+      .filter((d: any) => d.flag > 0)
       .sortBy('CE.changeinOpenInterest')
       .takeRight(3)
       .value();
