@@ -12,7 +12,7 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
   } as _data"
 >
   <div class="mt-2" *ngIf="_data.data != null">
-    <div class="row">
+    <div class="row g-1">
       <div class="col-3">
         <select
           [(ngModel)]="data.contracts"
@@ -57,145 +57,140 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
         </button>
       </div>
     </div>
-    <div class="row" id="html_to_jpeg">
+    <div class="row g-1" id="html_to_jpeg">
       <div
         class="col-md-6 col-lg-6 col-12"
         *ngFor="let i of ob(_data.data)['expiryData_key']"
       >
-        <span class="fw-semibold">
-          {{ i }}
-        </span>
-        Underlying Index:
-        <span class="fw-semibold">
-          {{ data.contracts }}
-        </span>
-        <span class="fw-semibold">
-          {{ ob(_data.data).data.records.underlyingValue | number }}
-        </span>
-        As on
+        <ng-container *ngIf="ob(_data.data).expiryData[i].length == 6">
+          <span class="fw-semibold">
+            {{ i }}
+          </span>
+          Underlying Index:
+          <span class="fw-semibold">
+            {{ data.contracts }}
+          </span>
+          <span class="fw-semibold">
+            {{ ob(_data.data).data.records.underlyingValue | number }}
+          </span>
+          As on
 
-        <span class="fw-semibold">
-          {{ ob(_data.data).data.records.timestamp }}
-        </span>
+          <span class="fw-semibold">
+            {{ ob(_data.data).data.records.timestamp }}
+          </span>
 
-        <span class="badge text-bg-primary"></span>
-        <table
-          id="example"
-          class="table table-sm table-striped table-hover mt-2"
-        >
-          <thead class="header-fixed bg" (click)="show(data, _data)">
-            <tr>
-              <th></th>
-              <th class="text-end">OI</th>
-              <th class="text-end">COI</th>
+          <span class="badge text-bg-primary"></span>
+          <table
+            id="example"
+            class="table table-sm table-striped table-hover mt-2"
+          >
+            <thead class="header-fixed bg" (click)="show(data, _data)">
+              <tr>
+                <th class="text-end text-nowrap">OI</th>
+                <th class="text-end text-nowrap">COI</th>
 
-              <th class="text-end">lastPrice</th>
-              <th class="text-center">Strike Price</th>
-              <th class="text-end">lastPrice</th>
-              <th class="text-end">COI</th>
-              <th class="text-end">OI</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let i of ob(_data.data).expiryData[i]">
-              <!--             'text-danger': ((i.CE.change || 0 ) < 0),
+                <th class="text-end text-nowrap">Last Price</th>
+                <th class="text-center text-nowrap">Strike Price</th>
+                <th class="text-end text-nowrap">Last Price</th>
+                <th class="text-end text-nowrap">COI</th>
+                <th class="text-end text-nowrap">OI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let i of ob(_data.data).expiryData[i]">
+                <!--             'text-danger': ((i.CE.change || 0 ) < 0),
                 'text-success':   ((i.CE.change || 0 ) > 0),-->
-              <td class="text-center">
-                <i
-                  class="fa-solid fa-chart-line"
+
+                <td
+                  class="text-end"
+                  [class]="{
+                    'bg-primary-subtle': i.flag < i.step,
+                    'text-danger': (i?.CE?.change || 0) < 0,
+                    'text-success': (i?.CE?.change || 0) > 0
+                  }"
+                  [title]="i?.CE?.change || ''"
+                >
+                  {{ i?.CE?.openInterest || 0 | number }}
+                </td>
+                <td
+                  class="text-end"
+                  [class]="{
+                    'bg-primary-subtle': i.flag < i.step,
+                    'text-danger': (i?.CE?.change || 0) < 0,
+                    'text-success': (i?.CE?.change || 0) > 0
+                  }"
+                  [title]="i?.CE?.change || ''"
+                >
+                  {{ i?.CE?.changeinOpenInterest || 0 | number }}
+                </td>
+
+                <td
+                  class="text-end"
+                  [class]="{
+                    'bg-primary-subtle': i.flag < i.step,
+                    'text-danger': (i?.CE?.change || 0) < 0,
+                    'text-success': (i?.CE?.change || 0) > 0
+                  }"
+                >
+                  {{ n(i?.CE?.lastPrice || 0) }}
+                </td>
+                <td
+                  class="text-center"
                   (click)="put_call_chart_id_open('#put_call_chart_id', i)"
-                ></i>
-              </td>
-              <td
-                class="text-end"
-                [class]="{
-                  'bg-primary-subtle': i.flag < 50,
-                  'text-danger': (i.CE.change || 0) < 0,
-                  'text-success': (i.CE.change || 0) > 0
-                }"
-                [title]="i.CE.change"
-              >
-                {{ i.CE.openInterest | number }}
-              </td>
-              <td
-                class="text-end"
-                [class]="{
-                  'bg-primary-subtle': i.flag < 50,
-                  'text-danger': (i.CE.change || 0) < 0,
-                  'text-success': (i.CE.change || 0) > 0
-                }"
-                [title]="i.CE.change"
-              >
-                {{ i.CE.changeinOpenInterest | number }}
-              </td>
+                >
+                  {{ i?.strikePrice || 0 | number }}
+                </td>
+                <td
+                  class="text-end"
+                  [class]="{
+                    'bg-primary-subtle': i.flag > i.step,
+                    'text-danger': (i?.CE?.change || 0) < 0,
+                    'text-success': (i?.CE?.change || 0) > 0
+                  }"
+                >
+                  {{ n(i?.PE?.lastPrice || 0) }}
+                </td>
 
-              <td
-                class="text-end"
-                [class]="{
-                  'bg-primary-subtle': i.flag < 50,
-                  'text-danger': (i.CE.change || 0) < 0,
-                  'text-success': (i.CE.change || 0) > 0
-                }"
-              >
-                {{ n(i.CE.lastPrice) }}
-              </td>
-              <td class="text-center">
-                {{ i.strikePrice | number }}
-              </td>
-              <td
-                class="text-end"
-                [class]="{
-                  'bg-primary-subtle': i.flag > 50,
-                  'text-danger': (i.PE.change || 0) < 0,
-                  'text-success': (i.PE.change || 0) > 0
-                }"
-              >
-                {{ n(i.PE.lastPrice) }}
-              </td>
+                <td
+                  class="text-end"
+                  [class]="{
+                    'bg-primary-subtle': i.flag > i.step,
+                    'text-danger': (i?.CE?.change || 0) < 0,
+                    'text-success': (i?.CE?.change || 0) > 0
+                  }"
+                  [title]="i?.PE?.change || ''"
+                >
+                  {{ i?.PE?.changeinOpenInterest || 0 | number }}
+                </td>
 
-              <td
-                class="text-end"
-                [class]="{
-                  'bg-primary-subtle': i.flag > 50,
-                  'text-danger': (i.PE.change || 0) < 0,
-                  'text-success': (i.PE.change || 0) > 0
-                }"
-                [title]="i.PE.change"
-              >
-                {{ i.PE.changeinOpenInterest | number }}
-              </td>
-
-              <td
-                class="text-end"
-                [class]="{
-                  'bg-primary-subtle': i.flag > 50,
-                  'text-danger': (i.PE.change || 0) < 0,
-                  'text-success': (i.PE.change || 0) > 0
-                }"
-                [title]="i.PE.change"
-              >
-                {{ i.PE.openInterest | number }}
-              </td>
-              <td class="text-center">
-                <i
-                  class="fa-solid fa-chart-line"
-                  (click)="put_call_chart_id_open('#put_call_chart_id', i)"
-                ></i>
-              </td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
+                <td
+                  class="text-end"
+                  [class]="{
+                    'bg-primary-subtle': i.flag > i.step,
+                    'text-danger': (i?.CE?.change || 0) < 0,
+                    'text-success': (i?.CE?.change || 0) > 0
+                  }"
+                  [title]="i?.PE?.change || ''"
+                >
+                  {{ i?.PE?.openInterest || 0 | number }}
+                </td>
+              </tr>
+              <tr>
+                <td class="text-end">
+                  {{ ob(_data.data).PCR[i].TTL_CE | number }}
+                </td>
+                <td></td>
+                <td></td>
+                <td class="text-center">{{ ob(_data.data).PCR[i].PCR }}</td>
+                <td></td>
+                <td></td>
+                <td class="text-end">
+                  {{ ob(_data.data).PCR[i].TTL_PE | number }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
       </div>
     </div>
   </div>
@@ -220,8 +215,8 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
 >
   <div class="modal-dialog modal-xl">
     <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+      <div class="modal-header bg text-white fw-semibold">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Chart</h1>
         <button
           type="button"
           class="btn-close"

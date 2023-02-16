@@ -36,6 +36,7 @@ export class HeroService {
     //return 'http://localhost:3000';
   }
   ch(data: any, id: any) {
+    console.log('hs.ch=>', data, id);
     Highcharts.chart(id, {
       chart: {
         zoomType: 'x',
@@ -105,7 +106,7 @@ export class HeroService {
       tap((_data: any) => {
         console.log('data=>', _data);
 
-        this.ch(data, id);
+        this.ch(_data, id);
       })
     );
   }

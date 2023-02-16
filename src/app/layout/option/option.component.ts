@@ -49,7 +49,18 @@ export class OptionComponent implements OnInit {
         });
         let expiryData = that.getAllopData({ data: d });
         let expiryData_key = Object.keys(expiryData);
-        let dt = { data: d, expiryData, expiryData_key };
+        let PCR = expiryData_key.reduce((a: any, d: any) => {
+          let CE = _.chain(expiryData[d]).map('CE.openInterest').sum().value();
+          let PE = _.chain(expiryData[d]).map('PE.openInterest').sum().value();
+          a[d] = {
+            PCR: Number(PE / CE).toFixed(2),
+            TTL_CE: CE,
+            TTL_PE: PE,
+          };
+          return a;
+        }, {});
+        let dt: any = { data: d, expiryData, expiryData_key, PCR };
+
         return dt;
       })
     );
@@ -74,8 +85,6 @@ export class OptionComponent implements OnInit {
         $(id).click();
         that.hs.put_call_chart({ data: resp, _data: data }, 'container');
       });
-
-    console.log(id, data);
   }
   h_expiryDates(data: any, _data: any) {
     data.expiryData = this.getAllopData(_data);
@@ -88,18 +97,25 @@ export class OptionComponent implements OnInit {
       .filter({ expiryDate: expiryDate })
       .value();
 
-    console.log('expiryDate=>', temp_data);
+    if (temp_data.length < 6)
+      return _.chain(temp_data).sortBy('strikePrice').value();
+    let STEP = temp_data[1].strikePrice - temp_data[0].strikePrice;
     let a = _.chain(temp_data)
-      .filter((d: any) => d.flag <= 50)
+      .filter((d: any) => d.flag <= STEP)
       .sortBy('PE.changeinOpenInterest')
       .takeRight(3)
       .value();
     let b = _.chain(temp_data)
-      .filter((d: any) => d.flag > 50)
+      .filter((d: any) => d.flag > STEP)
       .sortBy('CE.changeinOpenInterest')
       .takeRight(3)
       .value();
+    debugger;
     return _.chain([...a, ...b])
+      .map((d: any) => {
+        d.step = STEP;
+        return d;
+      })
       .sortBy('strikePrice')
       .value();
   }
@@ -115,7 +131,6 @@ export class OptionComponent implements OnInit {
       .value();
   }
   check(data: any, key: any) {
-    console.log(data, key, typeof data);
     return data;
   }
   reset(a: any, b: any) {
