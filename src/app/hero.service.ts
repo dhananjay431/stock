@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { from, of } from 'rxjs';
 import { finalize, mergeMap, tap } from 'rxjs/operators';
-declare var $: any, Highcharts: any;
+declare var $: any, Highcharts: any, html2canvas: any;
 @Injectable({
   providedIn: 'root',
 })
@@ -95,6 +95,16 @@ export class HeroService {
           data: data.grapthData,
         },
       ],
+    });
+  }
+  h_html2canvas(id: any) {
+    let that = this;
+    that.start();
+    html2canvas(document.querySelector(id)).then((canvas: any) => {
+      canvas.toBlob((blob: any) => {
+        navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+        that.stop();
+      });
     });
   }
 }

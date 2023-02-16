@@ -89,4 +89,7 @@ export class IndexDtlComponent implements OnInit {
     });
     //this.selected = { ...i, ...ob_data };
   }
+  symbol_and_to_(i: any) {
+    return i.symbol.replace(new RegExp(/&/, 'g'), '_');
+  }
 }

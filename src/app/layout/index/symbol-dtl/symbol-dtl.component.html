@@ -22,15 +22,40 @@
         <div id="container"></div>
 
         <div class="row">
-          <div class="col-6" *ngIf="selected.resp != null">
-            <pre>
-            {{ selected.resp.equity | json }}
-            </pre>
+          <div class="col-12">
+            <a
+              target="_blank"
+              [href]="
+                'https://www.tradingview.com/chart?symbol=NSE:' +
+                selected.symbol
+              "
+            >
+              chart
+            </a>
+
+            <iframe
+              [src]="
+                'https://www.tradingview.com/chart?symbol=NSE:' +
+                selected.symbol
+              "
+              height="300px"
+              width="700px"
+            ></iframe>
           </div>
           <div class="col-6" *ngIf="selected.resp != null">
-            <pre>
+            <div class="row g-0">
+              <ng-container *ngFor="let i of selected_col_metadata">
+                <div class="col-6 fw-semibold text-end">{{ i.value }}:</div>
+                <div class="col-6">
+                  {{ getD(i.key, selected.resp.equity.metadata) }}
+                </div>
+              </ng-container>
+            </div>
+          </div>
+          <div class="col-6" *ngIf="selected.resp != null">
+            <!-- <pre>
             {{ selected.resp.tradeInfo | json }}
-            </pre>
+            </pre> -->
           </div>
           <div class="col-12 col-md-4 col-lg-4" *ngFor="let i of selected_col">
             <div class="row g-0">
@@ -77,3 +102,161 @@
     </div>
   </div>
 </div>
+
+<!--
+   {
+  "info": {
+    "symbol": "IBREALEST",
+    "companyName": "Indiabulls Real Estate Limited",
+    "industry": "CONSTRUCTION",
+    "activeSeries": [
+      "EQ"
+    ],
+    "debtSeries": [],
+    "tempSuspendedSeries": [
+      "IL"
+    ],
+    "isFNOSec": false,
+    "isCASec": false,
+    "isSLBSec": true,
+    "isDebtSec": false,
+    "isSuspended": false,
+    "isETFSec": false,
+    "isDelisted": false,
+    "isin": "INE069I01010",
+    "isTop10": false,
+    "identifier": "IBREALESTEQN"
+  },
+  "metadata": {
+    "resp.tradeInfo.metadata.series": "EQ",
+    "resp.tradeInfo.metadata.symbol": "IBREALEST",
+    "resp.tradeInfo.metadata.isin": "INE069I01010",
+    "resp.tradeInfo.metadata.status": "Listed",
+    "resp.tradeInfo.metadata.listingDate": "23-Mar-2007",
+    "resp.tradeInfo.metadata.industry": "Residential Commercial Projects",
+    "resp.tradeInfo.metadata.lastUpdateTime": "15-Feb-2023 15:29:18",
+    "resp.tradeInfo.metadata.pdSectorPe": 37.73,
+    "resp.tradeInfo.metadata.pdSymbolPe": 0,
+    "resp.tradeInfo.metadata.pdSectorInd": "NIFTY REALTY                                      "
+  },
+  "securityInfo": {
+    "boardStatus": "Main",
+    "tradingStatus": "Active",
+    "tradingSegment": "Normal Market",
+    "sessionNo": "-",
+    "slb": "Yes",
+    "classOfShare": "Equity",
+    "derivatives": "No",
+    "surveillance": {
+      "surv": null,
+      "desc": null
+    },
+    "faceValue": 2,
+    "issuedSize": 541675331
+  },
+  "priceInfo": {
+    "lastPrice": 57.75,
+    "change": 1.8999999999999986,
+    "pChange": 3.401969561324975,
+    "previousClose": 55.85,
+    "open": 55.65,
+    "close": 0,
+    "vwap": 57.74,
+    "lowerCP": "44.70",
+    "upperCP": "67.00",
+    "pPriceBand": "20",
+    "basePrice": 55.85,
+    "intraDayHighLow": {
+      "min": 55.6,
+      "max": 59.3,
+      "value": 57.75
+    },
+    "weekHighLow": {
+      "min": 50.7,
+      "minDate": "14-Feb-2023",
+      "max": 135.9,
+      "maxDate": "14-Feb-2022",
+      "value": 57.75
+    },
+    "iNavValue": null,
+    "checkINAV": false
+  },
+  "industryInfo": {
+    "macro": "Consumer Discretionary",
+    "sector": "Realty",
+    "industry": "Realty",
+    "basicIndustry": "Residential Commercial Projects"
+  },
+  "preOpenMarket": {
+    "preopen": [
+      {
+        "price": 47.45,
+        "buyQty": 0,
+        "sellQty": 27
+      },
+      {
+        "price": 53.9,
+        "buyQty": 0,
+        "sellQty": 1
+      },
+      {
+        "price": 54,
+        "buyQty": 0,
+        "sellQty": 30
+      },
+      {
+        "price": 54.05,
+        "buyQty": 0,
+        "sellQty": 500
+      },
+      {
+        "price": 55.65,
+        "buyQty": 0,
+        "sellQty": 0,
+        "iep": true
+      },
+      {
+        "price": 57,
+        "buyQty": 213,
+        "sellQty": 0
+      },
+      {
+        "price": 57.25,
+        "buyQty": 100,
+        "sellQty": 0
+      },
+      {
+        "price": 58,
+        "buyQty": 50,
+        "sellQty": 0
+      },
+      {
+        "price": 58.4,
+        "buyQty": 2,
+        "sellQty": 0
+      }
+    ],
+    "ato": {
+      "buy": 3074,
+      "sell": 2233
+    },
+    "IEP": 55.65,
+    "totalTradedVolume": 24330,
+    "finalPrice": 55.65,
+    "finalQuantity": 24330,
+    "lastUpdateTime": "15-Feb-2023 09:07:17",
+    "totalBuyQuantity": 413591,
+    "totalSellQuantity": 270759,
+    "atoBuyQty": 3074,
+    "atoSellQty": 2233
+  }
+}
+
+
+ "industryInfo": {
+    "industryInfo.macro": "Consumer Discretionary",
+    "industryInfo.sector": "Realty",
+    "industryInfo.industry": "Realty",
+    "industryInfo.basicIndustry": "Residential Commercial Projects"
+  },
+ -->

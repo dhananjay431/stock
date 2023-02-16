@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HeroService } from '../../hero.service';
 import { of } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 declare var Highcharts: any, $: any;
 @Component({
@@ -24,6 +24,7 @@ export class DashboardComponent implements OnInit {
   h_selected_change(data: any) {
     this.data.dt$ = this.get_selected_change(data);
   }
+  n(a:any){ return Number(a).toFixed(2);}
   get_selected_change(data: any) {
     return this.hs
       .ajax(
@@ -40,8 +41,31 @@ export class DashboardComponent implements OnInit {
       );
   }
 
+  get_allIndices() {
+    return this.hs.ajax(this.hs.getUrl() + '/api/allIndices').pipe(
+      map((d: any) => {
+        d.data = d.data.map((x: any, i: any) => {
+          x.id = i;
+          return x;
+        });
+        return d;
+      }),
+      tap((d: any) => {
+        console.log('ddd=>', d);
+        setTimeout(() => {
+          $('#dashboard_component_tbl1').DataTable({
+            order: [[6, 'desc']],
+            lengthMenu: [
+              [-1, 50, 25, 10],
+              ['All', 50, 25, 10],
+            ],
+          });
+        }, 0);
+      })
+    );
+  }
   ngOnInit(): void {
-    this.data.allIndices$ = this.hs.ajax(this.hs.getUrl() + '/api/allIndices');
+    this.data.allIndices$ = this.get_allIndices();
     this.data.dt$ = this.get_selected_change(this.data);
   }
   goto(id: any) {
@@ -55,6 +79,6 @@ const params = Object.fromEntries(urlSearchParams.entries());
     console.log('id=>', id.index);
   }
   ref_index() {
-    this.data.allIndices$ = this.hs.ajax(this.hs.getUrl() + '/api/allIndices');
+    this.data.allIndices$ = this.get_allIndices();
   }
 }

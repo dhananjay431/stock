@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HeroService } from '../../hero.service';
 import { mergeMap, of, Subject } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
-declare var _: any;
+declare var _: any, html2canvas: any;
 @Component({
   selector: 'app-option',
   templateUrl: './option.component.html',
@@ -97,5 +97,8 @@ export class OptionComponent implements OnInit {
   }
   n(d: any) {
     return Number(d).toFixed(2);
+  }
+  h_html2canvas(id: any) {
+    this.hs.h_html2canvas(id);
   }
 }

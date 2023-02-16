@@ -3,61 +3,25 @@
     <thead class="header-fixed bg">
       <tr>
         <th class="text-center" (click)="download('example')">#</th>
-        <th class="text-center" (click)="asc_desc('symbol', _data.pg_data)">
-          symbol
-        </th>
-        <th
-          class="text-center"
-          (click)="asc_desc('meta.industry', _data.pg_data)"
-        >
-          industry
-        </th>
+        <th class="text-center">symbol</th>
+        <th class="text-center">industry</th>
         <!--        <th>test</th>-->
-        <th class="text-center" (click)="asc_desc('ffmc', _data.pg_data)">
-          ffmc
-        </th>
-        <th (click)="asc_desc('open', _data.pg_data)">open</th>
-        <th (click)="asc_desc('dayHigh', _data.pg_data)">dayHigh</th>
-        <th (click)="asc_desc('dayLow', _data.pg_data)">dayLow</th>
+        <th class="text-center">ffmc</th>
+        <th>open</th>
+        <th>dayHigh</th>
+        <th>dayLow</th>
 
-        <!--        <th (click)="asc_desc('DNL', _data.pg_data)">DNL</th>-->
-        <!--        <th (click)="asc_desc('DNH', _data.pg_data)">DNH</th>-->
-        <th
-          class="text-center"
-          (click)="asc_desc('previousClose', _data.pg_data)"
-        >
-          pClose
-        </th>
-        <th class="text-center" (click)="asc_desc('yearLow', _data.pg_data)">
-          52WL%
-        </th>
-        <th class="text-center" (click)="asc_desc('lastPrice', _data.pg_data)">
-          Close
-        </th>
-        <th class="text-center" (click)="asc_desc('yearHigh', _data.pg_data)">
-          52WH%
-        </th>
-        <th class="text-center" (click)="asc_desc('nearWKH', _data.pg_data)">
-          NH
-        </th>
-        <th class="text-center" (click)="asc_desc('nearWKL', _data.pg_data)">
-          NW
-        </th>
-        <th class="text-center" (click)="asc_desc('pChange', _data.pg_data)">
-          D%
-        </th>
-        <th
-          class="text-center"
-          (click)="asc_desc('perChange30d', _data.pg_data)"
-        >
-          30D%
-        </th>
-        <th
-          class="text-center"
-          (click)="asc_desc('perChange365d', _data.pg_data)"
-        >
-          365D%
-        </th>
+        <!--        <th th>-->
+        <!--        <th th>-->
+        <th class="text-center">pClose</th>
+        <th class="text-center">52WL%</th>
+        <th class="text-center">Close</th>
+        <th class="text-center">52WH%</th>
+        <th class="text-center">NH</th>
+        <th class="text-center">NW</th>
+        <th class="text-center">D%</th>
+        <th class="text-center">30D%</th>
+        <th class="text-center">365D%</th>
       </tr>
     </thead>
     <tbody>
@@ -72,9 +36,18 @@
           >
             {{ i.symbol }}
           </a>-->
-          <span (click)="open_popup('#index-dtl-popup-id', i)">
+          <!--          <span (click)="open_popup('#index-dtl-popup-id', i)">-->
+          <!--            {{ i.symbol }}-->
+          <!--          </span>-->
+          <a
+            target="_blank"
+            [href]="
+              'https://www.tradingview.com/chart?symbol=NSE:' +
+              symbol_and_to_(i)
+            "
+          >
             {{ i.symbol }}
-          </span>
+          </a>
         </td>
         <td class="text-nowrap">
           {{ i?.meta?.industry || "" }}

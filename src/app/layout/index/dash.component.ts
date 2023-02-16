@@ -68,7 +68,19 @@ export class DashComponent implements OnInit {
   _selected_drop$(id: any, _data: any) {
     if (_data === '') id.selected_ob = [];
     else id.selected_ob = _.find(_data.drop.all, { index: id.selected });
-    return this.hs.ajax(this.hs.getUrl() + '/api/index/' + id.selected);
+    return this.hs.ajax(this.hs.getUrl() + '/api/index/' + id.selected).pipe(
+      tap((d) => {
+        setTimeout(() => {
+          $('#example').DataTable({
+            order: [[5, 'desc']],
+            lengthMenu: [
+              [-1, 50, 25, 10],
+              ['All', 50, 25, 10],
+            ],
+          });
+        }, 0);
+      })
+    );
     /*      .pipe(
             map((d) => {
               d.data = d.data.map((x: any) => {
@@ -86,6 +98,20 @@ export class DashComponent implements OnInit {
 
   _selected_drop(id: any, _data: any) {
     this.data.pg_data = this._selected_drop$(id, _data);
+  }
+  h_html2canvas(id: any) {
+    this.hs.h_html2canvas(id);
+  }
+  copyToClipboard(data: any) {
+    let temp = _.chain(data.pg_data.data)
+      .filter({ priority: 0 })
+      .map((d: any) => {
+        return ',NSE:' + d.symbol.replace(new RegExp('&', 'g'), '_');
+      })
+      .join('')
+      .value();
+
+    navigator.clipboard.writeText(temp);
   }
   //add datasdfaasdf
   // asc_desc(key: any, data: any) {
