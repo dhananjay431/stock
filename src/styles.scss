@@ -1,4 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+body{
+  font-family: 'Poppins', sans-serif;
+  font-size: .9rem;
+}
+.fw-semibold {
+    font-weight: 500!important;
+}
 .b10{
   background: linear-gradient(45deg,#0000 calc(25%/3), #ffffff 0 calc(50%/3),
       #0000 0 calc(250%/3), #ffffff 0 calc(275%/3),

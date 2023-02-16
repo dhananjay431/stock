@@ -41,7 +41,10 @@
           <th>ID</th>
           <th>
             index {{ ob(_data.allIndices).timestamp }}
-            <span (click)="ref_index()" class="fa-solid fa-arrows-rotate"></span>
+            <span
+              (click)="ref_index()"
+              class="fa-solid fa-arrows-rotate"
+            ></span>
           </th>
           <th>adv</th>
           <th>dec</th>
@@ -59,8 +62,9 @@
       <tbody>
         <tr *ngFor="let i of ob(_data.allIndices).data">
           <!--          (click)="goto(i)"-->
-          <td>{{ i.id + 1 }}</td>
+          <td class="p-2">{{ i.id + 1 }}</td>
           <td
+            class="p-2"
             [class]="{
               'text-danger': i.open > i.last,
               'text-success': i.open < i.last
@@ -71,23 +75,32 @@
               {{ i.index }}
             </a>
           </td>
-          <td>
+          <td class="p-2">
             {{ i.advances || 0 }}
           </td>
-          <td>
+          <td class="p-2">
             {{ i.declines || 0 }}
           </td>
-          <td>{{ i.pe }}</td>
+          <td class="p-2">{{ i.pe }}</td>
           <!-- <td>{{ i.pb }}</td> -->
 
-          <td>{{ i.percentChange }}</td>
-          <td>{{ n(i.yearLow) }}</td>
-          <td>{{ n(i.last) }}</td>
-          <td>{{ n(i.yearHigh) }}</td>
+          <td class="p-2">{{ i.percentChange }}</td>
+          <td class="p-2">{{ n(i.yearLow) }}</td>
+          <td class="p-2">{{ n(i.last) }}</td>
+          <td class="p-2">{{ n(i.yearHigh) }}</td>
 
-          <td><img [src]="i.chartTodayPath" [title]="i.percentChange" /> <span class="d-none">{{i.percentChange}}</span></td>
-          <td><img [src]="i.chart30dPath" [title]="i.perChange30d" /> <span class="d-none">{{i.perChange30d}}</span></td>
-          <td><img [src]="i.chart365dPath" [title]="i.perChange365d" /> <span class="d-none">{{i.perChange365d}}</span></td>
+          <td>
+            <img [src]="i.chartTodayPath" [title]="i.percentChange" />
+            <span class="d-none">{{ i.percentChange }}</span>
+          </td>
+          <td>
+            <img [src]="i.chart30dPath" [title]="i.perChange30d" />
+            <span class="d-none">{{ i.perChange30d }}</span>
+          </td>
+          <td>
+            <img [src]="i.chart365dPath" [title]="i.perChange365d" />
+            <span class="d-none">{{ i.perChange365d }}</span>
+          </td>
         </tr>
       </tbody>
     </table>
