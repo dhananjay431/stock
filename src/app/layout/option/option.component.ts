@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HeroService } from '../../hero.service';
-import { mergeMap, of, Subject } from 'rxjs';
+import { forkJoin, mergeMap, of, Subject } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
-declare var _: any, html2canvas: any;
+declare var _: any, html2canvas: any, $: any;
 @Component({
   selector: 'app-option',
   templateUrl: './option.component.html',
@@ -50,12 +50,33 @@ export class OptionComponent implements OnInit {
         let expiryData = that.getAllopData({ data: d });
         let expiryData_key = Object.keys(expiryData);
         let dt = { data: d, expiryData, expiryData_key };
-        console.log('dt=>', dt);
         return dt;
       })
     );
   }
+  put_call_chart_id_open(id: any, data: any) {
+    let that = this;
+    let a = this.hs.ajax(
+      this.hs.getUrl() + '/api/equity/intraday/' + data.CE.identifier
+    );
+    let b = this.hs.ajax(
+      this.hs.getUrl() + '/api/equity/intraday/' + data.PE.identifier
+    );
+    forkJoin(a, b)
+      .pipe(
+        map((resp: any) => {
+          return resp.map((d: any) => {
+            return { name: d.identifier, data: d.grapthData };
+          });
+        })
+      )
+      .subscribe((resp) => {
+        $(id).click();
+        that.hs.put_call_chart({ data: resp, _data: data }, 'container');
+      });
 
+    console.log(id, data);
+  }
   h_expiryDates(data: any, _data: any) {
     data.expiryData = this.getAllopData(_data);
   }
@@ -67,15 +88,14 @@ export class OptionComponent implements OnInit {
       .filter({ expiryDate: expiryDate })
       .value();
 
-    debugger;
+    console.log('expiryDate=>', temp_data);
     let a = _.chain(temp_data)
-      .filter((d: any) => d.flag <= 0)
+      .filter((d: any) => d.flag <= 50)
       .sortBy('PE.changeinOpenInterest')
       .takeRight(3)
       .value();
-    debugger;
     let b = _.chain(temp_data)
-      .filter((d: any) => d.flag > 0)
+      .filter((d: any) => d.flag > 50)
       .sortBy('CE.changeinOpenInterest')
       .takeRight(3)
       .value();

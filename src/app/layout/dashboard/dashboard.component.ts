@@ -22,23 +22,13 @@ export class DashboardComponent implements OnInit {
   };
   ob = (a: any) => a;
   h_selected_change(data: any) {
-    this.data.dt$ = this.get_selected_change(data);
+    this.data.dt$ = this.get_selected_change(data, 'container');
   }
-  n(a:any){ return Number(a).toFixed(2);}
-  get_selected_change(data: any) {
-    return this.hs
-      .ajax(
-        this.hs.getUrl() +
-          '/api/equity/intraday/' +
-          data.selected +
-          '?indices=true'
-      )
-      .pipe(
-        tap((data: any) => {
-          console.log('data=>', data);
-          this.hs.ch(data, 'container');
-        })
-      );
+  n(a: any) {
+    return Number(a).toFixed(2);
+  }
+  get_selected_change(data: any, id: any) {
+    return this.hs.get_chart(data, id);
   }
 
   get_allIndices() {
@@ -66,7 +56,7 @@ export class DashboardComponent implements OnInit {
   }
   ngOnInit(): void {
     this.data.allIndices$ = this.get_allIndices();
-    this.data.dt$ = this.get_selected_change(this.data);
+    this.data.dt$ = this.get_selected_change(this.data, 'container');
   }
   goto(id: any) {
     // this.routes.navigate([]);

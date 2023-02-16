@@ -97,6 +97,18 @@ export class HeroService {
       ],
     });
   }
+  get_chart(data: any, id: any) {
+    debugger;
+    return this.ajax(
+      this.getUrl() + '/api/equity/intraday/' + data.selected + '?indices=true'
+    ).pipe(
+      tap((_data: any) => {
+        console.log('data=>', _data);
+
+        this.ch(data, id);
+      })
+    );
+  }
   h_html2canvas(id: any) {
     let that = this;
     that.start();
@@ -105,6 +117,65 @@ export class HeroService {
         navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
         that.stop();
       });
+    });
+  }
+
+  put_call_chart(data: any, id: any) {
+    Highcharts.chart(id, {
+      chart: {
+        type: 'spline',
+      },
+      // '' + data._data.CE.underlyingValue,
+      title: {
+        text: data._data.CE.underlying,
+      },
+      subtitle: {
+        text: data._data.expiryDate,
+      },
+      xAxis: {
+        type: 'datetime',
+        crosshair: {
+          snap: true,
+        },
+        dateTimeLabelFormats: {
+          // don't display the year
+          month: '%e. %b',
+          year: '%b',
+        },
+        title: {
+          text: 'Date',
+        },
+      },
+      // yAxis: {
+      //   title: {
+      //     text: 'Snow depth (m)',
+      //   },
+      //   min: 0,
+      // },
+      tooltip: {
+        crosshairs: true,
+        animation: true,
+        distance: 16,
+        enabled: true,
+        followTouchMove: true,
+        followPointer: true,
+        headerFormat: '<b>{point.key}</b><br>',
+        pointFormat: ' {point.y:.2f}',
+        shared: true,
+        split: true,
+      },
+
+      plotOptions: {
+        series: {
+          marker: {
+            enabled: false,
+            radius: 1,
+          },
+        },
+      },
+
+      colors: ['green', 'red', '#06C', '#036', '#000'],
+      series: data.data,
     });
   }
 }

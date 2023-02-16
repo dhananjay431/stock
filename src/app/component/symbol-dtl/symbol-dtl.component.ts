@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { forkJoin, of } from 'rxjs';
-import { HeroService } from '../../../hero.service';
+import { HeroService } from '../../hero.service';
 declare var _: any;
 @Component({
   selector: 'app-symbol-dtl',
@@ -54,18 +54,18 @@ export class SymbolDtlComponent implements OnInit {
     { key: 'meta.isin', value: 'isin' },
   ];
 
-  selected_col_metadata =  [
-{key:"series",value:"series"},
-{key:"symbol",value:"symbol"},
-{key:"isin",value:"isin"},
-{key:"status",value:"status"},
-{key:"listingDate",value:"listingDate"},
-{key:"industry",value:"industry"},
-{key:"lastUpdateTime",value:"lastUpdateTime"},
-{key:"pdSectorPe",value:"pdSectorPe"},
-{key:"pdSymbolPe",value:"pdSymbolPe"},
-{key:"pdSectorInd",value:"pdSectorInd"},
-];
+  selected_col_metadata = [
+    { key: 'series', value: 'series' },
+    { key: 'symbol', value: 'symbol' },
+    { key: 'isin', value: 'isin' },
+    { key: 'status', value: 'status' },
+    { key: 'listingDate', value: 'listingDate' },
+    { key: 'industry', value: 'industry' },
+    { key: 'lastUpdateTime', value: 'lastUpdateTime' },
+    { key: 'pdSectorPe', value: 'pdSectorPe' },
+    { key: 'pdSymbolPe', value: 'pdSymbolPe' },
+    { key: 'pdSectorInd', value: 'pdSectorInd' },
+  ];
   getD(key: any, data: any) {
     debugger;
     return _.get(data, key) || '';

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { HeroService } from '../../../hero.service';
+import { HeroService } from '../../hero.service';
 import { forkJoin } from 'rxjs';
 declare var XLSX: any, _: any, $: any;
 

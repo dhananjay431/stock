@@ -85,6 +85,7 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
         >
           <thead class="header-fixed bg" (click)="show(data, _data)">
             <tr>
+              <th></th>
               <th class="text-end">OI</th>
               <th class="text-end">COI</th>
 
@@ -93,12 +94,19 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
               <th class="text-end">lastPrice</th>
               <th class="text-end">COI</th>
               <th class="text-end">OI</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let i of ob(_data.data).expiryData[i]">
               <!--             'text-danger': ((i.CE.change || 0 ) < 0),
                 'text-success':   ((i.CE.change || 0 ) > 0),-->
+              <td class="text-center">
+                <i
+                  class="fa-solid fa-chart-line"
+                  (click)="put_call_chart_id_open('#put_call_chart_id', i)"
+                ></i>
+              </td>
               <td
                 class="text-end"
                 [class]="{
@@ -132,7 +140,9 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
               >
                 {{ n(i.CE.lastPrice) }}
               </td>
-              <td class="text-center">{{ i.strikePrice | number }}</td>
+              <td class="text-center">
+                {{ i.strikePrice | number }}
+              </td>
               <td
                 class="text-end"
                 [class]="{
@@ -167,8 +177,16 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
               >
                 {{ i.PE.openInterest | number }}
               </td>
+              <td class="text-center">
+                <i
+                  class="fa-solid fa-chart-line"
+                  (click)="put_call_chart_id_open('#put_call_chart_id', i)"
+                ></i>
+              </td>
             </tr>
             <tr>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -178,6 +196,45 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
+</div>
+<button
+  type="button"
+  class="btn btn-primary d-none"
+  id="put_call_chart_id"
+  data-bs-toggle="modal"
+  data-bs-target="#put_call_chart"
+>
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="put_call_chart"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body"><div id="container"></div></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary">Save changes</button>
       </div>
     </div>
   </div>
