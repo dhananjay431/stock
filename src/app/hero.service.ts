@@ -18,14 +18,15 @@ export class HeroService {
     $('.loader').last().remove();
   }
 
-  ajax(url: any) {
+  ajax(url: any, flag = true) {
     let that = this;
-    that.start();
+
+    flag == true && that.start();
     return of([]).pipe(
       mergeMap((d: any) => from(fetch(url).then((resp) => resp.json()))),
       finalize(() => {
         console.log('end');
-        that.stop();
+        flag == true && that.stop();
       })
     );
   }

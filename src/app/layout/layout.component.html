@@ -1,6 +1,19 @@
 <nav class="navbar navbar-expand-lg bg text-white fw-semibold p-0">
   <div class="container-fluid">
-    <a class="navbar-brand text-white fw-semibold" href="#">Navbar</a>
+    <span
+      class="navbar-brand text-white fw-semibold"
+      *ngIf="data.livedt$ | async as _tm"
+      (click)="ref()"
+    >
+      <span
+        [class]="{
+          'text-danger': ob(_tm).marketState[0].percentChange < 0,
+          'text-success': ob(_tm).marketState[0].percentChange > 0
+        }"
+      >
+        {{ ob(_tm).marketState[0].last }}
+      </span>
+    </span>
     <button
       class="navbar-toggler"
       type="button"
@@ -60,7 +73,7 @@
           <a class="nav-link disabled text-white fw-semibold">Disabled</a>
         </li>
       </ul>
-      <form class="d-flex" role="search">
+      <div class="d-flex" role="search">
         <input
           class="form-control form-control-sm me-2"
           type="search"
@@ -70,7 +83,7 @@
         <button class="btn btn-outline-danger btn-sm" (click)="logout()">
           <i class="fa-solid fa-right-from-bracket"></i>
         </button>
-      </form>
+      </div>
     </div>
   </div>
 </nav>

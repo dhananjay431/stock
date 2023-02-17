@@ -104,7 +104,7 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
                 <td
                   class="text-end"
                   [class]="{
-                    'bg-primary-subtle': i.flag < i.step,
+                    'bg-primary-subtle': i.flag == false,
                     'text-danger': (i?.CE?.change || 0) < 0,
                     'text-success': (i?.CE?.change || 0) > 0
                   }"
@@ -115,7 +115,7 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
                 <td
                   class="text-end"
                   [class]="{
-                    'bg-primary-subtle': i.flag < i.step,
+                    'bg-primary-subtle': i.flag == false,
                     'text-danger': (i?.CE?.change || 0) < 0,
                     'text-success': (i?.CE?.change || 0) > 0
                   }"
@@ -127,7 +127,7 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
                 <td
                   class="text-end"
                   [class]="{
-                    'bg-primary-subtle': i.flag < i.step,
+                    'bg-primary-subtle': i.flag == false,
                     'text-danger': (i?.CE?.change || 0) < 0,
                     'text-success': (i?.CE?.change || 0) > 0
                   }"
@@ -143,9 +143,9 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
                 <td
                   class="text-end"
                   [class]="{
-                    'bg-primary-subtle': i.flag > i.step,
-                    'text-danger': (i?.CE?.change || 0) < 0,
-                    'text-success': (i?.CE?.change || 0) > 0
+                    'bg-primary-subtle': i.flag == true,
+                    'text-danger': (i?.PE?.change || 0) < 0,
+                    'text-success': (i?.PE?.change || 0) > 0
                   }"
                 >
                   {{ n(i?.PE?.lastPrice || 0) }}
@@ -154,9 +154,9 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
                 <td
                   class="text-end"
                   [class]="{
-                    'bg-primary-subtle': i.flag > i.step,
-                    'text-danger': (i?.CE?.change || 0) < 0,
-                    'text-success': (i?.CE?.change || 0) > 0
+                    'bg-primary-subtle': i.flag == true,
+                    'text-danger': (i?.PE?.change || 0) < 0,
+                    'text-success': (i?.PE?.change || 0) > 0
                   }"
                   [title]="i?.PE?.change || ''"
                 >
@@ -166,9 +166,9 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
                 <td
                   class="text-end"
                   [class]="{
-                    'bg-primary-subtle': i.flag > i.step,
-                    'text-danger': (i?.CE?.change || 0) < 0,
-                    'text-success': (i?.CE?.change || 0) > 0
+                    'bg-primary-subtle': i.flag == true,
+                    'text-danger': (i?.PE?.change || 0) < 0,
+                    'text-success': (i?.PE?.change || 0) > 0
                   }"
                   [title]="i?.PE?.change || ''"
                 >

@@ -40,11 +40,12 @@ export class OptionComponent implements OnInit {
   }
   getNew(id: any) {
     let that = this;
+    debugger;
     return this.hs.ajax(this.hs.getUrl() + id.url + id.id).pipe(
       map((d: any) => {
         d.records.data = d.records.data.map((d: any) => {
           if (d.PE != undefined)
-            d.flag = d.PE.strikePrice - d.PE.underlyingValue;
+            d.flag = d.PE.strikePrice > d.PE.underlyingValue;
           // d.flag = d.PE.underlyingValue - d.PE.strikePrice;
           return d;
         });
@@ -97,26 +98,23 @@ export class OptionComponent implements OnInit {
     let temp_data: any = _.chain(_data.data.records.data)
       .filter({ expiryDate: expiryDate })
       .value();
-
+    debugger;
     if (temp_data.length < 6)
       return _.chain(temp_data).sortBy('strikePrice').value();
-    let STEP = temp_data[1].strikePrice - temp_data[0].strikePrice;
+
     let a = _.chain(temp_data)
-      .filter((d: any) => d.flag <= STEP)
+      .filter((d: any) => d.flag == false)
       .sortBy('PE.changeinOpenInterest')
       .takeRight(3)
       .value();
     let b = _.chain(temp_data)
-      .filter((d: any) => d.flag > STEP)
+      .filter((d: any) => d.flag == true)
       .sortBy('CE.changeinOpenInterest')
       .takeRight(3)
       .value();
     debugger;
     return _.chain([...a, ...b])
-      .map((d: any) => {
-        d.step = STEP;
-        return d;
-      })
+
       .sortBy('strikePrice')
       .value();
   }
