@@ -18,10 +18,13 @@ export class LayoutComponent implements OnInit {
     let that = this;
 
     this.data.livedt$ = this.data.livedt$$.pipe(
-      mergeMap((d) => this.hs.ajax(this.hs.getUrl(), false))
+      mergeMap((d) => this.hs.ajax(this.hs.getUrl(), false)),
+      tap((d: any) => {
+        document.title = 'NIFTY ' + d.marketState[0].last;
+      })
     );
 
-    interval(3000)
+    interval(5000)
       .pipe(
         tap((d) => {
           this.data.livedt$$.next();
