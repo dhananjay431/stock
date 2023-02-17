@@ -121,7 +121,7 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
                   }"
                   [title]="i?.CE?.change || ''"
                 >
-                  {{ i?.CE?.changeinOpenInterest || 0 | number }}
+                  {{ i?.CE?.changeinOpenInterest | number }}
                 </td>
 
                 <td
@@ -160,7 +160,7 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
                   }"
                   [title]="i?.PE?.change || ''"
                 >
-                  {{ i?.PE?.changeinOpenInterest || 0 | number }}
+                  {{ i?.PE?.changeinOpenInterest | number }}
                 </td>
 
                 <td

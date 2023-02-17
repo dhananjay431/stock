@@ -45,6 +45,7 @@ export class OptionComponent implements OnInit {
         d.records.data = d.records.data.map((d: any) => {
           if (d.PE != undefined)
             d.flag = d.PE.strikePrice - d.PE.underlyingValue;
+          // d.flag = d.PE.underlyingValue - d.PE.strikePrice;
           return d;
         });
         let expiryData = that.getAllopData({ data: d });
