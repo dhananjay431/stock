@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
+import { ActiveGuard } from './active.guard';
 const routes: Routes = [
   {
     path: '',
@@ -10,6 +11,7 @@ const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
+    canActivate: [ActiveGuard],
     children: [
       {
         path: 'table',
@@ -44,6 +46,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
+  providers: [ActiveGuard],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
