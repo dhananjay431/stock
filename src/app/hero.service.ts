@@ -20,12 +20,10 @@ export class HeroService {
 
   ajax(url: any, flag = true) {
     let that = this;
-
     flag == true && that.start();
     return of([]).pipe(
       mergeMap((d: any) => from(fetch(url).then((resp) => resp.json()))),
       finalize(() => {
-        console.log('end');
         flag == true && that.stop();
       })
     );

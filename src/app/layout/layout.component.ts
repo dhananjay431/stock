@@ -11,8 +11,10 @@ export class LayoutComponent implements OnInit {
   constructor(private router: Router, private hs: HeroService) {}
 
   data: any = {
+    interval$:null,
     livedt$$: new Subject(),
     livedt$: of([]),
+    test:interval(1000)
   };
   ngOnInit(): void {
     let that = this;
@@ -24,35 +26,42 @@ export class LayoutComponent implements OnInit {
       })
     );
 
-    interval(5000)
-      .pipe(
-        tap((d) => {
-          this.data.livedt$$.next();
-        })
-      )
-      .subscribe();
+     
+    setTimeout(()=>{
+      if(that.chk()){
+      that.data.interval  =   interval(1000)
+        .pipe(
+          tap((d) => {
+            that.chk();
+            that.data.livedt$$.next();
+          })
+        ).subscribe();
+      }else{
+        that.ref();
+      }
+    },0)
+
+    
+
+
+
   }
 
   ref() {
     this.data.livedt$$.next();
   }
 
-  // liveTime: any = '';
-  // chk() {
-  //   let a =
-  //     new Date(new Date().toDateString() + ' 13:30:00').getTime() >
-  //     new Date().getTime();
-  //   let b =
-  //     new Date().getTime() >
-  //     new Date(new Date().toDateString() + ' 09:00:00').getTime();
-  //   if (a && b) this.ref();
-  //   else clearInterval(this.liveTime);
-  // }
-  // ref_time() {
-  //   this.liveTime = setInterval(() => {
-  //     this.chk();
-  //   }, 3000);
-  // }
+  
+  chk() {
+    let that = this;
+    let a =
+      new Date(new Date().toDateString() + ' 15:30:00').getTime() >
+      new Date().getTime();
+    let b =
+      new Date().getTime() >
+      new Date(new Date().toDateString() + ' 09:00:00').getTime();
+    return (a && b) ? true : (that.data.interval!= null && that.data.interval.subscribe(),false)
+  }
   ob = (a: any) => a;
   logout() {
     this.router.navigate(['/login']);

@@ -1,10 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 body{
-  //font-family: 'Poppins', sans-serif;
-  //font-family: 'Fira Code', monospace;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Poppins', sans-serif;
+  // font-family: 'Fira Code', monospace;
+  // font-family: 'JetBrains Mono', monospace;
 
-  font-size: .9rem;
+  font-size: .9vw;
+  font-weight:500!important;
 }
 .fw-semibold {
     font-weight: 500!important;
