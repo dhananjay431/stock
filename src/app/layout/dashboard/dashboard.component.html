@@ -22,6 +22,7 @@
   <div class="col-md-6 col-lg-6">
     <button
       type="button"
+      id="h_selected_change"
       class="btn btn-sm btn-danger me-2"
       (click)="h_selected_change(data)"
     >
@@ -42,6 +43,7 @@
           <th>
             index {{ ob(_data.allIndices).timestamp }}
             <span
+              id="ref_index"
               (click)="ref_index()"
               class="fa-solid fa-arrows-rotate"
             ></span>

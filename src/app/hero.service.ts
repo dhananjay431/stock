@@ -1,12 +1,27 @@
 import { Injectable } from '@angular/core';
-import { from, of } from 'rxjs';
-import { finalize, mergeMap, tap } from 'rxjs/operators';
+import { from, interval, of } from 'rxjs';
+import { finalize, map, mergeMap, tap } from 'rxjs/operators';
 declare var $: any, Highcharts: any, html2canvas: any;
 @Injectable({
   providedIn: 'root',
 })
 export class HeroService {
   constructor() {}
+  from_to_time: any = { from: '09:15:00', to: '15:30:00', time: 10000 };
+  _int({ from, to, time }: any) {
+    return interval(time).pipe(
+      map((d) => {
+        let a =
+          new Date(new Date().toDateString() + ' ' + to).getTime() >
+          new Date().getTime();
+        let b =
+          new Date().getTime() >
+          new Date(new Date().toDateString() + ' ' + from).getTime();
+        return a && b ? true : false;
+      })
+    );
+  }
+
   oa(a: any) {
     return Array.isArray(a) ? a : [a];
   }

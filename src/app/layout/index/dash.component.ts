@@ -34,13 +34,13 @@ export class DashComponent implements OnInit {
   };
   ngOnInit(): void {
     let that = this;
-    // that.data.drop = this.hs
-    //   .ajax('https://livedata.glitch.me/api/equityMaster')
-    //   .pipe(
-    //     map((d) => {
-    //       return { key: Object.keys(d), data: d };
-    //     })
-    //   );
+    let x = this.hs._int(this.hs.from_to_time).subscribe((resp: any) => {
+      if (resp == true) {
+        $('#index_refresh').click();
+      } else {
+        x.unsubscribe();
+      }
+    });
 
     that.data.drop = this.hs.ajax(this.hs.getUrl() + '/api/allIndices').pipe(
       map((d) => {

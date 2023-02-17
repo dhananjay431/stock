@@ -55,8 +55,18 @@ export class DashboardComponent implements OnInit {
     );
   }
   ngOnInit(): void {
+    let that = this;
     this.data.allIndices$ = this.get_allIndices();
     this.data.dt$ = this.get_selected_change(this.data, 'container');
+
+    let x = this.hs._int(this.hs.from_to_time).subscribe((resp: any) => {
+      if (resp == true) {
+        $('#h_selected_change').click();
+        $('#ref_index').click();
+      } else {
+        x.unsubscribe();
+      }
+    });
   }
   goto(id: any) {
     // this.routes.navigate([]);

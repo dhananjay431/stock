@@ -11,14 +11,13 @@ export class LayoutComponent implements OnInit {
   constructor(private router: Router, private hs: HeroService) {}
 
   data: any = {
-    interval$:null,
+    interval$: of(null),
     livedt$$: new Subject(),
     livedt$: of([]),
-    test:interval(1000)
+    test: interval(1000),
   };
   ngOnInit(): void {
     let that = this;
-
     this.data.livedt$ = this.data.livedt$$.pipe(
       mergeMap((d) => this.hs.ajax(this.hs.getUrl(), false)),
       tap((d: any) => {
@@ -26,32 +25,22 @@ export class LayoutComponent implements OnInit {
       })
     );
 
-     
-    setTimeout(()=>{
-      if(that.chk()){
-      that.data.interval  =   interval(1000)
-        .pipe(
-          tap((d) => {
-            that.chk();
-            that.data.livedt$$.next();
-          })
-        ).subscribe();
-      }else{
-        that.ref();
+    let x = this.hs._int(this.hs.from_to_time).subscribe((resp: any) => {
+      if (resp == true) {
+        that.data.livedt$$.next();
+      } else {
+        x.unsubscribe();
       }
-    },0)
-
-    
-
-
-
+    });
+    setTimeout(() => {
+      that.ref();
+    }, 0);
   }
 
   ref() {
     this.data.livedt$$.next();
   }
 
-  
   chk() {
     let that = this;
     let a =
@@ -60,7 +49,9 @@ export class LayoutComponent implements OnInit {
     let b =
       new Date().getTime() >
       new Date(new Date().toDateString() + ' 09:00:00').getTime();
-    return (a && b) ? true : (that.data.interval!= null && that.data.interval.subscribe(),false)
+    return a && b
+      ? true
+      : (that.data.interval != null && that.data.interval.subscribe(), false);
   }
   ob = (a: any) => a;
   logout() {

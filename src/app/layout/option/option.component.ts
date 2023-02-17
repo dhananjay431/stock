@@ -24,7 +24,15 @@ export class OptionComponent implements OnInit {
   oa = (a: any) => (Array.isArray(a) ? a : [a]);
   ngOnInit(): void {
     let that = this;
-    //_.chain(temp1).sortBy("strikePrice").groupBy("expiryDate").value()
+
+    let x = this.hs._int(this.hs.from_to_time).subscribe((resp: any) => {
+      if (resp == true) {
+        $('#option_refresh').click();
+      } else {
+        x.unsubscribe();
+      }
+    });
+
     this.data.$data = this.data.$$data.pipe(mergeMap((d) => this.getNew(d)));
     this.data.$masterQuote = this.hs.ajax(
       this.hs.getUrl() + '/api/master-quote'
