@@ -30,7 +30,20 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+"./src/assets/js/jquery-3.5.1.js",
+"./src/assets/js/jquery.dataTables.min.js",
+"./src/assets/js/dataTables.bootstrap5.min.js",
+"./src/assets/js/bootstrap.bundle.min.js",
+"./src/assets/js/lodash.min.js",
+"./src/assets/js/xlsx.full.min.js",
+"./src/assets/js/html2canvas.min.js",
+"./src/assets/js/highchart/highcharts.js",
+"./src/assets/js/highchart/data.js",
+"./src/assets/js/highchart/exporting.js",
+"./src/assets/js/highchart/export-data.js",
+"./src/assets/js/highchart/accessibility.js",
+            ]
           },
           "configurations": {
             "production": {
