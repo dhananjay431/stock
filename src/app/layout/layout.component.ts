@@ -19,7 +19,7 @@ export class LayoutComponent implements OnInit {
   ngOnInit(): void {
     let that = this;
     this.data.livedt$ = this.data.livedt$$.pipe(
-      mergeMap((d) => this.hs.ajax(this.hs.getUrl(), false)),
+      mergeMap((d) => this.hs.ajax('/api/marketStatus', false)),
       tap((d: any) => {
         document.title = 'NIFTY ' + d.marketState[0].last;
       })

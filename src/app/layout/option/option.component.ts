@@ -34,11 +34,12 @@ export class OptionComponent implements OnInit {
     });
 
     this.data.$data = this.data.$$data.pipe(mergeMap((d) => this.getNew(d)));
-    this.data.$masterQuote = this.hs.ajax(
-      this.hs.getUrl() + '/api/master-quote'
-    );
+    this.data.$masterQuote = this.hs.ajax('/api/master-quote');
     setTimeout(() => {
-      this.data.$$data.next({ url: '/api/option/', id: this.data.contracts });
+      this.data.$$data.next({
+        url: '/api/option-chain-indices?symbol=',
+        id: this.data.contracts,
+      });
     }, 100);
   }
   h_contracts(url: any, id: any) {
@@ -49,7 +50,7 @@ export class OptionComponent implements OnInit {
   getNew(id: any) {
     let that = this;
     debugger;
-    return this.hs.ajax(this.hs.getUrl() + id.url + id.id).pipe(
+    return this.hs.ajax(id.url + id.id).pipe(
       map((d: any) => {
         d.records.data = d.records.data.map((d: any) => {
           if (d.PE != undefined)
@@ -77,12 +78,8 @@ export class OptionComponent implements OnInit {
   }
   put_call_chart_id_open(id: any, data: any) {
     let that = this;
-    let a = this.hs.ajax(
-      this.hs.getUrl() + '/api/equity/intraday/' + data.CE.identifier
-    );
-    let b = this.hs.ajax(
-      this.hs.getUrl() + '/api/equity/intraday/' + data.PE.identifier
-    );
+    let a = this.hs.ajax('/api/chart-databyindex?index=' + data.CE.identifier);
+    let b = this.hs.ajax('/api/chart-databyindex?index=' + data.PE.identifier);
     forkJoin(a, b)
       .pipe(
         map((resp: any) => {

@@ -32,7 +32,7 @@ export class DashboardComponent implements OnInit {
   }
 
   get_allIndices() {
-    return this.hs.ajax(this.hs.getUrl() + '/api/allIndices').pipe(
+    return this.hs.ajax('/api/allIndices').pipe(
       map((d: any) => {
         d.data = d.data.map((x: any, i: any) => {
           x.id = i;

@@ -35,6 +35,7 @@ export class DashComponent implements OnInit {
   ngOnInit(): void {
     let that = this;
     let x = this.hs._int(this.hs.from_to_time).subscribe((resp: any) => {
+      debugger;
       if (resp == true) {
         $('#index_refresh').click();
       } else {
@@ -42,8 +43,8 @@ export class DashComponent implements OnInit {
       }
     });
 
-    that.data.drop = this.hs.ajax(this.hs.getUrl() + '/api/allIndices').pipe(
-      map((d) => {
+    that.data.drop = this.hs.ajax('/api/allIndices').pipe(
+      map((d: any) => {
         let x = _.chain(d.data).groupBy('key').value();
         return { key: Object.keys(x), data: x, all: d.data };
       })
@@ -68,7 +69,7 @@ export class DashComponent implements OnInit {
   _selected_drop$(id: any, _data: any) {
     if (_data === '') id.selected_ob = [];
     else id.selected_ob = _.find(_data.drop.all, { index: id.selected });
-    return this.hs.ajax(this.hs.getUrl() + '/api/index/' + id.selected).pipe(
+    return this.hs.ajax('api/equity-stockIndices?index=' + id.selected).pipe(
       tap((d) => {
         setTimeout(() => {
           $('#example').DataTable({

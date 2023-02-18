@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { from, interval, of } from 'rxjs';
 import { finalize, map, mergeMap, tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 declare var $: any, Highcharts: any, html2canvas: any;
 @Injectable({
   providedIn: 'root',
 })
 export class HeroService {
-  constructor() {}
+  constructor(private http: HttpClient) {}
   from_to_time: any = { from: '09:15:00', to: '15:30:00', time: 10000 };
   _int({ from, to, time }: any) {
     return interval(time).pipe(
@@ -34,10 +35,15 @@ export class HeroService {
   }
 
   ajax(url: any, flag = true) {
+    debugger;
     let that = this;
     flag == true && that.start();
     return of([]).pipe(
-      mergeMap((d: any) => from(fetch(url).then((resp) => resp.json()))),
+      mergeMap((d: any) =>
+        this.http.post(this.getUrl() + '/nse', {
+          url: url,
+        })
+      ),
       finalize(() => {
         flag == true && that.stop();
       })
@@ -115,7 +121,7 @@ export class HeroService {
   get_chart(data: any, id: any) {
     debugger;
     return this.ajax(
-      this.getUrl() + '/api/equity/intraday/' + data.selected + '?indices=true'
+      `/api/chart-databyindex?index=${data.selected}&indices=true`
     ).pipe(
       tap((_data: any) => {
         console.log('data=>', _data);
