@@ -16,6 +16,15 @@ export class LayoutComponent implements OnInit {
     livedt$: of([]),
     test: interval(1000),
   };
+
+  testdb = this.hs.testdb.pipe(
+    tap((resp: any) => {
+      document.title = 'NIFTY ' + resp.last;
+      if (resp.marketStatus != 'Close') {
+        this.data.livedt$$.next();
+      }
+    })
+  );
   ngOnInit(): void {
     let that = this;
     this.data.livedt$ = this.data.livedt$$.pipe(
@@ -24,14 +33,6 @@ export class LayoutComponent implements OnInit {
         document.title = 'NIFTY ' + d.marketState[0].last;
       })
     );
-
-    let x = this.hs._int(this.hs.from_to_time).subscribe((resp: any) => {
-      if (resp == true) {
-        that.data.livedt$$.next();
-      } else {
-        x.unsubscribe();
-      }
-    });
     setTimeout(() => {
       that.ref();
     }, 0);

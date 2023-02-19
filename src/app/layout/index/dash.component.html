@@ -1,3 +1,4 @@
+<span *ngIf="testdb | async as rr"></span>
 <div
   class="row"
   *ngIf="{ drop: data.drop | async, pg_data: data.pg_data | async } as _data"

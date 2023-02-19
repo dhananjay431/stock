@@ -32,18 +32,17 @@ export class DashComponent implements OnInit {
     console.log('call---getKey');
     return Object.keys(d);
   };
+  testdb = this.hs.testdb.pipe(
+    tap((resp: any) => {
+      if (resp.marketStatus != 'Close') {
+        $('#index_refresh').click();
+      }
+    })
+  );
   ngOnInit(): void {
     let that = this;
-    let x = this.hs._int(this.hs.from_to_time).subscribe((resp: any) => {
-      debugger;
-      if (resp == true) {
-        $('#index_refresh').click();
-      } else {
-        x.unsubscribe();
-      }
-    });
 
-    that.data.drop = this.hs.ajax('/api/allIndices').pipe(
+    that.data.drop = this.hs.ajax('/api/allIndices', false).pipe(
       map((d: any) => {
         let x = _.chain(d.data).groupBy('key').value();
         return { key: Object.keys(x), data: x, all: d.data };
@@ -63,25 +62,28 @@ export class DashComponent implements OnInit {
       this._selected_drop(this.data, '');
     }
   }
+
   _sh(d: any) {
     console.log(d);
   }
   _selected_drop$(id: any, _data: any) {
     if (_data === '') id.selected_ob = [];
     else id.selected_ob = _.find(_data.drop.all, { index: id.selected });
-    return this.hs.ajax('api/equity-stockIndices?index=' + id.selected).pipe(
-      tap((d) => {
-        setTimeout(() => {
-          $('#example').DataTable({
-            order: [[5, 'desc']],
-            lengthMenu: [
-              [-1, 50, 25, 10],
-              ['All', 50, 25, 10],
-            ],
-          });
-        }, 0);
-      })
-    );
+    return this.hs
+      .ajax('api/equity-stockIndices?index=' + id.selected, false)
+      .pipe(
+        tap((d) => {
+          setTimeout(() => {
+            $('#example').DataTable({
+              order: [[5, 'desc']],
+              lengthMenu: [
+                [-1, 50, 25, 10],
+                ['All', 50, 25, 10],
+              ],
+            });
+          }, 0);
+        })
+      );
     /*      .pipe(
             map((d) => {
               d.data = d.data.map((x: any) => {

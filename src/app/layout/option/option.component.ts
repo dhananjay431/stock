@@ -11,6 +11,13 @@ declare var _: any, html2canvas: any, $: any;
 export class OptionComponent implements OnInit {
   constructor(private hs: HeroService) {}
   //api/master-quote
+  testdb = this.hs.testdb.pipe(
+    tap((resp: any) => {
+      if (resp.marketStatus != 'Close') {
+        $('#option_refresh').click();
+      }
+    })
+  );
   data: any = {
     contracts: 'NIFTY',
     $masterQuote: of([]),
@@ -24,15 +31,6 @@ export class OptionComponent implements OnInit {
   oa = (a: any) => (Array.isArray(a) ? a : [a]);
   ngOnInit(): void {
     let that = this;
-
-    let x = this.hs._int(this.hs.from_to_time).subscribe((resp: any) => {
-      if (resp == true) {
-        $('#option_refresh').click();
-      } else {
-        x.unsubscribe();
-      }
-    });
-
     this.data.$data = this.data.$$data.pipe(mergeMap((d) => this.getNew(d)));
     this.data.$masterQuote = this.hs.ajax('/api/master-quote');
     setTimeout(() => {
@@ -50,7 +48,7 @@ export class OptionComponent implements OnInit {
   getNew(id: any) {
     let that = this;
     debugger;
-    return this.hs.ajax(id.url + id.id).pipe(
+    return this.hs.ajax(id.url + id.id, false).pipe(
       map((d: any) => {
         d.records.data = d.records.data.map((d: any) => {
           if (d.PE != undefined)

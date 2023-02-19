@@ -8,7 +8,11 @@ const _server = require("./server");
 async function dis(url) {
   let d = await _server.get_all_nse("api/option-chain-indices?symbol=" + url);
   fs.appendFile(
-    new Date().toISOString().substr(0, 10) + "_" + url + ".txt",
+    "./server/data/" +
+      new Date().toISOString().substr(0, 10) +
+      "_" +
+      url +
+      ".txt",
     "\n" + JSON.stringify(d),
     (err) => {
       if (err) {

@@ -2,27 +2,20 @@ import { Injectable } from '@angular/core';
 import { from, interval, of } from 'rxjs';
 import { finalize, map, mergeMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-declare var $: any, Highcharts: any, html2canvas: any;
+declare var $: any, Highcharts: any, html2canvas: any, _: any;
 @Injectable({
   providedIn: 'root',
 })
 export class HeroService {
   constructor(private http: HttpClient) {}
-  from_to_time: any = { from: '09:15:00', to: '15:30:00', time: 10000 };
-  _int({ from, to, time }: any) {
-    return interval(time).pipe(
-      map((d) => {
-        let a =
-          new Date(new Date().toDateString() + ' ' + to).getTime() >
-          new Date().getTime();
-        let b =
-          new Date().getTime() >
-          new Date(new Date().toDateString() + ' ' + from).getTime();
-        return a && b ? true : false;
-      })
-    );
-  }
 
+  from_to_time: any = 10;
+  testdb: any = interval(this.from_to_time * 1000).pipe(
+    mergeMap((d) => this.ajax('/api/marketStatus', false)),
+    map((d: any) => {
+      return _.chain(d.marketState).find({ market: 'Capital Market' }).value();
+    })
+  );
   oa(a: any) {
     return Array.isArray(a) ? a : [a];
   }
@@ -62,7 +55,7 @@ export class HeroService {
         zoomType: 'x',
       },
       title: {
-        text: data.name + ' ' + data.closePrice,
+        text: data.name,
         align: 'center',
       },
 
@@ -121,7 +114,8 @@ export class HeroService {
   get_chart(data: any, id: any) {
     debugger;
     return this.ajax(
-      `/api/chart-databyindex?index=${data.selected}&indices=true`
+      `/api/chart-databyindex?index=${data.selected}&indices=true`,
+      false
     ).pipe(
       tap((_data: any) => {
         console.log('data=>', _data);

@@ -1,10 +1,4 @@
-<!--
-https://www.nseindia.com/api/master-quote
-https://www.nseindia.com/api/option-chain-equities?symbol=ABB
-https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
-
--->
-
+<span *ngIf="testdb | async as rr"></span>
 <div
   *ngIf="{
     data: data.$data | async,

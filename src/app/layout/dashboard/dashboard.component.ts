@@ -15,6 +15,14 @@ export class DashboardComponent implements OnInit {
   // /api/equity/intraday/NIFTY%2050?indices=true
 
   ///api/allIndices
+  testdb = this.hs.testdb.pipe(
+    tap((resp: any) => {
+      if (resp.marketStatus != 'Close') {
+        $('#h_selected_change').click();
+        $('#ref_index').click();
+      }
+    })
+  );
   data: any = {
     dt$: of([]),
     allIndices$: of([]),
@@ -32,7 +40,7 @@ export class DashboardComponent implements OnInit {
   }
 
   get_allIndices() {
-    return this.hs.ajax('/api/allIndices').pipe(
+    return this.hs.ajax('/api/allIndices', false).pipe(
       map((d: any) => {
         d.data = d.data.map((x: any, i: any) => {
           x.id = i;
@@ -58,15 +66,6 @@ export class DashboardComponent implements OnInit {
     let that = this;
     this.data.allIndices$ = this.get_allIndices();
     this.data.dt$ = this.get_selected_change(this.data, 'container');
-
-    let x = this.hs._int(this.hs.from_to_time).subscribe((resp: any) => {
-      if (resp == true) {
-        $('#h_selected_change').click();
-        $('#ref_index').click();
-      } else {
-        x.unsubscribe();
-      }
-    });
   }
   goto(id: any) {
     // this.routes.navigate([]);
