@@ -18,7 +18,7 @@ export class OptionComponent implements OnInit {
     $$data: new Subject(),
     expiryData_key: [],
     expiryData: [],
-    temp_url: '/api/option/',
+    temp_url: '/api/option-chain-indices?symbol=',
   };
   ob = (a: any) => a;
   oa = (a: any) => (Array.isArray(a) ? a : [a]);
@@ -63,10 +63,21 @@ export class OptionComponent implements OnInit {
         let PCR = expiryData_key.reduce((a: any, d: any) => {
           let CE = _.chain(expiryData[d]).map('CE.openInterest').sum().value();
           let PE = _.chain(expiryData[d]).map('PE.openInterest').sum().value();
+          let C_CE = _.chain(expiryData[d])
+            .map('CE.changeinOpenInterest')
+            .sum()
+            .value();
+          let C_PE = _.chain(expiryData[d])
+            .map('PE.changeinOpenInterest')
+            .sum()
+            .value();
           a[d] = {
             PCR: Number(PE / CE).toFixed(2),
+            C_PCR: Number(C_PE / C_CE).toFixed(2),
             TTL_CE: CE,
             TTL_PE: PE,
+            TTL_C_CE: C_CE,
+            TTL_C_PE: C_PE,
           };
           return a;
         }, {});

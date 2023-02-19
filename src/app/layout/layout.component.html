@@ -6,13 +6,14 @@
       (click)="ref()"
     >
       <span
+        class="badge"
         [class]="{
-          'text-danger': ob(_tm).marketState[0].percentChange < 0,
-          'text-success': ob(_tm).marketState[0].percentChange > 0
+          'text-bg-danger': ob(_tm).marketState[0].percentChange < 0,
+          'text-bg-success': ob(_tm).marketState[0].percentChange > 0
         }"
       >
         {{ ob(_tm).marketState[0].last }}
-      
+        <!--        <i class="fa-solid fa-sort-up"></i>-->
       </span>
     </span>
     <button

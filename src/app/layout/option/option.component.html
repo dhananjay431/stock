@@ -184,11 +184,18 @@ https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY
                 <td class="text-end">
                   {{ ob(_data.data).PCR[i].TTL_CE | number }}
                 </td>
+                <td class="text-end">
+                  {{ ob(_data.data).PCR[i].TTL_C_CE | number }}
+                </td>
                 <td></td>
+                <td class="text-center">
+                  {{ ob(_data.data).PCR[i].PCR }} /
+                  {{ ob(_data.data).PCR[i].C_PCR }}
+                </td>
                 <td></td>
-                <td class="text-center">{{ ob(_data.data).PCR[i].PCR }}</td>
-                <td></td>
-                <td></td>
+                <td class="text-end">
+                  {{ ob(_data.data).PCR[i].TTL_C_PE | number }}
+                </td>
                 <td class="text-end">
                   {{ ob(_data.data).PCR[i].TTL_PE | number }}
                 </td>
