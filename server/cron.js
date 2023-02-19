@@ -10,11 +10,11 @@ async function dis(url) {
     let d = await _server.get_all_nse("api/option-chain-indices?symbol=" + url);
 
     save_file(
-      `./server/data/${new Date().toISOString().substr(0, 10)}_,${url}.txt`,
+      `./server/data/${new Date().toISOString().substr(0, 10)}_${url}`,
       d
     );
     save_file(
-      `./server/data/${new Date().toISOString().substr(0, 10)}_PCR_,${url}.txt`,
+      `./server/data/${new Date().toISOString().substr(0, 10)}_PCR_${url}`,
       get_data(d)
     );
   }
@@ -82,7 +82,11 @@ function get_data(d) {
     };
     return a;
   }, {});
-  let dt = { date: new Date("2023-02-19T12:49:17.036Z").toLocaleString(), PCR };
+  let dt = {
+    timestamp: d.records.timestamp,
+    underlyingValue: d.records.underlyingValue,
+    PCR,
+  };
 
   return dt;
 }
