@@ -62,7 +62,7 @@
         class="col-md-6 col-lg-6 col-12"
         *ngFor="let i of ob(_data.data)['expiryData_key']"
       >
-        <ng-container *ngIf="ob(_data.data).expiryData[i].length == 6">
+        <ng-container *ngIf="ob(_data.data).expiryData[i].length == 16">
           <span class="fw-semibold">
             {{ i }}
           </span>
@@ -98,9 +98,6 @@
             </thead>
             <tbody>
               <tr *ngFor="let i of ob(_data.data).expiryData[i]">
-                <!--             'text-danger': ((i.CE.change || 0 ) < 0),
-                'text-success':   ((i.CE.change || 0 ) > 0),-->
-
                 <td
                   class="text-end"
                   [class]="{
@@ -206,11 +203,10 @@
               <td rowspan="2" class="text-center">Time</td>
               <td rowspan="2" class="text-center">U Value</td>
               <ng-container *ngFor="let j of ob(_data).data.expiryData_key">
-                <td  colspan="2" class="text-center">{{ j }}</td>
+                <td colspan="2" class="text-center">{{ j }}</td>
               </ng-container>
             </tr>
             <tr>
-           
               <ng-container *ngFor="let j of ob(_data).data.expiryData_key">
                 <td class="text-center" class="text-center">PCR</td>
                 <td class="text-center" class="text-center">C PCR</td>
@@ -223,25 +219,29 @@
               <td class="text-center">{{ i.timestamp }}</td>
               <td class="text-center">{{ i.underlyingValue }}</td>
               <ng-container *ngFor="let j of ob(_data).data.expiryData_key">
-                <td
-                  class="text-white text-center"
-                  [class]="{
-                    'bg-warning':n(i.PCR[j].PCR) == 1,
-                    'bg-success': n(i.PCR[j].PCR) < 1,
-                    'bg-danger': n(i.PCR[j].PCR) > 1
-                  }"
-                >
-                  {{ i.PCR[j].PCR }}
+                <td class="text-white text-center">
+                  <h2
+                    class="badge text-bg-primary bg-opacity-75"
+                    [class]="{
+                      'text-bg-warning': n(i.PCR[j].PCR) == 1,
+                      'text-bg-danger': n(i.PCR[j].PCR) < 1,
+                      'text-bg-success': n(i.PCR[j].PCR) > 1
+                    }"
+                  >
+                    {{ i.PCR[j].PCR }}
+                  </h2>
                 </td>
-                <td
-                  class="text-white text-center"
-                  [class]="{
-                    'bg-warning':n(i.PCR[j].C_PCR) == 1,
-                    'bg-success': n(i.PCR[j].C_PCR) < 1,
-                    'bg-danger': n(i.PCR[j].C_PCR) > 1
-                  }"
-                >
-                  {{ i.PCR[j].C_PCR }}
+                <td class="text-white text-center">
+                  <h2
+                    class="badge text-bg-primary bg-opacity-75"
+                    [class]="{
+                      'text-bg-warning': n(i.PCR[j].C_PCR) == 1,
+                      'text-bg-danger': n(i.PCR[j].C_PCR) < 1,
+                      'text-bg-success': n(i.PCR[j].C_PCR) > 1
+                    }"
+                  >
+                    {{ i.PCR[j].C_PCR }}
+                  </h2>
                 </td>
               </ng-container>
             </tr>

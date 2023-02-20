@@ -13,7 +13,7 @@ export class OptionComponent implements OnInit {
     let d = fetch(
       `http://localhost:3000/data/${new Date()
         .toISOString()
-        .substr(0, 10)}_PCR_${data.contracts}.txt`
+        .substr(0, 10)}_PCR_${data.contracts}`
     )
       .then((d) => d.text())
       .then((d) => {
@@ -63,7 +63,7 @@ export class OptionComponent implements OnInit {
   }
   h_contracts(url: any, id: any) {
     this.data.temp_url = url;
-    this.data.pcr$ = this.get_PCR({contracts:id});
+    this.data.pcr$ = this.get_PCR({ contracts: id });
     this.data.$$data.next({ url, id });
   }
   getNew(id: any) {
@@ -100,7 +100,6 @@ export class OptionComponent implements OnInit {
           return a;
         }, {});
         let dt: any = { data: d, expiryData, expiryData_key, PCR };
-
         return dt;
       })
     );
@@ -135,15 +134,25 @@ export class OptionComponent implements OnInit {
     if (temp_data.length < 6)
       return _.chain(temp_data).sortBy('strikePrice').value();
 
+    // let a = _.chain(temp_data)
+    //   .filter((d: any) => d.flag == false)
+    //   .sortBy('PE.changeinOpenInterest')
+    //   .takeRight(3)
+    //   .value();
+    // let b = _.chain(temp_data)
+    //   .filter((d: any) => d.flag == true)
+    //   .sortBy('CE.changeinOpenInterest')
+    //   .takeRight(3)
+    //   .value();
     let a = _.chain(temp_data)
-      .filter((d: any) => d.flag == false)
-      .sortBy('PE.changeinOpenInterest')
-      .takeRight(3)
+      .filter({ flag: false })
+      .sortBy('strikePrice')
+      .takeRight(8)
       .value();
     let b = _.chain(temp_data)
-      .filter((d: any) => d.flag == true)
-      .sortBy('CE.changeinOpenInterest')
-      .takeRight(3)
+      .filter({ flag: true })
+      .sortBy('strikePrice')
+      .take(8)
       .value();
     return _.chain([...a, ...b])
 

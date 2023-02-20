@@ -6,23 +6,24 @@ const _server = require("./server");
 
 async function dis(url) {
   let live = await _server.get_all_nse("/api/marketStatus");
-  if (live.marketState[0].marketStatus != "Close") {
+  if (live.marketState[0].marketStatus == "Closed") {
     let d = await _server.get_all_nse("api/option-chain-indices?symbol=" + url);
 
     save_file(
-      `./server/data/${new Date().toISOString().substr(0, 10)}_${url}.txt`,
+      `./server/data/${new Date().toISOString().substr(0, 10)}_${url}`,
       d
     );
     save_file(
-      `./server/data/${new Date().toISOString().substr(0, 10)}_PCR_${url}.txt`,
+      `./server/data/${new Date().toISOString().substr(0, 10)}_PCR_${url}`,
       get_data(d)
     );
   }
 }
+//"0/15 9-16 * * 1-5",
 module.exports = {
   run_cron: function (url) {
     return new CronJob(
-      "0/15 9-16 * * 1-5",
+      "*/1 * * * *",
       function () {
         dis(url);
       },
@@ -98,18 +99,16 @@ function getexpiryData(expiryDate, _data) {
     return _.chain(temp_data).sortBy("strikePrice").value();
 
   let a = _.chain(temp_data)
-    .filter((d) => d.flag == false)
-    .sortBy("PE.changeinOpenInterest")
-    .takeRight(3)
+    .filter({ flag: false })
+    .sortBy("strikePrice")
+    .takeRight(8)
     .value();
   let b = _.chain(temp_data)
-    .filter((d) => d.flag == true)
-    .sortBy("CE.changeinOpenInterest")
-    .takeRight(3)
+    .filter({ flag: true })
+    .sortBy("strikePrice")
+    .take(8)
     .value();
-  debugger;
   return _.chain([...a, ...b])
-
     .sortBy("strikePrice")
     .value();
 }
