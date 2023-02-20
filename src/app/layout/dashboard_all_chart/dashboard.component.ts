@@ -30,7 +30,6 @@ export class DashboardComponent implements OnInit {
       )
       .pipe(
         tap((data: any) => {
-          debugger;
           console.log('data=>', data, data2);
           this.ch(data, data2);
         }),
@@ -111,8 +110,7 @@ export class DashboardComponent implements OnInit {
     this.data.allIndices$ = this.hs
       .ajax(this.hs.getUrl() + '/api/allIndices')
       .pipe(
-        tap((d) => {
-          debugger;
+        tap((d: any) => {
           let all_chart = d.data.map((dx: any) => {
             return that.get_selected_change(dx.index);
           });

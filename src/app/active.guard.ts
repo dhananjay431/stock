@@ -21,7 +21,6 @@ export class ActiveGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    debugger;
     let l: any = localStorage;
     if (l.url === undefined) {
       this.router.navigate(['/login']);

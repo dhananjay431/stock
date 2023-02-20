@@ -2,7 +2,8 @@
 <div
   *ngIf="{
     data: data.$data | async,
-    masterQuote: data.$masterQuote | async
+    masterQuote: data.$masterQuote | async,
+    pcr: data.pcr$ | async
   } as _data"
 >
   <div class="mt-2" *ngIf="_data.data != null">
@@ -197,6 +198,55 @@
             </tbody>
           </table>
         </ng-container>
+      </div>
+      <div class="col-12">
+        <table class="table table-sm table-striped table-hover mt-2">
+          <thead class="header-fixed bg">
+            <tr>
+              <td rowspan="2" class="text-center">Time</td>
+              <td rowspan="2" class="text-center">U Value</td>
+              <ng-container *ngFor="let j of ob(_data).data.expiryData_key">
+                <td  colspan="2" class="text-center">{{ j }}</td>
+              </ng-container>
+            </tr>
+            <tr>
+           
+              <ng-container *ngFor="let j of ob(_data).data.expiryData_key">
+                <td class="text-center" class="text-center">PCR</td>
+                <td class="text-center" class="text-center">C PCR</td>
+              </ng-container>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let i of ob(_data.pcr).reverse()">
+              <td class="text-center">{{ i.timestamp }}</td>
+              <td class="text-center">{{ i.underlyingValue }}</td>
+              <ng-container *ngFor="let j of ob(_data).data.expiryData_key">
+                <td
+                  class="text-white text-center"
+                  [class]="{
+                    'bg-warning':n(i.PCR[j].PCR) == 1,
+                    'bg-success': n(i.PCR[j].PCR) < 1,
+                    'bg-danger': n(i.PCR[j].PCR) > 1
+                  }"
+                >
+                  {{ i.PCR[j].PCR }}
+                </td>
+                <td
+                  class="text-white text-center"
+                  [class]="{
+                    'bg-warning':n(i.PCR[j].C_PCR) == 1,
+                    'bg-success': n(i.PCR[j].C_PCR) < 1,
+                    'bg-danger': n(i.PCR[j].C_PCR) > 1
+                  }"
+                >
+                  {{ i.PCR[j].C_PCR }}
+                </td>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

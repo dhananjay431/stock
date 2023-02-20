@@ -17,7 +17,7 @@ export class DashboardComponent implements OnInit {
   ///api/allIndices
   testdb = this.hs.testdb.pipe(
     tap((resp: any) => {
-      if (resp.marketStatus != 'Close') {
+      if (resp.marketStatus != 'Closed') {
         $('#h_selected_change').click();
         $('#ref_index').click();
       }

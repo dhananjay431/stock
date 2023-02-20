@@ -34,7 +34,7 @@ export class DashComponent implements OnInit {
   };
   testdb = this.hs.testdb.pipe(
     tap((resp: any) => {
-      if (resp.marketStatus != 'Close') {
+      if (resp.marketStatus != 'Closed') {
         $('#index_refresh').click();
       }
     })
@@ -189,13 +189,11 @@ export class DashComponent implements OnInit {
     return _.flow(new_ftr)(pg_dt.pg_data.data);
   }
   reset(id: any, _data: any) {
-    debugger;
     //id.filter_arr = [];
     //this.data.pg_data =
 
     this.data.pg_data = this._selected_drop$(id, _data).pipe(
       map((d: any) => {
-        debugger;
         _data.pg_data = _.cloneDeep(d);
         _data.pg_data.data = this._search(id, _.cloneDeep(_data));
         return _data.pg_data;
@@ -210,7 +208,6 @@ export class DashComponent implements OnInit {
   temp_save_popup_data(d: any) {}
 
   asc_desc(key: any, pg_dt: any) {
-    debugger;
     if (pg_dt.col === undefined) {
       pg_dt.col = {};
     }

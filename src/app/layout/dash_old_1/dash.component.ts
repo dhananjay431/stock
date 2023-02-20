@@ -25,8 +25,6 @@ export class DashComponent implements OnInit {
     filter_arr: [],
   };
   test(d: any) {
-    debugger;
-
     this.data.pg_data = _.clone(d);
 
     this.data.drop = _.keys(this.data.pg_data);

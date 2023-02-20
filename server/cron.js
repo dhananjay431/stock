@@ -10,11 +10,11 @@ async function dis(url) {
     let d = await _server.get_all_nse("api/option-chain-indices?symbol=" + url);
 
     save_file(
-      `./server/data/${new Date().toISOString().substr(0, 10)}_${url}`,
+      `./server/data/${new Date().toISOString().substr(0, 10)}_${url}.txt`,
       d
     );
     save_file(
-      `./server/data/${new Date().toISOString().substr(0, 10)}_PCR_${url}`,
+      `./server/data/${new Date().toISOString().substr(0, 10)}_PCR_${url}.txt`,
       get_data(d)
     );
   }
@@ -22,7 +22,7 @@ async function dis(url) {
 module.exports = {
   run_cron: function (url) {
     return new CronJob(
-      "*/15  * * * *",
+      "0/15 9-16 * * 1-5",
       function () {
         dis(url);
       },

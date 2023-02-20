@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HeroService } from '../../hero.service';
-import { forkJoin, mergeMap, of, Subject } from 'rxjs';
+import { forkJoin, mergeMap, of, Subject, from } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 declare var _: any, html2canvas: any, $: any;
 @Component({
@@ -9,11 +9,29 @@ declare var _: any, html2canvas: any, $: any;
   styleUrls: ['./option.component.scss'],
 })
 export class OptionComponent implements OnInit {
+  get_PCR(data: any) {
+    let d = fetch(
+      `http://localhost:3000/data/${new Date()
+        .toISOString()
+        .substr(0, 10)}_PCR_${data.contracts}.txt`
+    )
+      .then((d) => d.text())
+      .then((d) => {
+        return Promise.resolve(
+          d
+            .split('\n')
+            .filter(Boolean)
+            .map((d) => JSON.parse(d))
+        );
+      });
+    return from(d);
+  }
+
   constructor(private hs: HeroService) {}
   //api/master-quote
   testdb = this.hs.testdb.pipe(
     tap((resp: any) => {
-      if (resp.marketStatus != 'Close') {
+      if (resp.marketStatus != 'Closed') {
         $('#option_refresh').click();
       }
     })
@@ -26,11 +44,14 @@ export class OptionComponent implements OnInit {
     expiryData_key: [],
     expiryData: [],
     temp_url: '/api/option-chain-indices?symbol=',
+    pcr$: of([]),
   };
   ob = (a: any) => a;
   oa = (a: any) => (Array.isArray(a) ? a : [a]);
   ngOnInit(): void {
     let that = this;
+
+    this.data.pcr$ = this.get_PCR(this.data);
     this.data.$data = this.data.$$data.pipe(mergeMap((d) => this.getNew(d)));
     this.data.$masterQuote = this.hs.ajax('/api/master-quote');
     setTimeout(() => {
@@ -41,13 +62,12 @@ export class OptionComponent implements OnInit {
     }, 100);
   }
   h_contracts(url: any, id: any) {
-    debugger;
     this.data.temp_url = url;
+    this.data.pcr$ = this.get_PCR({contracts:id});
     this.data.$$data.next({ url, id });
   }
   getNew(id: any) {
     let that = this;
-    debugger;
     return this.hs.ajax(id.url + id.id, false).pipe(
       map((d: any) => {
         d.records.data = d.records.data.map((d: any) => {
@@ -112,7 +132,6 @@ export class OptionComponent implements OnInit {
     let temp_data: any = _.chain(_data.data.records.data)
       .filter({ expiryDate: expiryDate })
       .value();
-    debugger;
     if (temp_data.length < 6)
       return _.chain(temp_data).sortBy('strikePrice').value();
 
@@ -126,14 +145,12 @@ export class OptionComponent implements OnInit {
       .sortBy('CE.changeinOpenInterest')
       .takeRight(3)
       .value();
-    debugger;
     return _.chain([...a, ...b])
 
       .sortBy('strikePrice')
       .value();
   }
   getAllopData(_data: any) {
-    debugger;
     return _.chain(_data.data.records.expiryDates)
       .take(4)
       .reduce((a: any, b: any) => {
@@ -150,7 +167,7 @@ export class OptionComponent implements OnInit {
     this.data.$$data.next({ url: this.data.temp_url, id: this.data.contracts });
   }
   n(d: any) {
-    return Number(d).toFixed(2);
+    return Number(Number(d).toFixed(2));
   }
   h_html2canvas(id: any) {
     this.hs.h_html2canvas(id);

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { from, interval, of } from 'rxjs';
+import { from, interval, of, shareReplay } from 'rxjs';
 import { finalize, map, mergeMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 declare var $: any, Highcharts: any, html2canvas: any, _: any;
@@ -11,7 +11,7 @@ export class HeroService {
 
   from_to_time: any = 10;
   testdb: any = interval(this.from_to_time * 1000).pipe(
-    mergeMap((d) => this.ajax('/api/marketStatus', false)),
+    mergeMap((d) => this.ajax('/api/marketStatus', false).pipe(shareReplay())),
     map((d: any) => {
       return _.chain(d.marketState).find({ market: 'Capital Market' }).value();
     })
@@ -28,7 +28,6 @@ export class HeroService {
   }
 
   ajax(url: any, flag = true) {
-    debugger;
     let that = this;
     flag == true && that.start();
     return of([]).pipe(
@@ -112,7 +111,6 @@ export class HeroService {
     });
   }
   get_chart(data: any, id: any) {
-    debugger;
     return this.ajax(
       `/api/chart-databyindex?index=${data.selected}&indices=true`,
       false

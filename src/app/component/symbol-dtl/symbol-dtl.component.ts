@@ -67,7 +67,6 @@ export class SymbolDtlComponent implements OnInit {
     { key: 'pdSectorInd', value: 'pdSectorInd' },
   ];
   getD(key: any, data: any) {
-    debugger;
     return _.get(data, key) || '';
   }
   n(d: any) {
