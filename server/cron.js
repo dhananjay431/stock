@@ -6,7 +6,7 @@ const _server = require("./server");
 
 async function dis(url) {
   let live = await _server.get_all_nse("/api/marketStatus");
-  if (live.marketState[0].marketStatus == "Closed") {
+  if (live.marketState[0].marketStatus != "Closed") {
     let d = await _server.get_all_nse("api/option-chain-indices?symbol=" + url);
 
     save_file(
@@ -23,7 +23,7 @@ async function dis(url) {
 module.exports = {
   run_cron: function (url) {
     return new CronJob(
-      "*/1 * * * *",
+      "0/15 9-16 * * 1-5",
       function () {
         dis(url);
       },
