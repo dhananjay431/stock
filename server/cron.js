@@ -23,7 +23,7 @@ async function dis(url) {
 module.exports = {
   run_cron: function (url) {
     return new CronJob(
-      "0/15 9-16 * * 1-5",
+      "0/5 9-16 * * 1-5",
       function () {
         dis(url);
       },

@@ -29,6 +29,13 @@ const routes: Routes = [
           import('./layout/option/option.module').then((m) => m.OptionModule),
       },
       {
+        path: 'option_history',
+        loadChildren: () =>
+          import('./layout/option_history/option.module').then(
+            (m) => m.OptionModule
+          ),
+      },
+      {
         path: 'dashboard',
         loadChildren: () =>
           import('./layout/dashboard/dashboard.module').then(

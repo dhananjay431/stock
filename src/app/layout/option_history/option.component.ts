@@ -37,33 +37,53 @@ export class OptionComponent implements OnInit {
     })
   );
   data: any = {
-    contracts: 'NIFTY',
+    contracts: new Date().toISOString().substr(0, 10) + '_NIFTY',
     $masterQuote: of([]),
     $data: of([]),
     $$data: new Subject(),
     expiryData_key: [],
     expiryData: [],
     temp_url: '/api/option-chain-indices?symbol=',
-    pcr$: of([]),
+    // pcr$: of([]),
   };
   ob = (a: any) => a;
   oa = (a: any) => (Array.isArray(a) ? a : [a]);
   ngOnInit(): void {
     let that = this;
 
-    this.data.pcr$ = this.get_PCR(this.data);
+    // this.data.pcr$ = this.get_PCR(this.data);
     this.data.$data = this.data.$$data.pipe(mergeMap((d) => this.getNew(d)));
     this.data.$masterQuote = this.hs.ajax('/api/master-quote');
     setTimeout(() => {
       this.data.$$data.next({
         url: '/api/option-chain-indices?symbol=',
         id: this.data.contracts,
+        n: 0,
       });
     }, 100);
   }
+  rec_num: any = 0;
+  prev(data: any, _data: any, flag: any) {
+    if (flag == 'p') {
+      this.rec_num--;
+      this.data.$$data.next({
+        url: this.data.temp_url,
+        id: this.data.contracts,
+        n: this.rec_num,
+      });
+    }
+    if (flag == 'n') {
+      this.rec_num++;
+      this.data.$$data.next({
+        url: this.data.temp_url,
+        id: this.data.contracts,
+        n: this.rec_num,
+      });
+    }
+  }
   h_contracts(url: any, id: any) {
     this.data.temp_url = url;
-    this.data.pcr$ = this.get_PCR({ contracts: id });
+    // this.data.pcr$ = this.get_PCR({ contracts: id });
     this.data.$$data.next({ url, id });
   }
   _getNew = () =>
@@ -102,12 +122,12 @@ export class OptionComponent implements OnInit {
     });
   getNew(id: any) {
     let that = this;
-    return this.hs.ajax(id.url + id.id, false).pipe(that._getNew());
-    // return from(
-    //   fetch('http://localhost:3000/getData/2023-02-20_NIFTY.txt?n=3').then(
-    //     (r) => r.json()
-    //   )
-    // ).pipe(that._getNew());
+    //return this.hs.ajax(id.url + id.id, false).pipe(that._getNew());
+    return from(
+      fetch(`http://localhost:3000/getData/${id.id}?n=${id.n}`).then((r) =>
+        r.json()
+      )
+    ).pipe(that._getNew());
   }
   put_call_chart_id_open(id: any, data: any) {
     let that = this;

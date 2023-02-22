@@ -10,12 +10,13 @@ export class HeroService {
   constructor(private http: HttpClient) {}
 
   from_to_time: any = 10;
-  testdb: any = interval(this.from_to_time * 1000).pipe(
+  testdb: any = of({});
+  /*testdb: any = interval(this.from_to_time * 1000).pipe(
     mergeMap((d) => this.ajax('/api/marketStatus', false).pipe(shareReplay())),
     map((d: any) => {
       return _.chain(d.marketState).find({ market: 'Capital Market' }).value();
     })
-  );
+  );*/
   oa(a: any) {
     return Array.isArray(a) ? a : [a];
   }
