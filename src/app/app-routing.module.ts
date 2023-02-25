@@ -42,6 +42,11 @@ const routes: Routes = [
             (m) => m.DashboardModule
           ),
       },
+      {
+        path: 'bse',
+        loadChildren: () =>
+          import('./layout/bse/bse.module').then((m) => m.BseModule),
+      },
     ],
   },
   {

@@ -10,21 +10,23 @@ declare var _: any, html2canvas: any, $: any;
 })
 export class OptionComponent implements OnInit {
   get_PCR(data: any) {
+    debugger;
     let d = fetch(
-      `http://localhost:3000/data/${new Date()
-        .toISOString()
-        .substr(0, 10)}_PCR_${data.contracts}`
-    )
-      .then((d) => d.text())
-      .then((d) => {
-        return Promise.resolve(
-          d
-            .split('\n')
-            .filter(Boolean)
-            .map((d) => JSON.parse(d))
-        );
-      });
-    return from(d);
+      `${this.hs.getUrl()}/data/${data.date}_PCR_${data.contracts}`
+    ).then((d2: any) => d2.text());
+
+    return from(d).pipe(
+      map((d3: any) => {
+        debugger;
+        return d3
+          .split('\n')
+          .filter(Boolean)
+          .map((d4: any) => JSON.parse(d4));
+      }),
+      tap((dd) => {
+        console.log('ddddd=>', dd);
+      })
+    );
   }
 
   constructor(private hs: HeroService) {}
@@ -37,38 +39,40 @@ export class OptionComponent implements OnInit {
     })
   );
   data: any = {
-    contracts: new Date().toISOString().substr(0, 10) + '_NIFTY',
+    date: new Date().toISOString().substr(0, 10),
+    contracts: 'NIFTY',
     $masterQuote: of([]),
     $data: of([]),
     $$data: new Subject(),
     expiryData_key: [],
     expiryData: [],
     temp_url: '/api/option-chain-indices?symbol=',
-    // pcr$: of([]),
+    pcr$: of([]),
   };
   ob = (a: any) => a;
   oa = (a: any) => (Array.isArray(a) ? a : [a]);
   ngOnInit(): void {
     let that = this;
 
-    // this.data.pcr$ = this.get_PCR(this.data);
+    this.data.pcr$ = this.get_PCR(this.data);
     this.data.$data = this.data.$$data.pipe(mergeMap((d) => this.getNew(d)));
     this.data.$masterQuote = this.hs.ajax('/api/master-quote');
     setTimeout(() => {
       this.data.$$data.next({
         url: '/api/option-chain-indices?symbol=',
-        id: this.data.contracts,
+        data: this.data,
         n: 0,
       });
     }, 100);
   }
   rec_num: any = 0;
   prev(data: any, _data: any, flag: any) {
+    this.data.pcr$ = this.get_PCR(data);
     if (flag == 'p') {
       this.rec_num--;
       this.data.$$data.next({
         url: this.data.temp_url,
-        id: this.data.contracts,
+        data: this.data,
         n: this.rec_num,
       });
     }
@@ -76,18 +80,19 @@ export class OptionComponent implements OnInit {
       this.rec_num++;
       this.data.$$data.next({
         url: this.data.temp_url,
-        id: this.data.contracts,
+        data: this.data,
         n: this.rec_num,
       });
     }
   }
   h_contracts(url: any, id: any) {
     this.data.temp_url = url;
-    // this.data.pcr$ = this.get_PCR({ contracts: id });
+    this.data.pcr$ = this.get_PCR({ contracts: id });
     this.data.$$data.next({ url, id });
   }
   _getNew = () =>
     map((d: any) => {
+      if (d?.records?.data == undefined) return;
       d.records.data = d.records.data.map((d: any) => {
         if (d.PE != undefined)
           d.flag = !(d.PE.underlyingValue > d.PE.strikePrice);
@@ -123,11 +128,19 @@ export class OptionComponent implements OnInit {
   getNew(id: any) {
     let that = this;
     //return this.hs.ajax(id.url + id.id, false).pipe(that._getNew());
+    debugger;
     return from(
-      fetch(`http://localhost:3000/getData/${id.id}?n=${id.n}`).then((r) =>
-        r.json()
-      )
-    ).pipe(that._getNew());
+      fetch(
+        `${this.hs.getUrl()}/getData/${id.data.date}_${id.data.contracts}?n=${
+          id.n
+        }`
+      ).then((r) => r.json())
+    ).pipe(
+      that._getNew(),
+      tap((d) => {
+        this.data.prc$ = this.get_PCR(id.data);
+      })
+    );
   }
   put_call_chart_id_open(id: any, data: any) {
     let that = this;

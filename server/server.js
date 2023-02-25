@@ -37,7 +37,8 @@ module.exports = {
       });
       return response.data;
     } catch (err) {
-      cookieUsedCount--;
+      //cookieUsedCount--;
+      return {};
       throw err;
     }
   },

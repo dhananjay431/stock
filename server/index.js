@@ -40,16 +40,19 @@ app.get("/getData/:id", async (req, res) => {
   //res.send({ body: req.body, params: req.params, query: req.query });
 
   fs.readFile(`/stock/server/data/${req.params.id}`, (err, data) => {
-    if (err) throw err;
-
-    res.send(
-      data
-        .toString()
-        .split("\n")
-        .filter(Boolean)
-        .map((d) => JSON.parse(d))
-        .at(req.query.n)
-    );
+    if (err) {
+      res.send([]);
+      // throw err;
+    } else {
+      res.send(
+        data
+          .toString()
+          .split("\n")
+          .filter(Boolean)
+          .map((d) => JSON.parse(d))
+          .at(req.query.n)
+      );
+    }
   });
 });
 

@@ -27,7 +27,16 @@ export class HeroService {
   stop() {
     $('.loader').last().remove();
   }
-
+  ajaxp(url: any, flag: any = true) {
+    let that = this;
+    flag == true && that.start();
+    return of([]).pipe(
+      mergeMap((d: any) => fetch(url).then((r) => r.json())),
+      finalize(() => {
+        flag == true && that.stop();
+      })
+    );
+  }
   ajax(url: any, flag = true) {
     let that = this;
     flag == true && that.start();

@@ -11,17 +11,22 @@ declare var _: any, html2canvas: any, $: any;
 export class OptionComponent implements OnInit {
   get_PCR(data: any) {
     let d = fetch(
-      `http://localhost:3000/data/${new Date()
-        .toISOString()
-        .substr(0, 10)}_PCR_${data.contracts}`
+      `${this.hs.getUrl()}/data/${new Date().toISOString().substr(0, 10)}_PCR_${
+        data.contracts
+      }`
     )
-      .then((d) => d.text())
-      .then((d) => {
+      .then(
+        (d) => d.text(),
+        (err) => {
+          return Promise.resolve('');
+        }
+      )
+      .then((d: any) => {
         return Promise.resolve(
           d
             .split('\n')
             .filter(Boolean)
-            .map((d) => JSON.parse(d))
+            .map((d: any) => JSON.parse(d))
         );
       });
     return from(d);
@@ -46,7 +51,10 @@ export class OptionComponent implements OnInit {
     temp_url: '/api/option-chain-indices?symbol=',
     pcr$: of([]),
   };
-  ob = (a: any) => a;
+  ob = (a: any) => {
+    if (a == null || a == undefined || a == '') return [];
+    return a;
+  };
   oa = (a: any) => (Array.isArray(a) ? a : [a]);
   ngOnInit(): void {
     let that = this;

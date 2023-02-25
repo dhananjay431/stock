@@ -1,0 +1,16 @@
+<div
+  *ngIf="{
+    getAll: data.getAll$ | async,
+    Dropdowndata: data.Dropdowndata$ | async
+  } as _data"
+>
+  <ul>
+    <li *ngFor="let i of ob(_data).getAll" (click)="getSub(i)">
+      {{ i.indxnm }}
+    </li>
+  </ul>
+
+  <pre>
+    {{ _data.Dropdowndata | json }}
+  </pre>
+</div>

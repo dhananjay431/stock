@@ -80,173 +80,177 @@
           </span>
 
           <span class="badge text-bg-primary"></span>
-          <table
-            id="example"
-            class="table table-sm table-striped table-hover mt-2"
-          >
-            <thead class="header-fixed bg" (click)="show(data, _data)">
-              <tr>
-                <th class="text-end text-nowrap">OI</th>
-                <th class="text-end text-nowrap">COI</th>
+          <div class="table-responsive">
+            <table
+              id="example"
+              class="table table-sm table-striped table-hover mt-2"
+            >
+              <thead class="header-fixed bg" (click)="show(data, _data)">
+                <tr>
+                  <th class="text-end text-nowrap">OI</th>
+                  <th class="text-end text-nowrap">COI</th>
 
-                <th class="text-end text-nowrap">Last Price</th>
-                <th class="text-center text-nowrap">Strike Price</th>
-                <th class="text-end text-nowrap">Last Price</th>
-                <th class="text-end text-nowrap">COI</th>
-                <th class="text-end text-nowrap">OI</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let i of ob(_data.data).expiryData[i]">
-                <td
-                  class="text-end"
-                  [class]="{
-                    'bg-primary-subtle': i.flag == false,
-                    'text-danger': (i?.CE?.change || 0) < 0,
-                    'text-success': (i?.CE?.change || 0) > 0
-                  }"
-                  [title]="i?.CE?.change || ''"
-                >
-                  {{ i?.CE?.openInterest || 0 | number }}
-                </td>
-                <td
-                  class="text-end"
-                  [class]="{
-                    'bg-primary-subtle': i.flag == false,
-                    'text-danger': (i?.CE?.change || 0) < 0,
-                    'text-success': (i?.CE?.change || 0) > 0
-                  }"
-                  [title]="i?.CE?.change || ''"
-                >
-                  {{ i?.CE?.changeinOpenInterest | number }}
-                </td>
+                  <th class="text-end text-nowrap">Last Price</th>
+                  <th class="text-center text-nowrap">Strike Price</th>
+                  <th class="text-end text-nowrap">Last Price</th>
+                  <th class="text-end text-nowrap">COI</th>
+                  <th class="text-end text-nowrap">OI</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let i of ob(_data.data).expiryData[i]">
+                  <td
+                    class="text-end"
+                    [class]="{
+                      'bg-primary-subtle': i.flag == false,
+                      'text-danger': (i?.CE?.change || 0) < 0,
+                      'text-success': (i?.CE?.change || 0) > 0
+                    }"
+                    [title]="i?.CE?.change || ''"
+                  >
+                    {{ i?.CE?.openInterest || 0 | number }}
+                  </td>
+                  <td
+                    class="text-end"
+                    [class]="{
+                      'bg-primary-subtle': i.flag == false,
+                      'text-danger': (i?.CE?.change || 0) < 0,
+                      'text-success': (i?.CE?.change || 0) > 0
+                    }"
+                    [title]="i?.CE?.change || ''"
+                  >
+                    {{ i?.CE?.changeinOpenInterest | number }}
+                  </td>
 
-                <td
-                  class="text-end"
-                  [class]="{
-                    'bg-primary-subtle': i.flag == false,
-                    'text-danger': (i?.CE?.change || 0) < 0,
-                    'text-success': (i?.CE?.change || 0) > 0
-                  }"
-                >
-                  {{ n(i?.CE?.lastPrice || 0) }}
-                </td>
-                <td
-                  class="text-center"
-                  (click)="put_call_chart_id_open('#put_call_chart_id', i)"
-                >
-                  {{ i?.strikePrice || 0 | number }}
-                </td>
-                <td
-                  class="text-end"
-                  [class]="{
-                    'bg-primary-subtle': i.flag == true,
-                    'text-danger': (i?.PE?.change || 0) < 0,
-                    'text-success': (i?.PE?.change || 0) > 0
-                  }"
-                >
-                  {{ n(i?.PE?.lastPrice || 0) }}
-                </td>
+                  <td
+                    class="text-end"
+                    [class]="{
+                      'bg-primary-subtle': i.flag == false,
+                      'text-danger': (i?.CE?.change || 0) < 0,
+                      'text-success': (i?.CE?.change || 0) > 0
+                    }"
+                  >
+                    {{ n(i?.CE?.lastPrice || 0) }}
+                  </td>
+                  <td
+                    class="text-center"
+                    (click)="put_call_chart_id_open('#put_call_chart_id', i)"
+                  >
+                    {{ i?.strikePrice || 0 | number }}
+                  </td>
+                  <td
+                    class="text-end"
+                    [class]="{
+                      'bg-primary-subtle': i.flag == true,
+                      'text-danger': (i?.PE?.change || 0) < 0,
+                      'text-success': (i?.PE?.change || 0) > 0
+                    }"
+                  >
+                    {{ n(i?.PE?.lastPrice || 0) }}
+                  </td>
 
-                <td
-                  class="text-end"
-                  [class]="{
-                    'bg-primary-subtle': i.flag == true,
-                    'text-danger': (i?.PE?.change || 0) < 0,
-                    'text-success': (i?.PE?.change || 0) > 0
-                  }"
-                  [title]="i?.PE?.change || ''"
-                >
-                  {{ i?.PE?.changeinOpenInterest | number }}
-                </td>
+                  <td
+                    class="text-end"
+                    [class]="{
+                      'bg-primary-subtle': i.flag == true,
+                      'text-danger': (i?.PE?.change || 0) < 0,
+                      'text-success': (i?.PE?.change || 0) > 0
+                    }"
+                    [title]="i?.PE?.change || ''"
+                  >
+                    {{ i?.PE?.changeinOpenInterest | number }}
+                  </td>
 
-                <td
-                  class="text-end"
-                  [class]="{
-                    'bg-primary-subtle': i.flag == true,
-                    'text-danger': (i?.PE?.change || 0) < 0,
-                    'text-success': (i?.PE?.change || 0) > 0
-                  }"
-                  [title]="i?.PE?.change || ''"
-                >
-                  {{ i?.PE?.openInterest || 0 | number }}
-                </td>
-              </tr>
-              <tr>
-                <td class="text-end">
-                  {{ ob(_data.data).PCR[i].TTL_CE | number }}
-                </td>
-                <td class="text-end">
-                  {{ ob(_data.data).PCR[i].TTL_C_CE | number }}
-                </td>
-                <td></td>
-                <td class="text-center">
-                  {{ ob(_data.data).PCR[i].PCR }} /
-                  {{ ob(_data.data).PCR[i].C_PCR }}
-                </td>
-                <td></td>
-                <td class="text-end">
-                  {{ ob(_data.data).PCR[i].TTL_C_PE | number }}
-                </td>
-                <td class="text-end">
-                  {{ ob(_data.data).PCR[i].TTL_PE | number }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  <td
+                    class="text-end"
+                    [class]="{
+                      'bg-primary-subtle': i.flag == true,
+                      'text-danger': (i?.PE?.change || 0) < 0,
+                      'text-success': (i?.PE?.change || 0) > 0
+                    }"
+                    [title]="i?.PE?.change || ''"
+                  >
+                    {{ i?.PE?.openInterest || 0 | number }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-end">
+                    {{ ob(_data.data).PCR[i].TTL_CE | number }}
+                  </td>
+                  <td class="text-end">
+                    {{ ob(_data.data).PCR[i].TTL_C_CE | number }}
+                  </td>
+                  <td></td>
+                  <td class="text-center">
+                    {{ ob(_data.data).PCR[i].PCR }} /
+                    {{ ob(_data.data).PCR[i].C_PCR }}
+                  </td>
+                  <td></td>
+                  <td class="text-end">
+                    {{ ob(_data.data).PCR[i].TTL_C_PE | number }}
+                  </td>
+                  <td class="text-end">
+                    {{ ob(_data.data).PCR[i].TTL_PE | number }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </ng-container>
       </div>
       <div class="col-12">
-        <table class="table table-sm table-striped table-hover mt-2">
-          <thead class="header-fixed bg">
-            <tr>
-              <td rowspan="2" class="text-center">Time</td>
-              <td rowspan="2" class="text-center">U Value</td>
-              <ng-container *ngFor="let j of ob(_data).data.expiryData_key">
-                <td colspan="2" class="text-center">{{ j }}</td>
-              </ng-container>
-            </tr>
-            <tr>
-              <ng-container *ngFor="let j of ob(_data).data.expiryData_key">
-                <td class="text-center" class="text-center">PCR</td>
-                <td class="text-center" class="text-center">C PCR</td>
-              </ng-container>
-            </tr>
-          </thead>
+        <div class="table-responsive">
+          <table class="table table-sm table-striped table-hover mt-2">
+            <thead class="header-fixed bg">
+              <tr>
+                <td rowspan="2" class="text-center">Time</td>
+                <td rowspan="2" class="text-center">U Value</td>
+                <ng-container *ngFor="let j of ob(_data).data.expiryData_key">
+                  <td colspan="2" class="text-center">{{ j }}</td>
+                </ng-container>
+              </tr>
+              <tr>
+                <ng-container *ngFor="let j of ob(_data).data.expiryData_key">
+                  <td class="text-center" class="text-center">PCR</td>
+                  <td class="text-center" class="text-center">C PCR</td>
+                </ng-container>
+              </tr>
+            </thead>
 
-          <tbody>
-            <tr *ngFor="let i of ob(_data.pcr).reverse()">
-              <td class="text-center">{{ i.timestamp }}</td>
-              <td class="text-center">{{ i.underlyingValue }}</td>
-              <ng-container *ngFor="let j of ob(_data).data.expiryData_key">
-                <td class="text-white text-center">
-                  <h2
-                    class="badge text-bg-primary bg-opacity-75"
-                    [class]="{
-                      'text-bg-warning': n(i.PCR[j].PCR) == 1,
-                      'text-bg-danger': n(i.PCR[j].PCR) < 1,
-                      'text-bg-success': n(i.PCR[j].PCR) > 1
-                    }"
-                  >
-                    {{ i.PCR[j].PCR }}
-                  </h2>
-                </td>
-                <td class="text-white text-center">
-                  <h2
-                    class="badge text-bg-primary bg-opacity-75"
-                    [class]="{
-                      'text-bg-warning': n(i.PCR[j].C_PCR) == 1,
-                      'text-bg-danger': n(i.PCR[j].C_PCR) < 1,
-                      'text-bg-success': n(i.PCR[j].C_PCR) > 1
-                    }"
-                  >
-                    {{ i.PCR[j].C_PCR }}
-                  </h2>
-                </td>
-              </ng-container>
-            </tr>
-          </tbody>
-        </table>
+            <tbody>
+              <tr *ngFor="let i of ob(_data.pcr).reverse()">
+                <td class="text-center">{{ i.timestamp }}</td>
+                <td class="text-center">{{ i.underlyingValue }}</td>
+                <ng-container *ngFor="let j of ob(_data).data.expiryData_key">
+                  <td class="text-white text-center">
+                    <h2
+                      class="badge text-bg-primary bg-opacity-75"
+                      [class]="{
+                        'text-bg-warning': n(i.PCR[j].PCR) == 1,
+                        'text-bg-danger': n(i.PCR[j].PCR) < 1,
+                        'text-bg-success': n(i.PCR[j].PCR) > 1
+                      }"
+                    >
+                      {{ i.PCR[j].PCR }}
+                    </h2>
+                  </td>
+                  <td class="text-white text-center">
+                    <h2
+                      class="badge text-bg-primary bg-opacity-75"
+                      [class]="{
+                        'text-bg-warning': n(i.PCR[j].C_PCR) == 1,
+                        'text-bg-danger': n(i.PCR[j].C_PCR) < 1,
+                        'text-bg-success': n(i.PCR[j].C_PCR) > 1
+                      }"
+                    >
+                      {{ i.PCR[j].C_PCR }}
+                    </h2>
+                  </td>
+                </ng-container>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
