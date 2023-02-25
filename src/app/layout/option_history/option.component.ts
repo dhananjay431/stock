@@ -48,9 +48,9 @@ export class OptionComponent implements OnInit {
         }).pipe(
           tap((dx: any) => {
             this.data.all = dx;
-            console.log('all=>', this.data);
           }),
           catchError((err) => {
+            delete this.data.all;
             return of({ PCR: [], get_option_data: {} });
           })
         );
