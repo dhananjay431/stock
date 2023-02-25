@@ -47,7 +47,8 @@ export class OptionComponent implements OnInit {
           get_option_data: this.get_option_data(d),
         }).pipe(
           tap((dx: any) => {
-            console.log('all=>', dx);
+            this.data.all = dx;
+            console.log('all=>', this.data);
           }),
           catchError((err) => {
             return of({ PCR: [], get_option_data: {} });
@@ -142,6 +143,9 @@ export class OptionComponent implements OnInit {
     if (flag == 'n') {
       data.n++;
     }
+    this.data.sub$$.next(data);
+  }
+  time_change(data: any) {
     this.data.sub$$.next(data);
   }
   change_date(data: any) {

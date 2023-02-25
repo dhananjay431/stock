@@ -21,8 +21,21 @@
       <option value="BANKNIFTY">BANKNIFTY</option>
     </select>
   </div>
+  <div class="col-3" *ngIf="data.all != undefined">
+    <select
+      class="form-select form-select-sm"
+      aria-label="Default select example"
+      [(ngModel)]="data.n"
+      (change)="time_change(data)"
+    >
+      <option>-SELECT-</option>
+      <option *ngFor="let i of data.all.PCR; let id = index" [value]="id">
+        {{ i.timestamp }}
+      </option>
+    </select>
+  </div>
 
-  <div class="col-6">
+  <div class="col-3">
     <button
       type="button"
       id="option_refresh"
