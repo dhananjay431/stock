@@ -14,6 +14,7 @@
       class="form-select form-select-sm"
       aria-label="Default select example"
       [(ngModel)]="data.type"
+      (change)="change_date(data)"
     >
       <option>-SELECT-</option>
       <option value="NIFTY">NIFTY</option>
@@ -220,17 +221,31 @@
           <tbody>
             <tr *ngFor="let i of ob(_data.data).PCR.reverse()">
               <td class="text-center">{{ i.timestamp }}</td>
-              <td class="text-center">{{ i.underlyingValue }}</td>
+              <td class="text-center">{{ n_text(i.underlyingValue) }}</td>
               <ng-container
                 *ngFor="let j of ob(_data).data.get_option_data.expiryData_key"
               >
                 <td class="text-white text-center">
-                  <h2 class="badge text-bg-primary bg-opacity-75">
+                  <h2
+                    class="badge text-bg-primary bg-opacity-50"
+                    [class]="{
+                      'text-bg-warning': n(i.PCR[j]?.PCR) == 1,
+                      'text-bg-danger': n(i.PCR[j]?.PCR) < 1,
+                      'text-bg-success': n(i.PCR[j]?.PCR) > 1
+                    }"
+                  >
                     {{ h_get_pcr(i, j)?.PCR || "" }}
                   </h2>
                 </td>
                 <td class="text-white text-center">
-                  <h2 class="badge text-bg-primary bg-opacity-75">
+                  <h2
+                    class="badge text-bg-primary bg-opacity-50"
+                    [class]="{
+                      'text-bg-warning': n(i.PCR[j]?.PCR) == 1,
+                      'text-bg-danger': n(i.PCR[j]?.PCR) < 1,
+                      'text-bg-success': n(i.PCR[j]?.PCR) > 1
+                    }"
+                  >
                     {{ h_get_pcr(i, j)?.C_PCR || "" }}
                   </h2>
                 </td>

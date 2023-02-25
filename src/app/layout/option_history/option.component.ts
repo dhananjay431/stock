@@ -128,6 +128,7 @@ export class OptionComponent implements OnInit {
 
   ob = (_: any) => _;
   n = (d: any) => Number(Number(d).toFixed(2));
+  n_text = (d: any) => Number(d).toFixed(2);
   h_get_pcr(i: any, j: any) {
     return i.PCR[j] || {};
   }
