@@ -1,0 +1,302 @@
+<span *ngIf="testdb | async as rr"></span>
+<div
+  *ngIf="{
+    data: data.$data | async,
+    masterQuote: data.$masterQuote | async,
+    pcr: data.pcr$ | async
+  } as _data"
+>
+  <!--  <pre>-->
+  <!--  {{ _data | json }}-->
+  <!--  </pre>-->
+
+  <div class="mt-2" *ngIf="_data.masterQuote != null">
+    <div class="row g-1">
+      <div class="col-3">
+        <input
+          class="form-control form-control-sm"
+          type="date"
+          id="birthday"
+          name="birthday"
+          [(ngModel)]="data.date"
+        />
+      </div>
+      <div class="col-3">
+        <select
+          class="form-select form-select-sm"
+          aria-label="Default select example"
+          [(ngModel)]="data.contracts"
+        >
+          <option>-SELECT-</option>
+          <option value="NIFTY">NIFTY</option>
+          <option value="BANKNIFTY">BANKNIFTY</option>
+        </select>
+        <!--        <input-->
+        <!--          class="form-control form-control-sm"-->
+        <!--          type="text"-->
+        <!--          [(ngModel)]="data.contracts"-->
+        <!--          placeholder=".form-control-sm"-->
+        <!--          aria-label=".form-control-sm example"-->
+        <!--        />-->
+      </div>
+
+      <div class="col-6">
+        <button
+          type="button"
+          id="option_refresh"
+          class="btn btn-sm btn-danger me-2"
+          (click)="prev(data, _data, 'p')"
+        >
+          P
+          <!--          <i class="fa-solid fa-arrows-rotate text-white"></i>-->
+        </button>
+        <button
+          type="button"
+          class="btn btn-sm btn-danger me-2"
+          (click)="prev(data, _data, 'n')"
+        >
+          N
+          <!--          <i class="fa-solid fa-camera text-white"></i>-->
+        </button>
+      </div>
+      <div class="col-12">
+        <div class="table-responsive">
+          <table class="table table-sm table-striped table-hover mt-2">
+            <thead class="header-fixed bg">
+              <tr>
+                <td rowspan="2" class="text-center">Time</td>
+                <td rowspan="2" class="text-center">U Value</td>
+                <ng-container *ngFor="let j of ob(_data).data.expiryData_key">
+                  <td colspan="2" class="text-center">{{ j }}</td>
+                </ng-container>
+              </tr>
+              <tr>
+                <ng-container *ngFor="let j of ob(_data).data.expiryData_key">
+                  <td class="text-center" class="text-center">PCR</td>
+                  <td class="text-center" class="text-center">C PCR</td>
+                </ng-container>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let i of ob(_data.pcr).reverse()">
+                <td class="text-center">{{ i.timestamp }}</td>
+                <td class="text-center">{{ i.underlyingValue }}</td>
+                <ng-container *ngFor="let j of ob(_data).data.expiryData_key">
+                  <td class="text-white text-center">
+                    <h2
+                      class="badge text-bg-primary bg-opacity-75"
+                      [class]="{
+                        'text-bg-warning': n(i.PCR[j].PCR) == 1,
+                        'text-bg-danger': n(i.PCR[j].PCR) < 1,
+                        'text-bg-success': n(i.PCR[j].PCR) > 1
+                      }"
+                    >
+                      {{ i.PCR[j].PCR }}
+                    </h2>
+                  </td>
+                  <td class="text-white text-center">
+                    <h2
+                      class="badge text-bg-primary bg-opacity-75"
+                      [class]="{
+                        'text-bg-warning': n(i.PCR[j].C_PCR) == 1,
+                        'text-bg-danger': n(i.PCR[j].C_PCR) < 1,
+                        'text-bg-success': n(i.PCR[j].C_PCR) > 1
+                      }"
+                    >
+                      {{ i.PCR[j].C_PCR }}
+                    </h2>
+                  </td>
+                </ng-container>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row g-1" id="html_to_jpeg">
+      <div
+        class="col-md-6 col-lg-6 col-12"
+        *ngFor="let i of ob(_data.data)['expiryData_key']"
+      >
+        <ng-container *ngIf="ob(_data.data).expiryData[i].length == 16">
+          <span class="fw-semibold"> {{ i }} </span>
+          Underlying Index:
+          <span class="fw-semibold"> {{ data.contracts }} </span>
+          <span class="fw-semibold">
+            {{ ob(_data.data).data.records.underlyingValue | number }}
+          </span>
+          As on
+
+          <span class="fw-semibold">
+            {{ ob(_data.data).data.records.timestamp }}
+          </span>
+
+          <span class="badge text-bg-primary"></span>
+          <table
+            id="example"
+            class="table table-sm table-striped table-hover mt-2"
+          >
+            <thead class="header-fixed bg" (click)="show(data, _data)">
+              <tr>
+                <th class="text-end text-nowrap">OI</th>
+                <th class="text-end text-nowrap">COI</th>
+
+                <th class="text-end text-nowrap">Last Price</th>
+                <th class="text-center text-nowrap">Strike Price</th>
+                <th class="text-end text-nowrap">Last Price</th>
+                <th class="text-end text-nowrap">COI</th>
+                <th class="text-end text-nowrap">OI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let i of ob(_data.data).expiryData[i]">
+                <td
+                  class="text-end"
+                  [class]="{
+                    'bg-primary-subtle': i.flag == false,
+                    'text-danger': (i?.CE?.change || 0) < 0,
+                    'text-success': (i?.CE?.change || 0) > 0
+                  }"
+                  [title]="i?.CE?.change || ''"
+                >
+                  {{ i?.CE?.openInterest || 0 | number }}
+                </td>
+                <td
+                  class="text-end"
+                  [class]="{
+                    'bg-primary-subtle': i.flag == false,
+                    'text-danger': (i?.CE?.change || 0) < 0,
+                    'text-success': (i?.CE?.change || 0) > 0
+                  }"
+                  [title]="i?.CE?.change || ''"
+                >
+                  {{ i?.CE?.changeinOpenInterest | number }}
+                </td>
+
+                <td
+                  class="text-end"
+                  [class]="{
+                    'bg-primary-subtle': i.flag == false,
+                    'text-danger': (i?.CE?.change || 0) < 0,
+                    'text-success': (i?.CE?.change || 0) > 0
+                  }"
+                >
+                  {{ n(i?.CE?.lastPrice || 0) }}
+                </td>
+                <td
+                  class="text-center"
+                  (click)="put_call_chart_id_open('#put_call_chart_id', i)"
+                >
+                  {{ i?.strikePrice || 0 | number }}
+                </td>
+                <td
+                  class="text-end"
+                  [class]="{
+                    'bg-primary-subtle': i.flag == true,
+                    'text-danger': (i?.PE?.change || 0) < 0,
+                    'text-success': (i?.PE?.change || 0) > 0
+                  }"
+                >
+                  {{ n(i?.PE?.lastPrice || 0) }}
+                </td>
+
+                <td
+                  class="text-end"
+                  [class]="{
+                    'bg-primary-subtle': i.flag == true,
+                    'text-danger': (i?.PE?.change || 0) < 0,
+                    'text-success': (i?.PE?.change || 0) > 0
+                  }"
+                  [title]="i?.PE?.change || ''"
+                >
+                  {{ i?.PE?.changeinOpenInterest | number }}
+                </td>
+
+                <td
+                  class="text-end"
+                  [class]="{
+                    'bg-primary-subtle': i.flag == true,
+                    'text-danger': (i?.PE?.change || 0) < 0,
+                    'text-success': (i?.PE?.change || 0) > 0
+                  }"
+                  [title]="i?.PE?.change || ''"
+                >
+                  {{ i?.PE?.openInterest || 0 | number }}
+                </td>
+              </tr>
+              <tr>
+                <td class="text-end">
+                  {{ ob(_data.data).PCR[i].TTL_CE | number }}
+                </td>
+                <td class="text-end">
+                  {{ ob(_data.data).PCR[i].TTL_C_CE | number }}
+                </td>
+                <td></td>
+                <td class="text-center">
+                  {{ ob(_data.data).PCR[i].PCR }} / {{
+                  ob(_data.data).PCR[i].C_PCR }}
+                </td>
+                <td></td>
+                <td class="text-end">
+                  {{ ob(_data.data).PCR[i].TTL_C_PE | number }}
+                </td>
+                <td class="text-end">
+                  {{ ob(_data.data).PCR[i].TTL_PE | number }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ng-container>
+      </div>
+      <div class="col-12">
+        <pre>
+        {{ _data.pcr | json }}
+        </pre>
+      </div>
+    </div>
+  </div>
+  <button
+    type="button"
+    class="btn btn-primary d-none"
+    id="put_call_chart_id"
+    data-bs-toggle="modal"
+    data-bs-target="#put_call_chart"
+  >
+    Launch demo modal
+  </button>
+
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="put_call_chart"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header bg text-white fw-semibold">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Chart</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body"><div id="container"></div></div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

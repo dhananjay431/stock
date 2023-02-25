@@ -9,86 +9,65 @@ declare var _: any, html2canvas: any, $: any;
   styleUrls: ['./option.component.scss'],
 })
 export class OptionComponent implements OnInit {
-  get_PCR(data: any) {
-    debugger;
-    let d = fetch(
-      `${this.hs.getUrl()}/data/${data.date}_PCR_${data.contracts}`
-    ).then((d2: any) => d2.text());
+  constructor(private hs: HeroService) {}
+  data: any = {
+    sub$$: new Subject(),
+    data$: of([]),
+    date: '2023-02-24',
+    type: 'NIFTY',
+    n: 0,
+  };
 
-    return from(d).pipe(
-      map((d3: any) => {
+  get_prc = (d: any) =>
+    from(
+      fetch(`${this.hs.getUrl()}/data/${d.date}_PCR_${d.type}`).then((r: any) =>
+        r.text()
+      )
+    ).pipe(
+      map((d: any) => {
         debugger;
-        return d3
+
+        return d
           .split('\n')
           .filter(Boolean)
-          .map((d4: any) => JSON.parse(d4));
-      }),
-      tap((dd) => {
-        console.log('ddddd=>', dd);
+          .map((d: any) => JSON.parse(d));
       })
     );
+  get_option_data(d: any) {
+    return this.hs
+      .ajaxp(`${this.hs.getUrl()}/getData/${d.date}_${d.type}?n=${d.n}`)
+      .pipe(this._getNew());
   }
 
-  constructor(private hs: HeroService) {}
-  //api/master-quote
-  testdb = this.hs.testdb.pipe(
-    tap((resp: any) => {
-      if (resp.marketStatus != 'Closed') {
-        $('#option_refresh').click();
-      }
-    })
-  );
-  data: any = {
-    date: new Date().toISOString().substr(0, 10),
-    contracts: 'NIFTY',
-    $masterQuote: of([]),
-    $data: of([]),
-    $$data: new Subject(),
-    expiryData_key: [],
-    expiryData: [],
-    temp_url: '/api/option-chain-indices?symbol=',
-    pcr$: of([]),
-  };
-  ob = (a: any) => a;
-  oa = (a: any) => (Array.isArray(a) ? a : [a]);
-  ngOnInit(): void {
-    let that = this;
-
-    this.data.pcr$ = this.get_PCR(this.data);
-    this.data.$data = this.data.$$data.pipe(mergeMap((d) => this.getNew(d)));
-    this.data.$masterQuote = this.hs.ajax('/api/master-quote');
+  ngOnInit() {
+    this.data.data$ = this.data.sub$$.pipe(
+      mergeMap((d: any) => {
+        return forkJoin({
+          PCR: this.get_prc(d),
+          get_option_data: this.get_option_data(d),
+        }).pipe(
+          tap((dx: any) => {
+            console.log('all=>', dx);
+          })
+        );
+      })
+    );
     setTimeout(() => {
-      this.data.$$data.next({
-        url: '/api/option-chain-indices?symbol=',
-        data: this.data,
-        n: 0,
-      });
-    }, 100);
+      this.data.sub$$.next(this.data);
+    }, 10);
   }
-  rec_num: any = 0;
-  prev(data: any, _data: any, flag: any) {
-    this.data.pcr$ = this.get_PCR(data);
-    if (flag == 'p') {
-      this.rec_num--;
-      this.data.$$data.next({
-        url: this.data.temp_url,
-        data: this.data,
-        n: this.rec_num,
-      });
-    }
-    if (flag == 'n') {
-      this.rec_num++;
-      this.data.$$data.next({
-        url: this.data.temp_url,
-        data: this.data,
-        n: this.rec_num,
-      });
-    }
+  change(data: any) {
+    this.data.sub$$.next(data);
   }
-  h_contracts(url: any, id: any) {
-    this.data.temp_url = url;
-    this.data.pcr$ = this.get_PCR({ contracts: id });
-    this.data.$$data.next({ url, id });
+  getAllopData(_data: any) {
+    return _.chain(_data.data.records.expiryDates)
+      .take(4)
+      .reduce((a: any, b: any) => {
+        let t: any = {};
+        a[b] = this.getexpiryData(b, _data);
+        return a;
+      }, {})
+      .value();
   }
   _getNew = () =>
     map((d: any) => {
@@ -125,63 +104,12 @@ export class OptionComponent implements OnInit {
       let dt: any = { data: d, expiryData, expiryData_key, PCR };
       return dt;
     });
-  getNew(id: any) {
-    let that = this;
-    //return this.hs.ajax(id.url + id.id, false).pipe(that._getNew());
-    debugger;
-    return from(
-      fetch(
-        `${this.hs.getUrl()}/getData/${id.data.date}_${id.data.contracts}?n=${
-          id.n
-        }`
-      ).then((r) => r.json())
-    ).pipe(
-      that._getNew(),
-      tap((d) => {
-        this.data.prc$ = this.get_PCR(id.data);
-      })
-    );
-  }
-  put_call_chart_id_open(id: any, data: any) {
-    let that = this;
-    let a = this.hs.ajax('/api/chart-databyindex?index=' + data.CE.identifier);
-    let b = this.hs.ajax('/api/chart-databyindex?index=' + data.PE.identifier);
-    forkJoin(a, b)
-      .pipe(
-        map((resp: any) => {
-          return resp.map((d: any) => {
-            return { name: d.identifier, data: d.grapthData };
-          });
-        })
-      )
-      .subscribe((resp) => {
-        $(id).click();
-        that.hs.put_call_chart({ data: resp, _data: data }, 'container');
-      });
-  }
-  h_expiryDates(data: any, _data: any) {
-    data.expiryData = this.getAllopData(_data);
-  }
-  show(d: any, _d: any) {
-    console.log(d, _d);
-  }
   getexpiryData(expiryDate: any, _data: any) {
     let temp_data: any = _.chain(_data.data.records.data)
       .filter({ expiryDate: expiryDate })
       .value();
     if (temp_data.length < 6)
       return _.chain(temp_data).sortBy('strikePrice').value();
-
-    // let a = _.chain(temp_data)
-    //   .filter((d: any) => d.flag == false)
-    //   .sortBy('PE.changeinOpenInterest')
-    //   .takeRight(3)
-    //   .value();
-    // let b = _.chain(temp_data)
-    //   .filter((d: any) => d.flag == true)
-    //   .sortBy('CE.changeinOpenInterest')
-    //   .takeRight(3)
-    //   .value();
     let a = _.chain(temp_data)
       .filter({ flag: false })
       .sortBy('strikePrice')
@@ -197,26 +125,23 @@ export class OptionComponent implements OnInit {
       .sortBy('strikePrice')
       .value();
   }
-  getAllopData(_data: any) {
-    return _.chain(_data.data.records.expiryDates)
-      .take(4)
-      .reduce((a: any, b: any) => {
-        let t: any = {};
-        a[b] = this.getexpiryData(b, _data);
-        return a;
-      }, {})
-      .value();
+
+  ob = (_: any) => _;
+  n = (d: any) => Number(Number(d).toFixed(2));
+  h_get_pcr(i: any, j: any) {
+    return i.PCR[j] || {};
   }
-  check(data: any, key: any) {
-    return data;
+  prev(data: any, flag: any) {
+    if (flag == 'p') {
+      data.n--;
+    }
+    if (flag == 'n') {
+      data.n++;
+    }
+    this.data.sub$$.next(data);
   }
-  reset(a: any, b: any) {
-    this.data.$$data.next({ url: this.data.temp_url, id: this.data.contracts });
-  }
-  n(d: any) {
-    return Number(Number(d).toFixed(2));
-  }
-  h_html2canvas(id: any) {
-    this.hs.h_html2canvas(id);
+  change_date(data: any) {
+    data.n = 0;
+    this.data.sub$$.next(data);
   }
 }
