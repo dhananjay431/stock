@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { from, interval, of, shareReplay } from 'rxjs';
 import { finalize, map, mergeMap, tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-declare var $: any, Highcharts: any, html2canvas: any, _: any;
+declare var $: any, Highcharts: any, html2canvas: any, _: any, dayjs: any;
 @Injectable({
   providedIn: 'root',
 })
@@ -200,5 +200,8 @@ export class HeroService {
       colors: ['green', 'red', '#06C', '#036', '#000'],
       series: data.data,
     });
+  }
+  dateformat(d: any, f: any = 'hh:mm') {
+    return dayjs(d).format(f);
   }
 }

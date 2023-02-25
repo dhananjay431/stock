@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HeroService } from '../../hero.service';
-import { forkJoin, mergeMap, of, Subject, from } from 'rxjs';
+import { forkJoin, mergeMap, of, Subject, from, catchError } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 declare var _: any, html2canvas: any, $: any;
 @Component({
@@ -48,6 +48,9 @@ export class OptionComponent implements OnInit {
         }).pipe(
           tap((dx: any) => {
             console.log('all=>', dx);
+          }),
+          catchError((err) => {
+            return of({ PCR: [], get_option_data: {} });
           })
         );
       })
@@ -144,5 +147,8 @@ export class OptionComponent implements OnInit {
   change_date(data: any) {
     data.n = 0;
     this.data.sub$$.next(data);
+  }
+  df(d: any) {
+    return this.hs.dateformat(d);
   }
 }

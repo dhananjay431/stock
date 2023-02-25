@@ -20,13 +20,6 @@
       <option value="NIFTY">NIFTY</option>
       <option value="BANKNIFTY">BANKNIFTY</option>
     </select>
-    <!--        <input-->
-    <!--          class="form-control form-control-sm"-->
-    <!--          type="text"-->
-    <!--          [(ngModel)]="data.contracts"-->
-    <!--          placeholder=".form-control-sm"-->
-    <!--          aria-label=".form-control-sm example"-->
-    <!--        />-->
   </div>
 
   <div class="col-6">
@@ -220,7 +213,7 @@
 
           <tbody>
             <tr *ngFor="let i of ob(_data.data).PCR.reverse()">
-              <td class="text-center">{{ i.timestamp }}</td>
+              <td class="text-center">{{ df(i.timestamp) }}</td>
               <td class="text-center">{{ n_text(i.underlyingValue) }}</td>
               <ng-container
                 *ngFor="let j of ob(_data).data.get_option_data.expiryData_key"

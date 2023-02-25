@@ -43,6 +43,7 @@
 "./src/assets/js/highchart/exporting.js",
 "./src/assets/js/highchart/export-data.js",
 "./src/assets/js/highchart/accessibility.js",
+              "./src/assets/js/dayjs.min.js"
             ]
           },
           "configurations": {
