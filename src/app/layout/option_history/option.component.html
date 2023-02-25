@@ -114,6 +114,13 @@
                   [title]="i?.CE?.change || ''"
                 >
                   {{ i?.CE?.openInterest || 0 | number }}
+                  <span style="font-size: 0.5rem">
+                    ({{
+                      n(
+                        (i?.PE?.openInterest || 0) / (i?.CE?.openInterest || 0)
+                      )
+                    }})
+                  </span>
                 </td>
                 <td
                   class="text-end"
@@ -125,6 +132,15 @@
                   [title]="i?.CE?.change || ''"
                 >
                   {{ i?.CE?.changeinOpenInterest | number }}
+
+                  <span style="font-size: 0.5rem">
+                    ({{
+                      n(
+                        (i?.PE?.changeinOpenInterest || 0) /
+                          (i?.CE?.changeinOpenInterest || 0)
+                      )
+                    }})
+                  </span>
                 </td>
 
                 <td
