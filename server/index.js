@@ -5,6 +5,7 @@ const fs = require("fs");
 var cors = require("cors");
 const _server = require("./server");
 const require1 = require("./cron");
+const path = require("path");
 const app = express();
 const port = 3000;
 
@@ -17,12 +18,13 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Methods", "GET,PUT, POST,DELETE");
   next();
 });
-
-app.get("/", (req, res) => {
-  res.json("wewerewrewr");
+app.use("/", express.static("stock_nse"));
+app.get("/", async (req, res) => {
+  // res.json(await _server.getNseCookies());
+  res.sendFile(path.join(__dirname, "/stock_nse/index.html"));
 });
-app.get("/nse", (req, res) => {
-  res.json("hello world");
+app.get("/nse", async (req, res) => {
+  res.json(await _server.getNseCookies());
 });
 
 app.post("/nse", async (req, res) => {
