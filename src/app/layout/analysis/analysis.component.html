@@ -1,0 +1,54 @@
+<div class="row">
+  <div class="col-5">
+    <select
+      class="form-select"
+      aria-label="Default select example"
+      (change)="typeChange(map2_qr)"
+      [(ngModel)]="map2_qr.type"
+    >
+      <option value="NIFTY">NIFTY</option>
+      <option value="BANKNIFTY">BANKNIFTY</option>
+    </select>
+  </div>
+  <div class="col-5">
+    <input
+      type="date"
+      class="form-control"
+      [(ngModel)]="map2_qr.date"
+      (blur)="date_change(map2_qr)"
+    />
+  </div>
+  <div class="col-2">
+    <button type="button" class="btn btn-primary" (click)="ngOnInit()">
+      search
+    </button>
+  </div>
+  <div class="col-12" *ngIf="pgData | async as _pgData">
+    <div class="db_chart">
+      <canvas id="acquisitions"></canvas>
+    </div>
+  </div>
+  <div class="col-4">
+    <!-- -->
+  </div>
+  <div class="col-4"></div>
+  <div class="col-4">
+    <button type="button" class="btn btn-primary me-2" (click)="pre_next('p')">
+      <<
+    </button>
+    <button type="button" class="btn btn-primary" (click)="pre_next('n')">
+      >>
+    </button>
+  </div>
+  <div class="col-12" *ngIf="pgcepe | async as _pgcepe">
+    Time :- <b>{{ formatTime(ob(_pgcepe)[0].date) }}</b>
+    <b>{{ ob(_pgcepe)[0].filtered.data[0].CE.underlyingValue }}</b>
+    <div class="db_chart">
+      <canvas id="acquisitions2"></canvas>
+    </div>
+
+    <div class="db_chart">
+      <canvas id="acquisitions3"></canvas>
+    </div>
+  </div>
+</div>

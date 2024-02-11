@@ -13,9 +13,9 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(express.static("server"));
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  res.header("Access-Control-Allow-Methods", "GET,PUT, POST,DELETE");
+  if (req.method === "OPTIONS") {
+    res.send({ data: new Date().getTime() });
+  }
   next();
 });
 app.use("/", express.static("stock_nse"));

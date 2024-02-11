@@ -47,6 +47,13 @@ const routes: Routes = [
         loadChildren: () =>
           import('./layout/bse/bse.module').then((m) => m.BseModule),
       },
+      {
+        path: 'analysis',
+        loadChildren: () =>
+          import('./layout/analysis/analysis.module').then(
+            (m) => m.AnalysisModule
+          ),
+      },
     ],
   },
   {
