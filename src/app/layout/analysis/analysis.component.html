@@ -41,8 +41,25 @@
     </button>
   </div>
   <div class="col-12" *ngIf="pgcepe | async as _pgcepe">
-    Time :- <b>{{ formatTime(ob(_pgcepe)[0].date) }}</b>
-    <b>{{ ob(_pgcepe)[0].filtered.data[0].CE.underlyingValue }}</b>
+    <table>
+      <tr>
+        <td>
+          <h5 class="me-4">
+            <b> Time :-{{ formatTime(ob(_pgcepe)[0].date) }}</b>
+          </h5>
+        </td>
+        <td>
+          <h5>
+            <b
+              >Underlying Value :-{{
+                ob(_pgcepe)[0].filtered.data[0].CE.underlyingValue
+              }}</b
+            >
+          </h5>
+        </td>
+      </tr>
+    </table>
+
     <div class="db_chart">
       <canvas id="acquisitions2"></canvas>
     </div>
