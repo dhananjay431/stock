@@ -16,7 +16,7 @@ export class AnalysisComponent implements OnInit {
   pgcepe: any = of({});
   map2_qr: any = {
     type: 'NIFTY',
-    date: new Date().toISOString(),
+    date: new Date().toISOString().substring(0, 10),
     limit: 1,
     skip: 0,
   };

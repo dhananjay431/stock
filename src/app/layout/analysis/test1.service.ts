@@ -15,6 +15,7 @@ export class Test1Service {
         datasets: [
           {
             label: 'PCR',
+            fill: false,
             data: data,
             borderColor: 'red',
             backgroundColor: 'red',
@@ -22,6 +23,7 @@ export class Test1Service {
           },
           {
             label: 'PRICE',
+            fill: false,
             data: data2,
             borderColor: 'blue',
             backgroundColor: 'blue',
@@ -42,6 +44,7 @@ export class Test1Service {
         fill: false,
         interaction: {
           intersect: false,
+          mode: 'index',
         },
         radius: 0,
         responsive: true,
@@ -51,6 +54,18 @@ export class Test1Service {
         // },
         stacked: false,
         plugins: {
+          tooltip: {
+            callbacks: {
+              footer: (tooltipItems: any) => {
+                // let sum = 0;
+                // debugger;
+                // tooltipItems.forEach(function (tooltipItem: any) {
+                //   sum += tooltipItem.parsed.y;
+                // });
+                // return 'Sum: ' + sum;
+              },
+            },
+          },
           title: {
             display: false,
             text: 'Chart.js Line Chart - Multi Axis',
@@ -101,6 +116,18 @@ export class Test1Service {
         },
         stacked: true,
         plugins: {
+          tooltip: {
+            callbacks: {
+              footer: (tooltipItems: any) => {
+                // let sum = 0;
+                // debugger;
+                // tooltipItems.forEach(function (tooltipItem: any) {
+                //   sum += tooltipItem.parsed.y;
+                // });
+                // return 'Sum: ' + sum;
+              },
+            },
+          },
           legend: {
             position: 'top',
           },
@@ -154,6 +181,18 @@ export class Test1Service {
         },
         stacked: true,
         plugins: {
+          tooltip: {
+            callbacks: {
+              footer: (tooltipItems: any) => {
+                // let sum = 0;
+                // debugger;
+                // tooltipItems.forEach(function (tooltipItem: any) {
+                //   sum += tooltipItem.parsed.y;
+                // });
+                // return 'Sum: ' + sum;
+              },
+            },
+          },
           legend: {
             position: 'top',
           },
@@ -189,6 +228,7 @@ export class Test1Service {
       datasets: [
         {
           label: 'ratio',
+          fill: false,
           data: resp[0].filtered.data.map(
             (d: any) => (d?.PE?.[type] || 0) / (d?.CE?.[type] || 0)
           ),
@@ -199,6 +239,7 @@ export class Test1Service {
         },
         {
           label: 'CE',
+          fill: false,
           data: resp[0].filtered.data.map((d: any) => d?.CE?.change || 0),
           backgroundColor: 'green',
           borderColor: 'green',
@@ -207,6 +248,7 @@ export class Test1Service {
         },
         {
           label: 'PE',
+          fill: false,
           data: resp[0].filtered.data.map((d: any) => d?.PE?.change || 0),
           backgroundColor: 'red',
           borderColor: 'red',
@@ -215,12 +257,14 @@ export class Test1Service {
         },
         {
           label: 'CE ' + type,
+          fill: false,
           data: resp[0].filtered.data.map((d: any) => d?.CE?.[type] || 0),
           backgroundColor: 'green',
           yAxisID: 'y',
         },
         {
           label: 'PE ' + type,
+          fill: false,
           data: resp[0].filtered.data.map((d: any) => d?.PE?.[type] || 0),
           backgroundColor: 'red',
           yAxisID: 'y',
