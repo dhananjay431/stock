@@ -1,13 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HeroService } from '../../hero.service';
-import { tap } from 'rxjs';
+import { Subject, tap } from 'rxjs';
 declare var Chart: any;
 @Injectable({
   providedIn: 'root',
 })
 export class Test1Service {
+  sub: any = {};
+  new_sub(key: any) {
+    this.sub[key] = new Subject();
+    return this.sub[key];
+  }
   constructor(private hs: HeroService) {}
   db_chart(label: any, data: any, data2: any) {
+    let that = this;
     let dh2 = new Chart(document.getElementById('acquisitions'), {
       type: 'line',
       data: {
@@ -33,13 +39,11 @@ export class Test1Service {
       },
       options: {
         onClick: (e: any) => {
-          const canvasPosition = Chart.helpers.getRelativePosition(e, dh2);
+          // const canvasPosition = Chart.helpers.getRelativePosition(e, dh2);
 
-          console.log('click', dh2.tooltip.title);
-          // Substitute the appropriate scale IDs
-          const dataX = dh2.scales.x.getValueForPixel(canvasPosition.x);
-          const dataY = dh2.scales.y.getValueForPixel(canvasPosition.y);
-          console.log(dataX, dataY);
+          that.sub['setObj'].next(dh2.tooltip.title[0]);
+          // that.chart2.destroy();
+          // that.chart3.destroy();
         },
         fill: false,
         interaction: {
@@ -100,8 +104,10 @@ export class Test1Service {
   radius: 0,
 }
  */
+  chart2: any;
+  chart3: any;
   db_chart2(data: any) {
-    let dh1 = new Chart(document.getElementById('acquisitions2'), {
+    this.chart2 = new Chart(document.getElementById('acquisitions2'), {
       type: 'bar',
       data: data,
 
@@ -116,18 +122,6 @@ export class Test1Service {
         },
         stacked: true,
         plugins: {
-          tooltip: {
-            callbacks: {
-              footer: (tooltipItems: any) => {
-                // let sum = 0;
-                // debugger;
-                // tooltipItems.forEach(function (tooltipItem: any) {
-                //   sum += tooltipItem.parsed.y;
-                // });
-                // return 'Sum: ' + sum;
-              },
-            },
-          },
           legend: {
             position: 'top',
           },
@@ -167,7 +161,7 @@ export class Test1Service {
     });
   }
   db_chart3(data: any) {
-    new Chart(document.getElementById('acquisitions3'), {
+    this.chart3 = new Chart(document.getElementById('acquisitions3'), {
       type: 'bar',
       data: data,
 
@@ -181,18 +175,6 @@ export class Test1Service {
         },
         stacked: true,
         plugins: {
-          tooltip: {
-            callbacks: {
-              footer: (tooltipItems: any) => {
-                // let sum = 0;
-                // debugger;
-                // tooltipItems.forEach(function (tooltipItem: any) {
-                //   sum += tooltipItem.parsed.y;
-                // });
-                // return 'Sum: ' + sum;
-              },
-            },
-          },
           legend: {
             position: 'top',
           },

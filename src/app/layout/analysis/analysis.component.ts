@@ -21,7 +21,7 @@ export class AnalysisComponent implements OnInit {
     skip: 0,
   };
   typeChange(all_data: any) {
-    this.ngOnInit();
+    this.db_init();
   }
   formatTime(localIsoDate: any) {
     localIsoDate = new Date(localIsoDate);
@@ -48,7 +48,8 @@ export class AnalysisComponent implements OnInit {
     }
     this.pgcepe = this.tone.db_chart2_qr(this.map2_qr);
   }
-  ngOnInit(): void {
+  sub: any = of([]);
+  db_init() {
     let next: any = new Date(this.map2_qr.date);
     //date.setDate(date.getDate() + 1);
     this.pgData = this.hs
@@ -65,11 +66,6 @@ export class AnalysisComponent implements OnInit {
           date: true,
           'filtered.CE': true,
           'filtered.PE': true,
-
-          // 'filtered.data.CE.changeinOpenInterest': true,
-          // 'filtered.data.PE.changeinOpenInterest': true,
-          // 'filtered.data.PE.openInterest': true,
-          // 'filtered.data.CE.openInterest': true,
           'filtered.data.CE.underlyingValue': true,
         },
       })
@@ -92,6 +88,27 @@ export class AnalysisComponent implements OnInit {
       );
 
     this.pgcepe = this.tone.db_chart2_qr(this.map2_qr);
+  }
+  ngOnInit(): void {
+    let that = this;
+    this.sub = this.tone.new_sub('setObj').pipe(
+      tap((d: any) => {
+        console.log('ddd=>', d);
+        let dt: any = new Date(that.map2_qr.date);
+        let hhmmss = d.split(':');
+        dt.setHours(hhmmss[0]);
+        dt.setMinutes(hhmmss[1]);
+        let new_qr = JSON.parse(JSON.stringify(that.map2_qr));
+        new_qr['date'] = dt.toISOString();
+        new_qr['limit'] = 1;
+        new_qr['skip'] = 0;
+        console.log('ddd2=>', d);
+        that.pgcepe = that.tone.db_chart2_qr(new_qr);
+        console.log('ddd3=>', d);
+      })
+    );
+
+    this.db_init();
   }
 }
 
