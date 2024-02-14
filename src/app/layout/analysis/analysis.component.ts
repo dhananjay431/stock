@@ -65,6 +65,7 @@ export class AnalysisComponent implements OnInit {
           date: true,
           'filtered.CE': true,
           'filtered.PE': true,
+
           // 'filtered.data.CE.changeinOpenInterest': true,
           // 'filtered.data.PE.changeinOpenInterest': true,
           // 'filtered.data.PE.openInterest': true,
@@ -79,7 +80,7 @@ export class AnalysisComponent implements OnInit {
           let label: any = [];
           for (let i = 0; i < resp.length; i++) {
             if (resp[i].filtered.data.length > 0) {
-              data.push(resp[i].filtered.CE.totOI / resp[i].filtered.PE.totOI);
+              data.push(resp[i].filtered.PE.totOI / resp[i].filtered.CE.totOI);
               data2.push(resp[i].filtered.data[0].CE.underlyingValue);
               label.push(this.formatTime(new Date(resp[i].date)));
             }

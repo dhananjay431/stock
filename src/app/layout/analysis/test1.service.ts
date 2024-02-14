@@ -8,7 +8,7 @@ declare var Chart: any;
 export class Test1Service {
   constructor(private hs: HeroService) {}
   db_chart(label: any, data: any, data2: any) {
-    new Chart(document.getElementById('acquisitions'), {
+    let dh2 = new Chart(document.getElementById('acquisitions'), {
       type: 'line',
       data: {
         labels: label,
@@ -30,6 +30,15 @@ export class Test1Service {
         ],
       },
       options: {
+        onClick: (e: any) => {
+          const canvasPosition = Chart.helpers.getRelativePosition(e, dh2);
+
+          console.log('click', dh2.tooltip.title);
+          // Substitute the appropriate scale IDs
+          const dataX = dh2.scales.x.getValueForPixel(canvasPosition.x);
+          const dataY = dh2.scales.y.getValueForPixel(canvasPosition.y);
+          console.log(dataX, dataY);
+        },
         fill: false,
         interaction: {
           intersect: false,
@@ -77,11 +86,20 @@ export class Test1Service {
 }
  */
   db_chart2(data: any) {
-    new Chart(document.getElementById('acquisitions2'), {
+    let dh1 = new Chart(document.getElementById('acquisitions2'), {
       type: 'bar',
       data: data,
+
       options: {
+        fill: false,
+
+        radius: 0,
         responsive: true,
+        interaction: {
+          intersect: false,
+          axis: 'x',
+        },
+        stacked: true,
         plugins: {
           legend: {
             position: 'top',
@@ -91,6 +109,33 @@ export class Test1Service {
             text: 'Chart.js Floating Bar Chart',
           },
         },
+        scales: {
+          y: {
+            type: 'linear',
+            display: true,
+            position: 'left',
+          },
+          y1: {
+            type: 'linear',
+            display: true,
+            position: 'right',
+
+            // grid line settings
+            grid: {
+              drawOnChartArea: false, // only want the grid lines for one axis to show up
+            },
+          },
+          y2: {
+            type: 'linear',
+            display: false,
+            position: 'right',
+
+            // grid line settings
+            grid: {
+              drawOnChartArea: false, // only want the grid lines for one axis to show up
+            },
+          },
+        },
       },
     });
   }
@@ -98,15 +143,40 @@ export class Test1Service {
     new Chart(document.getElementById('acquisitions3'), {
       type: 'bar',
       data: data,
+
       options: {
+        fill: false,
+
+        radius: 0,
         responsive: true,
+        interaction: {
+          intersect: false,
+        },
+        stacked: true,
         plugins: {
           legend: {
             position: 'top',
           },
           title: {
-            display: true,
+            display: false,
             text: 'Chart.js Floating Bar Chart',
+          },
+        },
+        scales: {
+          y: {
+            type: 'linear',
+            display: true,
+            position: 'left',
+          },
+          y1: {
+            type: 'linear',
+            display: true,
+            position: 'right',
+
+            // grid line settings
+            grid: {
+              drawOnChartArea: false, // only want the grid lines for one axis to show up
+            },
           },
         },
       },
@@ -117,29 +187,43 @@ export class Test1Service {
     return {
       labels: resp[0].filtered.data.map((d: any) => d?.CE?.strikePrice || 0),
       datasets: [
-        // {
-        //   label: 'CE',
-        //   data: resp[0].filtered.data.map(
-        //     (d: any) => d?.CE?.changeinOpenInterest || 0
-        //   ),
-        //   backgroundColor: 'blue',
-        // },
-        // {
-        //   label: 'PE',
-        //   data: resp[0].filtered.data.map(
-        //     (d: any) => d?.PE?.changeinOpenInterest || 0
-        //   ),
-        //   backgroundColor: 'black',
-        // },
+        {
+          label: 'ratio',
+          data: resp[0].filtered.data.map(
+            (d: any) => (d?.PE?.[type] || 0) / (d?.CE?.[type] || 0)
+          ),
+          backgroundColor: 'black',
+          borderColor: 'black',
+          type: 'line',
+          yAxisID: 'y2',
+        },
+        {
+          label: 'CE',
+          data: resp[0].filtered.data.map((d: any) => d?.CE?.change || 0),
+          backgroundColor: 'green',
+          borderColor: 'green',
+          type: 'line',
+          yAxisID: 'y1',
+        },
+        {
+          label: 'PE',
+          data: resp[0].filtered.data.map((d: any) => d?.PE?.change || 0),
+          backgroundColor: 'red',
+          borderColor: 'red',
+          type: 'line',
+          yAxisID: 'y1',
+        },
         {
           label: 'CE ' + type,
           data: resp[0].filtered.data.map((d: any) => d?.CE?.[type] || 0),
           backgroundColor: 'green',
+          yAxisID: 'y',
         },
         {
           label: 'PE ' + type,
           data: resp[0].filtered.data.map((d: any) => d?.PE?.[type] || 0),
           backgroundColor: 'red',
+          yAxisID: 'y',
         },
       ],
     };
@@ -166,6 +250,8 @@ export class Test1Service {
           'filtered.data.CE.openInterest': true,
           'filtered.data.CE.strikePrice': true,
           'filtered.data.PE.strikePrice': true,
+          'filtered.data.CE.change': true,
+          'filtered.data.PE.change': true,
         },
       })
       .pipe(
