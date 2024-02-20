@@ -12,9 +12,9 @@ export class Test1Service {
     return this.sub[key];
   }
   constructor(private hs: HeroService) {}
-  db_chart(label: any, data: any, data2: any) {
+  db_chart(label: any, data: any, data2: any, id: any) {
     let that = this;
-    let dh2 = new Chart(document.getElementById('acquisitions'), {
+    let dh2 = new Chart(document.getElementById(id), {
       type: 'line',
       data: {
         labels: label,
@@ -38,10 +38,8 @@ export class Test1Service {
         ],
       },
       options: {
-        onClick: (e: any) => {
-          // const canvasPosition = Chart.helpers.getRelativePosition(e, dh2);
-
-          that.sub['setObj'].next(dh2.tooltip.title[0]);
+        onClick: (e1: any, e2: any, e3: any) => {
+          that.sub['setObj'].next({ title: dh2.tooltip.title[0], type: 'one' });
           // that.chart2.destroy();
           // that.chart3.destroy();
         },
@@ -106,12 +104,19 @@ export class Test1Service {
  */
   chart2: any;
   chart3: any;
-  db_chart2(data: any) {
-    this.chart2 = new Chart(document.getElementById('acquisitions2'), {
+  db_chart2(data: any, id: any) {
+    let that = this;
+    this.chart2 = new Chart(document.getElementById(id), {
       type: 'bar',
       data: data,
 
       options: {
+        onClick: (e1: any, e2: any, e3: any) => {
+          that.sub['setObj'].next({
+            title: e3.tooltip.title,
+            type: 'two',
+          });
+        },
         fill: false,
 
         radius: 0,
@@ -204,6 +209,46 @@ export class Test1Service {
     });
   }
 
+  db_chart2_strike(resp: any) {
+    return {
+      labels: resp[4],
+      datasets: [
+        {
+          label: 'CE LTP',
+          fill: false,
+          data: resp[0],
+          backgroundColor: 'green',
+          borderColor: 'green',
+          type: 'line',
+          yAxisID: 'y1',
+        },
+        {
+          label: 'PE LTP',
+          fill: false,
+          data: resp[1],
+          backgroundColor: 'red',
+          borderColor: 'red',
+          type: 'line',
+          yAxisID: 'y1',
+        },
+
+        {
+          label: 'CE COI',
+          fill: false,
+          data: resp[2],
+          backgroundColor: 'green',
+          yAxisID: 'y',
+        },
+        {
+          label: 'PE COI',
+          fill: false,
+          data: resp[3],
+          backgroundColor: 'red',
+          yAxisID: 'y',
+        },
+      ],
+    };
+  }
   db_chart2_data(resp: any, type: any) {
     return {
       labels: resp[0].filtered.data.map((d: any) => d?.CE?.strikePrice || 0),
@@ -283,8 +328,14 @@ export class Test1Service {
       .pipe(
         tap((resp: any) => {
           setTimeout(() => {
-            this.db_chart2(this.db_chart2_data(resp, 'changeinOpenInterest'));
-            this.db_chart3(this.db_chart2_data(resp, 'openInterest'));
+            this.db_chart2(
+              this.db_chart2_data(resp, 'changeinOpenInterest'),
+              'acquisitions2'
+            );
+            this.db_chart2(
+              this.db_chart2_data(resp, 'openInterest'),
+              'acquisitions3'
+            );
           }, 300);
         })
       );

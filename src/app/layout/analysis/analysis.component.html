@@ -1,6 +1,13 @@
-<div *ngIf="sub | async as dtx">**</div>
-<div class="row">
-  <div class="col-5">
+<div *ngIf="sub | async as dtx"></div>
+<div
+  class="row"
+  *ngIf="{
+    _pgData: pgData | async,
+    _pgcepe: pgcepe | async,
+    _strike: strike | async
+  } as _dbPage"
+>
+  <div class="col-2">
     <select
       class="form-select"
       aria-label="Default select example"
@@ -11,7 +18,7 @@
       <option value="BANKNIFTY">BANKNIFTY</option>
     </select>
   </div>
-  <div class="col-5">
+  <div class="col-2">
     <input
       type="date"
       class="form-control"
@@ -20,18 +27,56 @@
     />
     <!-- {{ map2_qr.date }} -->
   </div>
+  <div class="col-2" *ngIf="_dbPage._pgcepe != null">
+    <select
+      class="form-select"
+      aria-label="Default select example"
+      [(ngModel)]="map2_qr.strikePrice"
+    >
+      <option value="">--Select--</option>
+      <!-- [0].filtered.data[0].CE.strikePrice -->
+      <option
+        *ngFor="let i of ob(_dbPage._pgcepe)[0].filtered.data"
+        [ngValue]="i.PE.strikePrice"
+      >
+        {{ i.PE.strikePrice }}
+      </option>
+    </select>
+  </div>
   <div class="col-2">
-    <button type="button" class="btn btn-primary" (click)="ngOnInit()">
+    <button type="button" class="btn btn-primary me-3" (click)="ngOnInit()">
       search
     </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="changeStrike(map2_qr)"
+    >
+      strike
+    </button>
   </div>
-  <div class="col-12" *ngIf="pgData | async as _pgData">
+  <div class="col-12" *ngIf="_dbPage._pgData != null">
     <div class="db_chart">
       <canvas id="acquisitions"></canvas>
     </div>
   </div>
   <div class="col-4">
-    <!-- -->
+    <button
+      type="button"
+      class="btn btn-primary me-2"
+      (click)="sh = 'All'"
+      id="all"
+    >
+      All
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary me-2"
+      (click)="sh = 'strike'"
+      id="strike"
+    >
+      strike
+    </button>
   </div>
   <div class="col-4"></div>
   <div class="col-4">
@@ -42,19 +87,24 @@
       >>
     </button>
   </div>
-  <div class="col-12" *ngIf="pgcepe | async as _pgcepe">
+  <div
+    class="col-12"
+    *ngIf="_dbPage._pgcepe != null"
+    [class]="{ 'd-none': sh != 'All' }"
+  >
     <table>
       <tr>
         <td>
           <h5 class="me-4">
-            <b> Time :-{{ formatTime(ob(_pgcepe)[0].date) }}</b>
+            <b> Time :-{{ formatTime(ob(_dbPage._pgcepe)[0].date) }}</b>
           </h5>
         </td>
         <td>
           <h5>
             <b
               >Underlying Value :-{{
-                ob(_pgcepe)[0].filtered.data[0].CE.underlyingValue
+                ob(_dbPage._pgcepe)[0]?.filtered?.data[0]?.CE
+                  ?.underlyingValue || "_____"
               }}</b
             >
           </h5>
@@ -69,5 +119,13 @@
     <div class="db_chart">
       <canvas id="acquisitions3"></canvas>
     </div>
+  </div>
+  <div
+    class="col-12"
+    *ngIf="_dbPage._strike != null"
+    [class]="{ 'd-none': sh != 'strike' }"
+  >
+    <canvas id="acquisitions4"></canvas>
+    <canvas id="acquisitions5"></canvas>
   </div>
 </div>

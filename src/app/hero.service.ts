@@ -1,10 +1,16 @@
 import { Injectable } from '@angular/core';
 import { from, interval, of, shareReplay } from 'rxjs';
 import { finalize, map, mergeMap, tap } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../environments/environment';
 //D:\stock\src\environments\environment.ts
-declare var $: any, Highcharts: any, html2canvas: any, _: any, dayjs: any;
+
+declare var $: any,
+  Highcharts: any,
+  html2canvas: any,
+  _: any,
+  dayjs: any,
+  CryptoJS: any;
 @Injectable({
   providedIn: 'root',
 })
@@ -30,8 +36,26 @@ export class HeroService {
     $('.loader').last().remove();
   }
   post(url: any, qr: any) {
-    debugger;
-    return this.http.post(localStorage.getItem('url') + url, qr);
+    console.log('QR=>', qr);
+    const t = new Date(new Date().toUTCString()).getTime() + 5000;
+    var ciphertext = CryptoJS.AES.encrypt(
+      t.toString(),
+      'secretkey123'
+    ).toString();
+    var encrypt_qr = CryptoJS.AES.encrypt(
+      JSON.stringify(qr),
+      'secretkey123'
+    ).toString();
+    const httpHeaders: HttpHeaders = new HttpHeaders({
+      Authorization: ciphertext + '.' + encrypt_qr,
+    });
+    return this.http.post(
+      localStorage.getItem('url') + url,
+      {},
+      {
+        headers: httpHeaders,
+      }
+    );
   }
   ajaxp(url: any, flag: any = true) {
     let that = this;
@@ -48,7 +72,7 @@ export class HeroService {
     flag == true && that.start();
     return of([]).pipe(
       mergeMap((d: any) =>
-        this.http.post(this.getUrl() + '/nse', {
+        this.post('/nse', {
           url: url,
         })
       ),
