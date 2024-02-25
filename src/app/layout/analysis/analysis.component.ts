@@ -3,6 +3,7 @@ import { HeroService } from '../../hero.service';
 //import { map, tap } from 'rxjs/operators';
 import { map, of, tap } from 'rxjs';
 import { Test1Service } from './test1.service';
+import { stat_data } from './data';
 declare var google: any, Chart: any, _: any, dayjs: any, $: any;
 
 @Component({
@@ -15,8 +16,10 @@ export class AnalysisComponent implements OnInit {
   pgData: any = of({});
   pgcepe: any = of({});
   strike: any = of({});
-  sh: any = 'All';
 
+  option2: any = of([]);
+  sh: any = 'All';
+  stat_data: any = JSON.parse(JSON.stringify(stat_data));
   map2_qr: any = {
     type: 'NIFTY',
     date: new Date().toISOString().substring(0, 10),
@@ -80,6 +83,26 @@ export class AnalysisComponent implements OnInit {
           }, 300);
         })
       );
+  }
+  getPrice_from_option2(strike: any, curr: any, all: any) {
+    if (all.length > 0) {
+      const xx = _.chain(all[0].filtered.data)
+        .find({ strikePrice: strike })
+        .value();
+      return xx[curr.ce_pe].lastPrice || curr.price;
+    } else {
+      return curr.price || 0;
+    }
+  }
+  change_toTime(dt: any, qr: any) {
+    let xx = JSON.parse(JSON.stringify(qr));
+    const newDate = new Date(dt.value).getTime() - 1000 * 20;
+    xx.date = new Date(newDate).toISOString();
+    this.option2 = this.tone.db_chart2_ob(xx);
+    console.log('change_toTime=>', dt);
+  }
+  date_to_time(i: any) {
+    return new Date(i.date).toTimeString().substr(0, 5);
   }
   formatTime(localIsoDate: any) {
     localIsoDate = new Date(localIsoDate);
@@ -150,6 +173,13 @@ export class AnalysisComponent implements OnInit {
       );
 
     this.pgcepe = this.tone.db_chart2_qr(this.map2_qr);
+  }
+  calPrice(strike: any, ob: any, all: any) {
+    debugger;
+    let ans = _.chain(all._pgcepe[0].filtered.data)
+      .find({ strikePrice: strike })
+      .value();
+    return ans[ob.ce_pe].lastPrice || 0;
   }
   ngOnInit(): void {
     let that = this;

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HeroService } from '../../hero.service';
-import { Subject, tap } from 'rxjs';
-declare var Chart: any;
+import { Subject, map, tap } from 'rxjs';
+declare var Chart: any, _: any;
 @Injectable({
   providedIn: 'root',
 })
@@ -299,45 +299,64 @@ export class Test1Service {
       ],
     };
   }
+  db_chart2_ob(dt: any) {
+    return this.hs.post('/option', {
+      find: {
+        type: dt.type,
+        date: {
+          $gt: dt.date,
+        },
+      },
+      limit: dt.limit,
+      skip: dt.skip,
+      select: {
+        date: true,
+        // 'filtered.CE': true,
+        // 'filtered.PE': true,
+        'filtered.data.CE.underlyingValue': true,
+        'filtered.data.CE.changeinOpenInterest': true,
+        'filtered.data.PE.changeinOpenInterest': true,
+        'filtered.data.PE.openInterest': true,
+        'filtered.data.CE.openInterest': true,
+        'filtered.data.CE.strikePrice': true,
+        'filtered.data.PE.strikePrice': true,
+        'filtered.data.CE.change': true,
+        'filtered.data.PE.change': true,
+        'filtered.data.CE.lastPrice': true,
+        'filtered.data.PE.lastPrice': true,
+        'filtered.data.strikePrice': true,
+      },
+    });
+  }
   db_chart2_qr(dt: any) {
-    return this.hs
-      .post('/option', {
-        find: {
-          type: dt.type,
-          date: {
-            $gt: dt.date,
-          },
-        },
-        limit: dt.limit,
-        skip: dt.skip,
-        select: {
-          date: true,
-          // 'filtered.CE': true,
-          // 'filtered.PE': true,
-          'filtered.data.CE.underlyingValue': true,
-          'filtered.data.CE.changeinOpenInterest': true,
-          'filtered.data.PE.changeinOpenInterest': true,
-          'filtered.data.PE.openInterest': true,
-          'filtered.data.CE.openInterest': true,
-          'filtered.data.CE.strikePrice': true,
-          'filtered.data.PE.strikePrice': true,
-          'filtered.data.CE.change': true,
-          'filtered.data.PE.change': true,
-        },
+    return this.db_chart2_ob(dt).pipe(
+      map((d: any) => {
+        let diff = dt.type == 'NIFTY' ? 50 : 100;
+        d[0].filtered.data = d[0].filtered.data.map((d1: any) => {
+          d1.ce_itm = d1.CE.underlyingValue - d1.strikePrice;
+          d1.pe_itm = d1.strikePrice - d1.CE.underlyingValue;
+          d1.atm = Math.abs(d1.CE.underlyingValue - d1.strikePrice);
+          return d1;
+        });
+        let _atm = _.chain(d[0].filtered.data).sortBy('atm').value();
+        d[0].atm = _atm[0];
+        _atm[0].atm = true;
+        console.log('ddd ttt=>', d);
+
+        return d;
+      }),
+      tap((resp: any) => {
+        setTimeout(() => {
+          this.db_chart2(
+            this.db_chart2_data(resp, 'changeinOpenInterest'),
+            'acquisitions2'
+          );
+          this.db_chart2(
+            this.db_chart2_data(resp, 'openInterest'),
+            'acquisitions3'
+          );
+        }, 300);
       })
-      .pipe(
-        tap((resp: any) => {
-          setTimeout(() => {
-            this.db_chart2(
-              this.db_chart2_data(resp, 'changeinOpenInterest'),
-              'acquisitions2'
-            );
-            this.db_chart2(
-              this.db_chart2_data(resp, 'openInterest'),
-              'acquisitions3'
-            );
-          }, 300);
-        })
-      );
+    );
   }
 }

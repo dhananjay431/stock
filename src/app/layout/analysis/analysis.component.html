@@ -7,7 +7,7 @@
     _strike: strike | async
   } as _dbPage"
 >
-  <div class="col-2">
+  <div class="col-12 col-md-2 col-lg-2 col-sm-12">
     <select
       class="form-select"
       aria-label="Default select example"
@@ -18,7 +18,7 @@
       <option value="BANKNIFTY">BANKNIFTY</option>
     </select>
   </div>
-  <div class="col-2">
+  <div class="col-12 col-md-2 col-lg-2 col-sm-12">
     <input
       type="date"
       class="form-control"
@@ -27,7 +27,10 @@
     />
     <!-- {{ map2_qr.date }} -->
   </div>
-  <div class="col-2" *ngIf="_dbPage._pgcepe != null">
+  <div
+    class="col-12 col-md-2 col-lg-2 col-sm-12"
+    *ngIf="_dbPage._pgcepe != null"
+  >
     <select
       class="form-select"
       aria-label="Default select example"
@@ -43,7 +46,7 @@
       </option>
     </select>
   </div>
-  <div class="col-2">
+  <div class="col-12 col-md-2 col-lg-2 col-sm-12 text-end">
     <button type="button" class="btn btn-primary me-3" (click)="ngOnInit()">
       search
     </button>
@@ -76,6 +79,14 @@
       id="strike"
     >
       strike
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary me-2"
+      (click)="sh = 'stat'"
+      id="stat"
+    >
+      stat
     </button>
   </div>
   <div class="col-4"></div>
@@ -127,5 +138,60 @@
   >
     <canvas id="acquisitions4"></canvas>
     <canvas id="acquisitions5"></canvas>
+  </div>
+  <div class="col-12" *ngIf="sh == 'stat'">
+    <!-- <div *ngIf="option2 | async as op2">
+      {{ op2 | json }}
+    </div> -->
+    <select
+      #toTime
+      (change)="change_toTime(toTime, map2_qr)"
+      class="form-select form-select-sm"
+      aria-label="Default select example"
+    >
+      <option selected>Open this select menu</option>
+      <option [value]="i.date" *ngFor="let i of ob(_dbPage)._pgData">
+        {{ date_to_time(i) }}
+      </option>
+    </select>
+
+    <table class="table table-sm" *ngIf="option2 | async as op2">
+      <ng-container *ngFor="let i of stat_data; let id = index">
+        <tr class="bg-primary">
+          <td>{{ i.name }}</td>
+          <td>{{ i.view }}</td>
+          <td>Lot</td>
+          <td>Strike</td>
+          <td>From Price</td>
+          <td>To Price</td>
+        </tr>
+        <ng-container *ngFor="let ii of i.data">
+          <tr>
+            <td>{{ ii.buy_sell }}</td>
+            <td>{{ ii.ce_pe }}</td>
+            <td>{{ ii.lot }}</td>
+            <td>{{ ob(_dbPage)._pgcepe[0].atm.strikePrice + ii.diff }}</td>
+            <td>
+              {{
+                calPrice(
+                  ob(_dbPage)._pgcepe[0].atm.strikePrice + ii.diff,
+                  ii,
+                  _dbPage
+                )
+              }}
+            </td>
+            <td>
+              {{
+                getPrice_from_option2(
+                  ob(_dbPage)._pgcepe[0].atm.strikePrice + ii.diff,
+                  ii,
+                  op2
+                )
+              }}
+            </td>
+          </tr>
+        </ng-container>
+      </ng-container>
+    </table>
   </div>
 </div>

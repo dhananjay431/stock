@@ -1,281 +1,176 @@
 <div class="row">
-  <div class="col-3">
-    <input
-      class="form-control form-control-sm"
-      type="date"
-      id="birthday"
-      name="birthday"
-      [(ngModel)]="data.date"
-      (change)="change_date(data)"
-    />
-  </div>
-  <div class="col-3">
+  <div class="col-12 col-md-2 col-lg-2 mt-1">
     <select
       class="form-select form-select-sm"
       aria-label="Default select example"
-      [(ngModel)]="data.type"
-      (change)="change_date(data)"
+      [(ngModel)]="map2_qr.type"
     >
-      <option>-SELECT-</option>
       <option value="NIFTY">NIFTY</option>
       <option value="BANKNIFTY">BANKNIFTY</option>
     </select>
   </div>
-  <div class="col-3" *ngIf="data.all != undefined">
+  <div class="col-12 col-md-2 col-lg-2 mt-1">
+    <input
+      type="date"
+      class="form-control form-control-sm"
+      [(ngModel)]="map2_qr.date"
+    />
+    <!-- {{ map2_qr.date }} -->
+  </div>
+  <div class="col-12 col-md-2 col-lg-2 mt-1">
     <select
-      class="form-select form-select-sm"
+      [(ngModel)]="map2_qr.time"
       aria-label="Default select example"
-      [(ngModel)]="data.n"
-      (change)="time_change(data)"
+      class="form-select form-select-sm"
     >
-      <option>-SELECT-</option>
-      <option *ngFor="let i of data.all.PCR; let id = index" [value]="id">
-        {{ i.timestamp }}
-      </option>
+      <option>--Select--</option>
+      <option *ngFor="let i of time" [ngValue]="i.value">{{ i.key }}</option>
     </select>
   </div>
-
-  <div class="col-3">
-    <button
-      type="button"
-      id="option_refresh"
-      class="btn btn-sm btn-danger me-2"
-      (click)="prev(data, 'p')"
-    >
-      <i class="fa-solid fa-backward"></i>
-      <!--          <i class="fa-solid fa-arrows-rotate text-white"></i>-->
-    </button>
-    <button
-      type="button"
-      class="btn btn-sm btn-danger me-2"
-      (click)="prev(data, 'n')"
-    >
-      <i class="fa-solid fa-forward"></i>
-      <!--          <i class="fa-solid fa-camera text-white"></i>-->
+  <div class="col-12 col-md-2 col-lg-2 mt-1">
+    <button class="btn btn-primary btn-sm" (click)="search(map2_qr)">
+      search
     </button>
   </div>
-</div>
-<div *ngIf="{ data: data.data$ | async } as _data">
-  <div class="row" *ngIf="_data.data != null">
-    <div
-      class="col-md-6 col-lg-6 col-12"
-      *ngFor="let i of ob(_data).data.get_option_data.expiryData_key"
-    >
-      <ng-container
-        *ngIf="ob(_data).data.get_option_data.expiryData[i].length == 16"
-      >
-        <span class="fw-semibold">
-          {{ i }}
-        </span>
-        Underlying Index:
-        <span class="fw-semibold">
-          {{ data.type }}
-        </span>
-        <span class="fw-semibold">
-          {{
-            ob(_data.data).get_option_data.data.records.underlyingValue | number
-          }}
-        </span>
-        As on
-
-        <span class="fw-semibold">
-          {{ ob(_data.data).get_option_data.data.records.timestamp }}
-        </span>
-
-        <span class="badge text-bg-primary"></span>
-        <div class="table-responsive">
-          <table
-            id="example"
-            class="table table-sm table-striped table-hover mt-2"
+  <div class="col-12 col-md-12 col-lg-12 mt-1" *ngIf="tbl_ob | async as tbl">
+    <table class="table table-sm">
+      <thead style="position: sticky; top: 0">
+        <tr>
+          <th colspan="6" class="bg-secondary text-white text-center">CALL</th>
+          <th>*</th>
+          <th colspan="6" class="bg-secondary text-white text-center">PUT</th>
+        </tr>
+        <tr>
+          <th class="bg-secondary text-white text-end">OI</th>
+          <th class="bg-secondary text-white text-end">CHNG IN OI</th>
+          <th class="bg-secondary text-white text-end">VOLUME</th>
+          <th class="bg-secondary text-white text-end">IV</th>
+          <th class="bg-secondary text-white text-end">LTP</th>
+          <th class="bg-secondary text-white text-end">CHNG</th>
+          <th class="bg-secondary text-white text-center">STRIKE</th>
+          <th class="bg-secondary text-white text-end">CHNG</th>
+          <th class="bg-secondary text-white text-end">LTP</th>
+          <th class="bg-secondary text-white text-end">IV</th>
+          <th class="bg-secondary text-white text-end">VOLUME</th>
+          <th class="bg-secondary text-white text-end">CHNG IN OI</th>
+          <th class="bg-secondary text-white text-end">OI</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let i of ob(tbl)[0].filtered.data">
+          <td
+            class="text-end"
+            [class]="{
+              'bg-warning-subtle': i.atm != true && i.ce_itm > 0,
+              'bg-primary': i.atm == true
+            }"
           >
-            <thead class="header-fixed bg">
-              <tr>
-                <th class="text-end text-nowrap">OI</th>
-                <th class="text-end text-nowrap">COI</th>
-
-                <th class="text-end text-nowrap">Last Price</th>
-                <th class="text-center text-nowrap">Strike Price</th>
-                <th class="text-end text-nowrap">Last Price</th>
-                <th class="text-end text-nowrap">COI</th>
-                <th class="text-end text-nowrap">OI</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                *ngFor="let i of ob(_data.data).get_option_data.expiryData[i]"
-              >
-                <td
-                  class="text-end"
-                  [class]="{
-                    'bg-primary-subtle': i.flag == false,
-                    'text-danger': (i?.CE?.change || 0) < 0,
-                    'text-success': (i?.CE?.change || 0) > 0
-                  }"
-                  [title]="i?.CE?.change || ''"
-                >
-                  {{ i?.CE?.openInterest || 0 | number }}
-                  <span style="font-size: 0.5rem">
-                    ({{
-                      n(
-                        (i?.PE?.openInterest || 0) / (i?.CE?.openInterest || 0)
-                      )
-                    }})
-                  </span>
-                </td>
-                <td
-                  class="text-end"
-                  [class]="{
-                    'bg-primary-subtle': i.flag == false,
-                    'text-danger': (i?.CE?.change || 0) < 0,
-                    'text-success': (i?.CE?.change || 0) > 0
-                  }"
-                  [title]="i?.CE?.change || ''"
-                >
-                  {{ i?.CE?.changeinOpenInterest | number }}
-
-                  <span style="font-size: 0.5rem">
-                    ({{
-                      n(
-                        (i?.PE?.changeinOpenInterest || 0) /
-                          (i?.CE?.changeinOpenInterest || 0)
-                      )
-                    }})
-                  </span>
-                </td>
-
-                <td
-                  class="text-end"
-                  [class]="{
-                    'bg-primary-subtle': i.flag == false,
-                    'text-danger': (i?.CE?.change || 0) < 0,
-                    'text-success': (i?.CE?.change || 0) > 0
-                  }"
-                >
-                  {{ n(i?.CE?.lastPrice || 0) }}
-                </td>
-                <td class="text-center">
-                  {{ i?.strikePrice || 0 | number }}
-                </td>
-                <td
-                  class="text-end"
-                  [class]="{
-                    'bg-primary-subtle': i.flag == true,
-                    'text-danger': (i?.PE?.change || 0) < 0,
-                    'text-success': (i?.PE?.change || 0) > 0
-                  }"
-                >
-                  {{ n(i?.PE?.lastPrice || 0) }}
-                </td>
-
-                <td
-                  class="text-end"
-                  [class]="{
-                    'bg-primary-subtle': i.flag == true,
-                    'text-danger': (i?.PE?.change || 0) < 0,
-                    'text-success': (i?.PE?.change || 0) > 0
-                  }"
-                  [title]="i?.PE?.change || ''"
-                >
-                  {{ i?.PE?.changeinOpenInterest | number }}
-                </td>
-
-                <td
-                  class="text-end"
-                  [class]="{
-                    'bg-primary-subtle': i.flag == true,
-                    'text-danger': (i?.PE?.change || 0) < 0,
-                    'text-success': (i?.PE?.change || 0) > 0
-                  }"
-                  [title]="i?.PE?.change || ''"
-                >
-                  {{ i?.PE?.openInterest || 0 | number }}
-                </td>
-              </tr>
-              <tr>
-                <td class="text-end">
-                  {{ ob(_data.data).get_option_data.PCR[i].TTL_CE | number }}
-                </td>
-                <td class="text-end">
-                  {{ ob(_data.data).get_option_data.PCR[i].TTL_C_CE | number }}
-                </td>
-                <td></td>
-                <td class="text-center">
-                  {{ ob(_data.data).get_option_data.PCR[i].PCR }} /
-                  {{ ob(_data.data).get_option_data.PCR[i].C_PCR }}
-                </td>
-                <td></td>
-                <td class="text-end">
-                  {{ ob(_data.data).get_option_data.PCR[i].TTL_C_PE | number }}
-                </td>
-                <td class="text-end">
-                  {{ ob(_data.data).get_option_data.PCR[i].TTL_PE | number }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </ng-container>
-    </div>
-
-    <div class="col-12">
-      <div class="table-responsive">
-        <table class="table table-sm table-striped table-hover mt-2">
-          <thead class="header-fixed bg">
-            <tr>
-              <td rowspan="2" class="text-center">Time</td>
-              <td rowspan="2" class="text-center">U Value</td>
-              <ng-container
-                *ngFor="let j of ob(_data).data.get_option_data.expiryData_key"
-              >
-                <td colspan="2" class="text-center">{{ j }}</td>
-              </ng-container>
-            </tr>
-            <tr>
-              <ng-container
-                *ngFor="let j of ob(_data).data.get_option_data.expiryData_key"
-              >
-                <td class="text-center" class="text-center">PCR</td>
-                <td class="text-center" class="text-center">C PCR</td>
-              </ng-container>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr *ngFor="let i of ob(_data.data).PCR.reverse()">
-              <td class="text-center">{{ df(i.timestamp) }}</td>
-              <td class="text-center">{{ n_text(i.underlyingValue) }}</td>
-              <ng-container
-                *ngFor="let j of ob(_data).data.get_option_data.expiryData_key"
-              >
-                <td class="text-white text-center">
-                  <h2
-                    class="badge text-bg-primary bg-opacity-50"
-                    [class]="{
-                      'text-bg-warning': n(i.PCR[j]?.PCR) == 1,
-                      'text-bg-danger': n(i.PCR[j]?.PCR) < 1,
-                      'text-bg-success': n(i.PCR[j]?.PCR) > 1
-                    }"
-                  >
-                    {{ h_get_pcr(i, j)?.PCR || "" }}
-                  </h2>
-                </td>
-                <td class="text-white text-center">
-                  <h2
-                    class="badge text-bg-primary bg-opacity-50"
-                    [class]="{
-                      'text-bg-warning': n(i.PCR[j]?.PCR) == 1,
-                      'text-bg-danger': n(i.PCR[j]?.PCR) < 1,
-                      'text-bg-success': n(i.PCR[j]?.PCR) > 1
-                    }"
-                  >
-                    {{ h_get_pcr(i, j)?.C_PCR || "" }}
-                  </h2>
-                </td>
-              </ng-container>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+            {{ i.CE.openInterest || "" }}
+          </td>
+          <td
+            class="text-end"
+            [class]="{
+              'bg-warning-subtle': i.atm != true && i.ce_itm > 0,
+              'bg-primary': i.atm == true
+            }"
+          >
+            {{ i.CE.changeinOpenInterest || "" }}
+          </td>
+          <td
+            class="text-end"
+            [class]="{
+              'bg-warning-subtle': i.atm != true && i.ce_itm > 0,
+              'bg-primary': i.atm == true
+            }"
+          >
+            {{ i.CE.totalTradedVolume || "" }}
+          </td>
+          <td
+            class="text-end"
+            [class]="{
+              'bg-warning-subtle': i.atm != true && i.ce_itm > 0,
+              'bg-primary': i.atm == true
+            }"
+          >
+            {{ i.CE.impliedVolatility || "" }}
+          </td>
+          <td
+            class="text-end"
+            [class]="{
+              'bg-warning-subtle': i.atm != true && i.ce_itm > 0,
+              'bg-primary': i.atm == true
+            }"
+          >
+            {{ i.CE.lastPrice }}
+          </td>
+          <td
+            class="text-end"
+            [class]="{
+              'bg-warning-subtle': i.atm != true && i.ce_itm > 0,
+              'bg-primary': i.atm == true
+            }"
+          >
+            {{ number_toFixed(i.CE.pChange, 2) || "" }}
+          </td>
+          <td class="bg-primary text-center">
+            {{ i.strikePrice }}
+          </td>
+          <td
+            class="text-end"
+            [class]="{
+              'bg-warning-subtle': i.atm != true && i.pe_itm > 0,
+              'bg-primary': i.atm == true
+            }"
+          >
+            {{ number_toFixed(i.PE.pChange, 2) || "" }}
+          </td>
+          <td
+            class="text-end"
+            [class]="{
+              'bg-warning-subtle': i.atm != true && i.pe_itm > 0,
+              'bg-primary': i.atm == true
+            }"
+          >
+            {{ i.PE.lastPrice || "" }}
+          </td>
+          <td
+            class="text-end"
+            [class]="{
+              'bg-warning-subtle': i.atm != true && i.pe_itm > 0,
+              'bg-primary': i.atm == true
+            }"
+          >
+            {{ i.PE.impliedVolatility || "" }}
+          </td>
+          <td
+            class="text-end"
+            [class]="{
+              'bg-warning-subtle': i.atm != true && i.pe_itm > 0,
+              'bg-primary': i.atm == true
+            }"
+          >
+            {{ i.PE.totalTradedVolume || "" }}
+          </td>
+          <td
+            class="text-end"
+            [class]="{
+              'bg-warning-subtle': i.atm != true && i.pe_itm > 0,
+              'bg-primary': i.atm == true
+            }"
+          >
+            {{ i.PE.changeinOpenInterest || "" }}
+          </td>
+          <td
+            class="text-end"
+            [class]="{
+              'bg-warning-subtle': i.atm != true && i.pe_itm > 0,
+              'bg-primary': i.atm == true
+            }"
+          >
+            {{ i.PE.openInterest || "" }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

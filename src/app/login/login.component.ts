@@ -9,7 +9,7 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router) {}
   data: any = { user: '', pass: '' };
   login(d: any) {
-    if (d.user === d.pass) {
+    if (d.pass != '' && d.pass != '' && d.user === d.pass) {
       localStorage.setItem('url', d.user);
       this.router.navigate(['/index', {}]);
     }
