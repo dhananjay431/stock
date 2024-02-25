@@ -14,10 +14,14 @@ export class OptionComponent implements OnInit {
   map2_qr: any = {
     type: 'NIFTY',
     date: new Date().toISOString().substring(0, 10),
-    time: { h: '09', m: '30' },
+    time: { h: '09', m: '00' },
   };
   tbl_ob = of([]);
   time: any = [
+    { key: '09:00', value: { h: '09', m: '00' } },
+    { key: '09:05', value: { h: '09', m: '05' } },
+    { key: '09:10', value: { h: '09', m: '10' } },
+    { key: '09:15', value: { h: '09', m: '15' } },
     { key: '09:20', value: { h: '09', m: '20' } },
     { key: '09:25', value: { h: '09', m: '25' } },
     { key: '09:30', value: { h: '09', m: '30' } },

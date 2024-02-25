@@ -33,144 +33,162 @@
     </button>
   </div>
   <div class="col-12 col-md-12 col-lg-12 mt-1" *ngIf="tbl_ob | async as tbl">
-    <table class="table table-sm">
-      <thead style="position: sticky; top: 0">
-        <tr>
-          <th colspan="6" class="bg-secondary text-white text-center">CALL</th>
-          <th>*</th>
-          <th colspan="6" class="bg-secondary text-white text-center">PUT</th>
-        </tr>
-        <tr>
-          <th class="bg-secondary text-white text-end">OI</th>
-          <th class="bg-secondary text-white text-end">CHNG IN OI</th>
-          <th class="bg-secondary text-white text-end">VOLUME</th>
-          <th class="bg-secondary text-white text-end">IV</th>
-          <th class="bg-secondary text-white text-end">LTP</th>
-          <th class="bg-secondary text-white text-end">CHNG</th>
-          <th class="bg-secondary text-white text-center">STRIKE</th>
-          <th class="bg-secondary text-white text-end">CHNG</th>
-          <th class="bg-secondary text-white text-end">LTP</th>
-          <th class="bg-secondary text-white text-end">IV</th>
-          <th class="bg-secondary text-white text-end">VOLUME</th>
-          <th class="bg-secondary text-white text-end">CHNG IN OI</th>
-          <th class="bg-secondary text-white text-end">OI</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let i of ob(tbl)[0].filtered.data">
-          <td
-            class="text-end"
-            [class]="{
-              'bg-warning-subtle': i.atm != true && i.ce_itm > 0,
-              'bg-primary': i.atm == true
-            }"
-          >
-            {{ i.CE.openInterest || "" }}
-          </td>
-          <td
-            class="text-end"
-            [class]="{
-              'bg-warning-subtle': i.atm != true && i.ce_itm > 0,
-              'bg-primary': i.atm == true
-            }"
-          >
-            {{ i.CE.changeinOpenInterest || "" }}
-          </td>
-          <td
-            class="text-end"
-            [class]="{
-              'bg-warning-subtle': i.atm != true && i.ce_itm > 0,
-              'bg-primary': i.atm == true
-            }"
-          >
-            {{ i.CE.totalTradedVolume || "" }}
-          </td>
-          <td
-            class="text-end"
-            [class]="{
-              'bg-warning-subtle': i.atm != true && i.ce_itm > 0,
-              'bg-primary': i.atm == true
-            }"
-          >
-            {{ i.CE.impliedVolatility || "" }}
-          </td>
-          <td
-            class="text-end"
-            [class]="{
-              'bg-warning-subtle': i.atm != true && i.ce_itm > 0,
-              'bg-primary': i.atm == true
-            }"
-          >
-            {{ i.CE.lastPrice }}
-          </td>
-          <td
-            class="text-end"
-            [class]="{
-              'bg-warning-subtle': i.atm != true && i.ce_itm > 0,
-              'bg-primary': i.atm == true
-            }"
-          >
-            {{ number_toFixed(i.CE.pChange, 2) || "" }}
-          </td>
-          <td class="bg-primary text-center">
-            {{ i.strikePrice }}
-          </td>
-          <td
-            class="text-end"
-            [class]="{
-              'bg-warning-subtle': i.atm != true && i.pe_itm > 0,
-              'bg-primary': i.atm == true
-            }"
-          >
-            {{ number_toFixed(i.PE.pChange, 2) || "" }}
-          </td>
-          <td
-            class="text-end"
-            [class]="{
-              'bg-warning-subtle': i.atm != true && i.pe_itm > 0,
-              'bg-primary': i.atm == true
-            }"
-          >
-            {{ i.PE.lastPrice || "" }}
-          </td>
-          <td
-            class="text-end"
-            [class]="{
-              'bg-warning-subtle': i.atm != true && i.pe_itm > 0,
-              'bg-primary': i.atm == true
-            }"
-          >
-            {{ i.PE.impliedVolatility || "" }}
-          </td>
-          <td
-            class="text-end"
-            [class]="{
-              'bg-warning-subtle': i.atm != true && i.pe_itm > 0,
-              'bg-primary': i.atm == true
-            }"
-          >
-            {{ i.PE.totalTradedVolume || "" }}
-          </td>
-          <td
-            class="text-end"
-            [class]="{
-              'bg-warning-subtle': i.atm != true && i.pe_itm > 0,
-              'bg-primary': i.atm == true
-            }"
-          >
-            {{ i.PE.changeinOpenInterest || "" }}
-          </td>
-          <td
-            class="text-end"
-            [class]="{
-              'bg-warning-subtle': i.atm != true && i.pe_itm > 0,
-              'bg-primary': i.atm == true
-            }"
-          >
-            {{ i.PE.openInterest || "" }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive-sm">
+      <table class="table table-sm">
+        <thead style="position: sticky; top: 0">
+          <tr>
+            <th colspan="6" class="bg-danger-subtle text-center">CALL</th>
+            <th class="text-white text-center"></th>
+            <th colspan="6" class="bg-success-subtle text-white text-center">
+              PUT
+            </th>
+          </tr>
+          <tr>
+            <th class="bg-secondary text-white text-end">OI</th>
+            <th class="bg-secondary text-white text-end">CHNG IN OI</th>
+            <th class="bg-secondary text-white text-end">VOLUME</th>
+            <th class="bg-secondary text-white text-end">IV</th>
+            <th class="bg-secondary text-white text-end">LTP</th>
+            <th class="bg-secondary text-white text-end">CHNG</th>
+            <th class="bg-secondary text-white text-center">STRIKE</th>
+            <th class="bg-secondary text-white text-end">CHNG</th>
+            <th class="bg-secondary text-white text-end">LTP</th>
+            <th class="bg-secondary text-white text-end">IV</th>
+            <th class="bg-secondary text-white text-end">VOLUME</th>
+            <th class="bg-secondary text-white text-end">CHNG IN OI</th>
+            <th class="bg-secondary text-white text-end">OI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let i of ob(tbl)[0].filtered.data">
+            <td
+              class="text-end"
+              [class]="{
+                'bg-warning-subtle': i.atm != true && i.ce_itm > 0,
+                'bg-secondary-subtle': i.atm == true
+              }"
+            >
+              {{ i.CE.openInterest || "" | number }}
+            </td>
+            <td
+              class="text-end"
+              [class]="{
+                'bg-warning-subtle': i.atm != true && i.ce_itm > 0,
+                'bg-secondary-subtle': i.atm == true
+              }"
+            >
+              {{ i.CE.changeinOpenInterest || "" | number }}
+            </td>
+            <td
+              class="text-end"
+              [class]="{
+                'bg-warning-subtle': i.atm != true && i.ce_itm > 0,
+                'bg-secondary-subtle': i.atm == true
+              }"
+            >
+              {{ i.CE.totalTradedVolume || "" | number }}
+            </td>
+            <td
+              class="text-end"
+              [class]="{
+                'bg-warning-subtle': i.atm != true && i.ce_itm > 0,
+                'bg-secondary-subtle': i.atm == true
+              }"
+            >
+              {{ i.CE.impliedVolatility || "" | number }}
+            </td>
+            <td
+              class="text-end"
+              [class]="{
+                'bg-warning-subtle': i.atm != true && i.ce_itm > 0,
+                'bg-secondary-subtle': i.atm == true
+              }"
+            >
+              {{ i.CE.lastPrice | number }}
+            </td>
+            <td
+              class="text-end"
+              [class]="{
+                'bg-warning-subtle': i.atm != true && i.ce_itm > 0,
+                'bg-secondary-subtle': i.atm == true
+              }"
+            >
+              <span
+                [class]="{
+                  'text-success': i.CE.pChange > 0,
+                  'text-danger': i.CE.pChange < 0
+                }"
+              >
+                {{ number_toFixed(i.CE.pChange, 2) || "" | number }}
+              </span>
+            </td>
+            <td class="bg-secondary-subtle text-center">
+              {{ i.strikePrice | number }}
+            </td>
+            <td
+              class="text-end"
+              [class]="{
+                'bg-warning-subtle': i.atm != true && i.pe_itm > 0,
+                'bg-secondary-subtle': i.atm == true
+              }"
+            >
+              <span
+                [class]="{
+                  'text-success': i.PE.pChange > 0,
+                  'text-danger': i.PE.pChange < 0
+                }"
+              >
+                {{ number_toFixed(i.PE.pChange, 2) || "" | number }}
+              </span>
+            </td>
+            <td
+              class="text-end"
+              [class]="{
+                'bg-warning-subtle': i.atm != true && i.pe_itm > 0,
+                'bg-secondary-subtle': i.atm == true
+              }"
+            >
+              {{ i.PE.lastPrice || "" | number }}
+            </td>
+            <td
+              class="text-end"
+              [class]="{
+                'bg-warning-subtle': i.atm != true && i.pe_itm > 0,
+                'bg-secondary-subtle': i.atm == true
+              }"
+            >
+              {{ i.PE.impliedVolatility || "" | number }}
+            </td>
+            <td
+              class="text-end"
+              [class]="{
+                'bg-warning-subtle': i.atm != true && i.pe_itm > 0,
+                'bg-secondary-subtle': i.atm == true
+              }"
+            >
+              {{ i.PE.totalTradedVolume || "" | number }}
+            </td>
+            <td
+              class="text-end"
+              [class]="{
+                'bg-warning-subtle': i.atm != true && i.pe_itm > 0,
+                'bg-secondary-subtle': i.atm == true
+              }"
+            >
+              {{ i.PE.changeinOpenInterest || "" | number }}
+            </td>
+            <td
+              class="text-end"
+              [class]="{
+                'bg-warning-subtle': i.atm != true && i.pe_itm > 0,
+                'bg-secondary-subtle': i.atm == true
+              }"
+            >
+              {{ i.PE.openInterest || "" | number }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

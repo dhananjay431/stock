@@ -250,24 +250,24 @@ export class Test1Service {
     };
   }
   db_chart2_data(resp: any, type: any) {
-    return {
+    let resp2: any = {
       labels: resp[0].filtered.data.map((d: any) => d?.CE?.strikePrice || 0),
       datasets: [
-        {
-          label: 'ratio',
-          fill: false,
-          data: resp[0].filtered.data.map(
-            (d: any) => (d?.PE?.[type] || 0) / (d?.CE?.[type] || 0)
-          ),
-          backgroundColor: 'black',
-          borderColor: 'black',
-          type: 'line',
-          yAxisID: 'y2',
-        },
+        // {
+        //   label: 'ratio',
+        //   fill: false,
+        //   data: resp[0].filtered.data.map(
+        //     (d: any) => (d?.PE?.[type] || 0) / (d?.CE?.[type] || 0)
+        //   ),
+        //   backgroundColor: 'black',
+        //   borderColor: 'black',
+        //   type: 'line',
+        //   yAxisID: 'y3',
+        // },
         {
           label: 'CE',
           fill: false,
-          data: resp[0].filtered.data.map((d: any) => d?.CE?.change || 0),
+          data: resp[0].filtered.data.map((d: any) => d?.CE?.lastPrice || 0),
           backgroundColor: 'green',
           borderColor: 'green',
           type: 'line',
@@ -276,7 +276,7 @@ export class Test1Service {
         {
           label: 'PE',
           fill: false,
-          data: resp[0].filtered.data.map((d: any) => d?.PE?.change || 0),
+          data: resp[0].filtered.data.map((d: any) => d?.PE?.lastPrice || 0),
           backgroundColor: 'red',
           borderColor: 'red',
           type: 'line',
@@ -298,6 +298,8 @@ export class Test1Service {
         },
       ],
     };
+    console.log('date resp=>', resp2);
+    return resp2;
   }
   db_chart2_ob(dt: any) {
     return this.hs.post('/option', {

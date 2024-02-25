@@ -103,24 +103,26 @@
     *ngIf="_dbPage._pgcepe != null"
     [class]="{ 'd-none': sh != 'All' }"
   >
-    <table>
-      <tr>
-        <td>
-          <h5 class="me-4">
-            <b> Time :-{{ formatTime(ob(_dbPage._pgcepe)[0].date) }}</b>
-          </h5>
-        </td>
-        <td>
-          <h5>
-            <b
-              >Underlying Value :-{{
-                ob(_dbPage._pgcepe)[0]?.filtered?.data[0]?.CE
-                  ?.underlyingValue || "_____"
-              }}</b
-            >
-          </h5>
-        </td>
-      </tr>
+    <table class="table">
+      <thead>
+        <tr>
+          <td>
+            <h5 class="me-4">
+              <b> Time :-{{ formatTime(ob(_dbPage._pgcepe)[0].date) }}</b>
+            </h5>
+          </td>
+          <td>
+            <h5>
+              <b
+                >Underlying Value :-{{
+                  ob(_dbPage._pgcepe)[0]?.filtered?.data[0]?.CE
+                    ?.underlyingValue || "_____" | number
+                }}</b
+              >
+            </h5>
+          </td>
+        </tr>
+      </thead>
     </table>
 
     <div class="db_chart">
@@ -136,6 +138,32 @@
     *ngIf="_dbPage._strike != null"
     [class]="{ 'd-none': sh != 'strike' }"
   >
+    <table class="table">
+      <thead>
+        <tr>
+          <td>
+            <h5 class="me-4">
+              <b> Time :{{ formatTime(ob(_dbPage._pgcepe)[0].date) }}</b>
+            </h5>
+          </td>
+          <td>
+            <h5>
+              <b
+                >Underlying Value :{{
+                  ob(_dbPage._pgcepe)[0]?.filtered?.data[0]?.CE
+                    ?.underlyingValue || "_____" | number
+                }}</b
+              >
+            </h5>
+          </td>
+          <td>
+            <h5>
+              strikePrice :<b>{{ map2_qr.strikePrice | number }}</b>
+            </h5>
+          </td>
+        </tr>
+      </thead>
+    </table>
     <canvas id="acquisitions4"></canvas>
     <canvas id="acquisitions5"></canvas>
   </div>
@@ -143,6 +171,27 @@
     <!-- <div *ngIf="option2 | async as op2">
       {{ op2 | json }}
     </div> -->
+    <table class="table">
+      <thead>
+        <tr>
+          <td>
+            <h5 class="me-4">
+              <b> Time :-{{ formatTime(ob(_dbPage._pgcepe)[0].date) }}</b>
+            </h5>
+          </td>
+          <td>
+            <h5>
+              <b
+                >Underlying Value :-{{
+                  ob(_dbPage._pgcepe)[0]?.filtered?.data[0]?.CE
+                    ?.underlyingValue || "_____" | number
+                }}</b
+              >
+            </h5>
+          </td>
+        </tr>
+      </thead>
+    </table>
     <select
       #toTime
       (change)="change_toTime(toTime, map2_qr)"
