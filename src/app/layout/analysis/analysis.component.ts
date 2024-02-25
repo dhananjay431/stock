@@ -3,7 +3,7 @@ import { HeroService } from '../../hero.service';
 //import { map, tap } from 'rxjs/operators';
 import { map, of, tap } from 'rxjs';
 import { Test1Service } from './test1.service';
-import { stat_data } from './data';
+import { stat_data, drop } from './data';
 declare var google: any, Chart: any, _: any, dayjs: any, $: any;
 
 @Component({
@@ -17,6 +17,7 @@ export class AnalysisComponent implements OnInit {
   pgcepe: any = of({});
   strike: any = of({});
 
+  all_drop: any = drop;
   option2: any = of([]);
   sh: any = 'All';
   stat_data: any = JSON.parse(JSON.stringify(stat_data));

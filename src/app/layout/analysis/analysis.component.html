@@ -14,8 +14,8 @@
       (change)="typeChange(map2_qr)"
       [(ngModel)]="map2_qr.type"
     >
-      <option value="NIFTY">NIFTY</option>
-      <option value="BANKNIFTY">BANKNIFTY</option>
+      <option value="">--Select--</option>
+      <option *ngFor="let i of all_drop" [value]="i">{{ i }}</option>
     </select>
   </div>
   <div class="col-12 col-md-2 col-lg-2 col-sm-12">
