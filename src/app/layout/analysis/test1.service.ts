@@ -13,6 +13,7 @@ export class Test1Service {
   }
   constructor(private hs: HeroService) {}
   db_chart(label: any, data: any, data2: any, id: any) {
+    debugger;
     let that = this;
     let dh2 = new Chart(document.getElementById(id), {
       type: 'line',
@@ -22,7 +23,7 @@ export class Test1Service {
           {
             label: 'PCR',
             fill: false,
-            data: data,
+            data: data.map((dx: any) => (dx != 0 ? dx : undefined)),
             borderColor: 'red',
             backgroundColor: 'red',
             yAxisID: 'y',
@@ -30,7 +31,7 @@ export class Test1Service {
           {
             label: 'PRICE',
             fill: false,
-            data: data2,
+            data: data2.map((dx: any) => (dx != 0 ? dx : undefined)),
             borderColor: 'blue',
             backgroundColor: 'blue',
             yAxisID: 'y1',
@@ -264,10 +265,13 @@ export class Test1Service {
         //   type: 'line',
         //   yAxisID: 'y3',
         // },
+
         {
           label: 'CE',
           fill: false,
-          data: resp[0].filtered.data.map((d: any) => d?.CE?.lastPrice || 0),
+          data: resp[0].filtered.data
+            .map((d: any) => d?.CE?.lastPrice || 0)
+            .map((dx: any) => (dx != 0 ? dx : undefined)),
           backgroundColor: 'green',
           borderColor: 'green',
           type: 'line',
@@ -276,7 +280,9 @@ export class Test1Service {
         {
           label: 'PE',
           fill: false,
-          data: resp[0].filtered.data.map((d: any) => d?.PE?.lastPrice || 0),
+          data: resp[0].filtered.data
+            .map((d: any) => d?.PE?.lastPrice || 0)
+            .map((dx: any) => (dx != 0 ? dx : undefined)),
           backgroundColor: 'red',
           borderColor: 'red',
           type: 'line',
@@ -285,14 +291,18 @@ export class Test1Service {
         {
           label: 'CE ' + type,
           fill: false,
-          data: resp[0].filtered.data.map((d: any) => d?.CE?.[type] || 0),
+          data: resp[0].filtered.data
+            .map((d: any) => d?.CE?.[type] || 0)
+            .map((dx: any) => (dx != 0 ? dx : undefined)),
           backgroundColor: 'green',
           yAxisID: 'y',
         },
         {
           label: 'PE ' + type,
           fill: false,
-          data: resp[0].filtered.data.map((d: any) => d?.PE?.[type] || 0),
+          data: resp[0].filtered.data
+            .map((d: any) => d?.PE?.[type] || 0)
+            .map((dx: any) => (dx != 0 ? dx : undefined)),
           backgroundColor: 'red',
           yAxisID: 'y',
         },
@@ -302,7 +312,7 @@ export class Test1Service {
     return resp2;
   }
   db_chart2_ob(dt: any) {
-    return this.hs.post('/option', {
+    return this.hs.post('/option?id=313', {
       find: {
         type: dt.type,
         date: {
@@ -324,9 +334,16 @@ export class Test1Service {
         'filtered.data.PE.strikePrice': true,
         'filtered.data.CE.change': true,
         'filtered.data.PE.change': true,
+        'filtered.data.CE.totalTradedVolume': true,
+        'filtered.data.PE.totalTradedVolume': true,
         'filtered.data.CE.lastPrice': true,
         'filtered.data.PE.lastPrice': true,
         'filtered.data.strikePrice': true,
+
+        'filtered.data.PE.totalBuyQuantity': true,
+        'filtered.data.PE.totalSellQuantity': true,
+        'filtered.data.CE.totalBuyQuantity': true,
+        'filtered.data.CE.totalSellQuantity': true,
       },
     });
   }
@@ -356,6 +373,18 @@ export class Test1Service {
           this.db_chart2(
             this.db_chart2_data(resp, 'openInterest'),
             'acquisitions3'
+          );
+          this.db_chart2(
+            this.db_chart2_data(resp, 'totalBuyQuantity'),
+            'acquisitions44'
+          );
+          this.db_chart2(
+            this.db_chart2_data(resp, 'totalSellQuantity'),
+            'acquisitions55'
+          );
+          this.db_chart2(
+            this.db_chart2_data(resp, 'totalTradedVolume'),
+            'acquisitions66'
           );
         }, 300);
       })

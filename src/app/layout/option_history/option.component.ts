@@ -3,6 +3,7 @@ import { HeroService } from '../../hero.service';
 
 import { tap, map } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { drop } from '../analysis/data';
 declare var _: any, html2canvas: any, $: any;
 @Component({
   selector: 'app-option',
@@ -17,6 +18,7 @@ export class OptionComponent implements OnInit {
     time: { h: '09', m: '00' },
   };
   tbl_ob = of([]);
+  drop: any = JSON.parse(JSON.stringify(drop));
   time: any = [
     { key: '09:00', value: { h: '09', m: '00' } },
     { key: '09:05', value: { h: '09', m: '05' } },

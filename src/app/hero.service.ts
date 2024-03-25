@@ -36,7 +36,6 @@ export class HeroService {
     $('.loader').last().remove();
   }
   post(url: any, qr: any) {
-    console.log('QR=>', qr);
     const t = new Date(new Date().toUTCString()).getTime() + 5000;
     var ciphertext = CryptoJS.AES.encrypt(
       t.toString(),
@@ -49,12 +48,20 @@ export class HeroService {
     const httpHeaders: HttpHeaders = new HttpHeaders({
       Authorization: ciphertext + '.' + encrypt_qr,
     });
-    return this.http.post(
-      localStorage.getItem('url') + url,
-      {},
-      {
-        headers: httpHeaders,
-      }
+    this.start();
+    return of([]).pipe(
+      mergeMap((d) =>
+        this.http.post(
+          localStorage.getItem('url') + url,
+          {},
+          {
+            headers: httpHeaders,
+          }
+        )
+      ),
+      finalize(() => {
+        this.stop();
+      })
     );
   }
   ajaxp(url: any, flag: any = true) {

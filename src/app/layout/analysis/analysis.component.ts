@@ -41,7 +41,7 @@ export class AnalysisComponent implements OnInit {
     dd2.setMinutes(31);
 
     this.strike = this.hs
-      .post('/option', {
+      .post('/option?id=44', {
         aggregate: [
           {
             $match: {
@@ -136,9 +136,9 @@ export class AnalysisComponent implements OnInit {
     //date.setDate(date.getDate() + 1);
     let d = new Date(this.map2_qr.date);
     d.setHours(9);
-    d.setMinutes(16);
+    d.setMinutes(0);
     this.pgData = this.hs
-      .post('/option', {
+      .post('/option?id=141', {
         find: {
           type: this.map2_qr.type,
           date: {
@@ -157,6 +157,7 @@ export class AnalysisComponent implements OnInit {
       })
       .pipe(
         tap((resp: any) => {
+          debugger;
           let data: any = [];
           let data2: any = [];
           let label: any = [];
@@ -186,6 +187,7 @@ export class AnalysisComponent implements OnInit {
     let that = this;
     this.sub = this.tone.new_sub('setObj').pipe(
       tap((d: any) => {
+        debugger;
         if (d.type == 'one') {
           let dt: any = new Date(that.map2_qr.date);
           let hhmmss = d.title.split(':');

@@ -5,8 +5,7 @@
       aria-label="Default select example"
       [(ngModel)]="map2_qr.type"
     >
-      <option value="NIFTY">NIFTY</option>
-      <option value="BANKNIFTY">BANKNIFTY</option>
+      <option [value]="i" *ngFor="let i of drop">{{ i }}</option>
     </select>
   </div>
   <div class="col-12 col-md-2 col-lg-2 mt-1">

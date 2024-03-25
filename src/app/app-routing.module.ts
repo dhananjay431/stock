@@ -54,6 +54,30 @@ const routes: Routes = [
             (m) => m.AnalysisModule
           ),
       },
+      {
+        path: 'd',
+        loadChildren: () =>
+          import('./layout/decode/decode.module').then((m) => m.DecodeModule),
+      },
+      {
+        path: 'analysis2',
+        loadChildren: () =>
+          import('./layout/analysistwo/analysistwo.module').then(
+            (m) => m.AnalysistwoModule
+          ),
+      },
+      {
+        path: 'test',
+        loadChildren: () =>
+          import('./layout/test/test.module').then((m) => m.TestModule),
+      },
+      {
+        path: 'cs',
+        loadChildren: () =>
+          import('./layout/candlestick/candlestick.module').then(
+            (m) => m.CandlestickModule
+          ),
+      },
     ],
   },
   {

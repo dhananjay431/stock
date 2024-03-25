@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="col-12 col-md-2 col-lg-2 col-sm-12">
+    <select
+      class="form-select"
+      aria-label="Default select example"
+      (change)="typeChange(map2_qr)"
+      [(ngModel)]="map2_qr.type"
+    >
+      <option value="">--Select--</option>
+      <option *ngFor="let i of all_drop" [value]="i">{{ i }}</option>
+    </select>
+  </div>
+  <div class="col-12 col-md-2 col-lg-2 col-sm-12">
+    <input
+      type="date"
+      class="form-control"
+      [(ngModel)]="map2_qr.date"
+      (blur)="date_change(map2_qr)"
+    />
+    <!-- {{ map2_qr.date }} -->
+  </div>
+  <div class="col-12 col-md-2 col-lg-2 col-sm-12">
+    <button (click)="search(map2_qr)" class="btn btn-primary">Search</button>
+  </div>
+  <div class="col-12" *ngIf="res | async as _res">
+    <canvas id="chart"></canvas>
+  </div>
+</div>
